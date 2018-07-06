@@ -1,14 +1,3 @@
-# SFDX  App
+# Force DI
 
-## Dev, Build and Test
-
-
-## Resources
-
-
-## Description of Files and Directories
-
-
-## Issues
-
-
+WIP: Generic DI library with support for Apex, Triggers, Visualforce and Lightning
