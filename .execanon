@@ -1,0 +1,6 @@
+Savepoint sp = Database.setSavepoint();
+try {
+    insert new Account(Name = 'Fred');
+} finally {
+    Database.rollback(sp);
+}

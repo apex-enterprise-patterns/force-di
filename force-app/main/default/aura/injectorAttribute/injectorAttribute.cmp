@@ -1,0 +1,4 @@
+<aura:component>
+    <aura:attribute name="name" type="String"/>
+    <aura:attribute name="value" type="Object"/>
+</aura:component>	
