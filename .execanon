@@ -4,3 +4,5 @@ try {
 } finally {
     Database.rollback(sp);
 }
+
+insert new Widget__c();

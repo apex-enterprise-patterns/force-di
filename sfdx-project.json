@@ -1,16 +1,16 @@
 {
   "packageDirectories": [
     {
-      "path": "force-app",
+      "path": "force-di",
       "default": false
     },
     {
       "path": "force-app-1",
-      "default": true
+      "default": false
     },
     {
       "path": "force-app-2",
-      "default": false
+      "default": true
     },
     {
       "path": "force-app-3",

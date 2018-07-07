@@ -10,6 +10,7 @@
     <label>DI Demo</label>
     <navType>Standard</navType>
     <tabs>DI_Demo</tabs>
+    <tabs>Widget__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>DI_Demo_UtilityBar</utilityBar>
 </CustomApplication>

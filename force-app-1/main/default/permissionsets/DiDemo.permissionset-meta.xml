@@ -6,4 +6,21 @@
     </applicationVisibilities>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Di Demo</label>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Widget__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <tabSettings>
+        <tab>DI_Demo</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Widget__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
 </PermissionSet>
