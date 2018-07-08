@@ -4,6 +4,6 @@
     <protected>false</protected>
     <values>
         <field>To__c</field>
-        <value xsi:type="xsd:string">WidgetInfoProvider</value>
+        <value xsi:type="xsd:string">WidgetInfoController.BindingProvider</value>
     </values>
 </CustomMetadata>

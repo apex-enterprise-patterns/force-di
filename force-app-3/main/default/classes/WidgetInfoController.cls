@@ -2,7 +2,9 @@ public with sharing class WidgetInfoController {
 
     public ApexPages.StandardController StandardControllerValue {get;set;}
     
-    public WidgetInfoController() {
-
+    public class BindingProvider implements Provider {
+        public Object newInstance(Object params) {
+            return new Component.widgetInfo(standardController = (ApexPages.StandardController) params);
+        }
     }
 }
