@@ -1,6 +1,5 @@
-<apex:component>
-<!-- Begin Default Content REMOVE THIS -->
-<h1>Congratulations</h1>
-This is your new Component
-<!-- End Default Content REMOVE THIS -->
+<apex:component controller="InjectorComponentController">
+    <apex:attribute name="bindingName" type="String" assignTo="{!BindingValue}" description=""/>
+    <apex:attribute name="pageController" type="InjectorController" assignTo="{!PageControllerValue}" description=""/>
+    <apex:dynamicComponent componentValue="{!inject}" invokeAfterAction="true"/>
 </apex:component>

@@ -10,11 +10,11 @@
     },
     {
       "path": "force-app-2",
-      "default": true
+      "default": false
     },
     {
       "path": "force-app-3",
-      "default": false
+      "default": true
     }
   ],
   "namespace": "",

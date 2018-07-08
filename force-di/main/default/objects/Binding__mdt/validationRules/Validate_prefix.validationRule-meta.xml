@@ -2,7 +2,7 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Validate_prefix</fullName>
     <active>true</active>
-    <errorConditionFormula>NOT(OR(BEGINS(DeveloperName, &#39;lc_&#39;),BEGINS(DeveloperName, &#39;apex_&#39;),BEGINS(DeveloperName, &#39;vfc_&#39;),BEGINS(DeveloperName, &#39;trigger_&#39;)))</errorConditionFormula>
+    <errorConditionFormula>NOT(OR(BEGINS(DeveloperName, &#39;lc_&#39;),BEGINS(DeveloperName, &#39;apex_&#39;),BEGINS(DeveloperName, &#39;vf_&#39;),BEGINS(DeveloperName, &#39;trigger_&#39;)))</errorConditionFormula>
     <errorDisplayField>DeveloperName</errorDisplayField>
     <errorMessage>Must begin with either lc_ (Lightning Component), apex_ (Apex class) or vc_ (Visualforce Component)</errorMessage>
 </ValidationRule>

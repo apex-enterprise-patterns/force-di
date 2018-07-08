@@ -19,7 +19,7 @@ public abstract class Binding {
             return new ApexBinding(binding.NamespacePrefix, binding.DeveloperName, binding.To__c);
         } else if(binding.DeveloperName.startsWithIgnoreCase('lc_')) {
             return new LightningComponentBinding(binding.NamespacePrefix, binding.DeveloperName, binding.To__c);
-        } else if(binding.DeveloperName.startsWithIgnoreCase('vfc_')) {
+        } else if(binding.DeveloperName.startsWithIgnoreCase('vf_')) {
             return new VisualForceComponentBinding(binding.NamespacePrefix, binding.DeveloperName, binding.To__c);
         }
         throw new BindingException('Binding ' + binding.DeveloperName + ' is not recognized');
