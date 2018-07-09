@@ -6,9 +6,9 @@ public abstract class Binding {
 
     public Binding__mdt Record {get;private set;}
 
-    public String Namespace {get { return Record.NamespacePrefix; } }
+    public String NamespacePrefix {get { return Record.NamespacePrefix; } }
 
-    public String Name {get { return Record.DeveloperName; } }
+    public String DeveloperName {get { return Record.DeveloperName; } }
 
     public String To {get { return Record.To__c; } }
 
@@ -135,9 +135,9 @@ public abstract class Binding {
         }
         public override Object getInstance(Object params) {
             // Apex bindings honour the namespace of the defining custom metadata type record
-            Type toType = NameSpace==null ? Type.forName(To) : Type.forName(Namespace, To);
+            Type toType = NameSpacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
             if(toType==null) {
-                throw new BindingException('Apex binding ' + Name + ' implementation ' + To + ' does not exist');
+                throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not exist');
             }
             Object toObject = toType.newInstance();
             // Is this Apex binding resolved via a Provider?
@@ -145,7 +145,7 @@ public abstract class Binding {
                 return ((Provider) toObject).newInstance(params);
             } else if(params!=null) {
                 // Params supplied but the binding does not reference a Provider?
-                throw new BindingException('Apex binding ' + Name + ' implementation ' + To + ' does not implement the Provider interaface.'); 
+                throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not implement the Provider interaface.'); 
             }
             return toObject;
         }
@@ -160,16 +160,16 @@ public abstract class Binding {
         }
         public  override Object getInstance(Object params) {
             // Visualforce Components references must be made via an Apex class implementing the Provider interface
-            Type toType = NameSpace==null ? Type.forName(To) : Type.forName(Namespace, To);
+            Type toType = NamespacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
             if(toType==null) {
-                throw new BindingException('Visualforce Component binding ' + Name + ' implementation ' + To + ' does not exist.');
+                throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + To + ' does not exist.');
             }
             // Visualforce Components have to be resolved via a Provider
             Object toObject = toType.newInstance();
             if(toObject instanceof Provider) {
                 return ((Provider) toObject).newInstance(params);
             }
-            throw new BindingException('Visualforce Component binding ' + Name + ' must point to a class implementing the Provider interface.');
+            throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the Provider interface.');
         }
     }
 

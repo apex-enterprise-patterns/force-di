@@ -21,7 +21,7 @@ public class TriggerInjector {
             if(handler instanceof TriggerHandler) {
                 handlers.add((TriggerHandler) handler);
             } else {
-                throw new TriggerInjectorException('Binding for ' + binding.Name + ' must extend Injector.TriggerHandler');                    
+                throw new TriggerInjectorException('Binding for ' + binding.DeveloperName + ' must extend Injector.TriggerHandler');                    
             }
         }
         // Trigger contexts allow for the client to perform optimizations and aggregations
