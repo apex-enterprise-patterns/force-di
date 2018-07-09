@@ -1,5 +1,5 @@
 <apex:component controller="InjectorComponentController">
-    <apex:attribute name="bindingName" type="String" assignTo="{!BindingValue}" description=""/>
-    <apex:attribute name="pageController" type="InjectorController" assignTo="{!PageControllerValue}" description=""/>
+    <apex:attribute name="bindingName" type="String" assignTo="{!BindingNameValue}" description=""/>
+    <apex:attribute name="parameters" type="Object" assignTo="{!ParametersValue}" description=""/>
     <apex:dynamicComponent componentValue="{!inject}" invokeAfterAction="true"/>
 </apex:component>

@@ -1,5 +1,5 @@
 <aura:component controller="InjectorController">
-    <aura:attribute name="binding" type="String"/>
+    <aura:attribute name="bindingName" type="String"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     {!v.body}
 </aura:component>	

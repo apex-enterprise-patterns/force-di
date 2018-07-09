@@ -2,7 +2,7 @@
     <lightning:card>
         <p class="slds-p-horizontal_small">
             <lightning:badge label="Component A"/>    
-            <c:injector binding="lc_ComponentAtoB">
+            <c:injector bindingName="lc_ComponentAtoB">
                 <c:injectorAttribute name="message" value="A message from Component A"/>
             </c:injector>
         </p>

@@ -1,6 +1,6 @@
 public with sharing class InjectorController {
 
-    public ApexPages.StandardController StandardController;
+    public ApexPages.StandardController StandardController {get;set;}
 
     public InjectorController(ApexPages.StandardController StandardController) {
         this.StandardController = StandardController;
