@@ -1,6 +1,6 @@
 # Force DI
 
-**WIP:** Generic [DI](https://en.wikipedia.org/wiki/Dependency_injection) library with support for injecting Apex, Visualforce and Lightning code at runtime. Blog comming soon!
+**WIP:** Generic [DI](https://en.wikipedia.org/wiki/Dependency_injection) library with support for injecting Apex, Visualforce and Lightning code at runtime. Blog coming soon!
 
 | Folder | Description |
 | ------ | ----------- |
