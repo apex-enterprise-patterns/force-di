@@ -1,11 +1,11 @@
 # Force DI
 
-WIP: Generic DI library with support for Apex, Visualforce and Lightning, blog to follow!
+**WIP:** Generic [DI](https://en.wikipedia.org/wiki/Dependency_injection) library with support for injecting Apex, Visualforce and Lightning code at runtime. Blog comming soon!
 
 | Folder | Description |
 | ------ | ----------- |
-| /force-di | Core library, contains **Injector** core Apex API and **<c:injector>** VF and Lightning Components |
-| /force-di-trigger-demo | Example of using the core library to build a simple trigger framework leveraging DI |
-| /force-app-1 | Sample application using the Core Force DI API's and Components to inject Apex, VF and Lightning at runtime |
-| /force-app-2 | Sample package providing impls for various bindings above |
-| /force-app-3 | Sample package providing impls for various bindings above |
+| **/force-di** | Core library, contains **Injector** Apex API and **<c:injector>** VF and Lightning Components |
+| **/force-app-1** | Sample application using thecore Force DI API's and Components to inject Apex, VF and Lightning at runtime |
+| **/force-app-2** | Sample package providing impls for various bindings above |
+| **/force-app-3** | Sample package providing impls for various bindings above |
+| **/force-di-trigger-demo** | Example of using the core library to build a simple trigger framework leveraging DI |
