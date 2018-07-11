@@ -27,26 +27,77 @@
 public class Injector {
 
     /**
-     * Binding resolver for the Injector
+     * Default Injector instance configured via Custom Metadata bindings
      **/
-    public static final Binding.Query Bindings = new Binding.Query();
+    public static final Injector Default = 
+        new Injector(
+            new List<Module> { 
+                new CustomMetadataModule()});
 
     /**
-     * Resolves the given binding
+     * Bindings visible to this Injector
      **/
-    public static Object getInstance(String qualifiedBindingName) {
+    public Binding.Resolver Bindings {get; private set;}
+
+    /**
+     * Configures the Injector with the bindings configured by the given Modules
+     **/
+    public Injector(List<Module> modules) {
+        Bindings = new Binding.Resolver(modules);
+    }   
+
+    /**
+     * Creates an instance of the object configured for the named binding
+     **/
+    public Object getInstance(String qualifiedBindingName) {
         return getInstance(qualifiedBindingName, null);
     }
 
     /**
-     * Resolves the given binding explicitly assuming a Provider binding (if params is not null)
+     * Creates an instance of the object configured for the named binding
+     *   (if params is specified, implicitly uses the Provider interface)
      **/
-    public static Object getInstance(String qualifiedBindingName, Object params) {        
+    public Object getInstance(String qualifiedBindingName, Object params) {        
         List<Binding> bindings = Bindings.byName(qualifiedBindingName).get();
         if(bindings==null || bindings.size()==0) {
             throw new InjectorException('Binding for ' + qualifiedBindingName + ' not found');
         }
         return bindings[0].getInstance(params);
+    }
+
+    /** 
+     * A Module that loads bindings configured via the Binding__mdt object
+     **/
+    private class CustomMetadataModule extends Module {
+
+        public void configure() {
+            for(Binding__mdt bindingConfig : 
+                [select QualifiedAPIName, DeveloperName, NamespacePrefix, 
+                        To__c, BindingObject__c, BindingSequence__c 
+                    from Binding__mdt]) {
+                bind(bindingConfig.DeveloperName);
+                // TODO: Convert to SObjectType
+                if(bindingConfig.BindingObject__c!=null) {                        
+                    SObjecType bindingObject = null;
+                    bind(bindingObject); 
+                }
+                // TODO: Utilize the new picklist field John is adding
+                if(bindingConfig.DeveloperName.startsWith('apex')) {
+                    apex();
+                } else if(bindingConfig.DeveloperName.startsWith('vf')) {
+                    visualforceComponent();
+                } else if(bindingConfig.DeveloperName.startsWith('lc')) {
+                    lightningCompnent();
+                }
+                if(bindingConfig.DeveloperName.endsWith('Module')) {
+                    module();
+                }
+                if(bindingConfig.BindingSequence__c!=null) {
+                    sequence(Integer.valueOf(indingConfig.BindingSequence__c));
+                }
+                to(bindingConfig.To__c);
+            }
+        }
     }
 
     public class InjectorException extends Exception {}

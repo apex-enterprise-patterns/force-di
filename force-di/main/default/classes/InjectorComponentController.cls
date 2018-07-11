@@ -31,6 +31,6 @@ public with sharing class InjectorComponentController {
     public Object ParametersValue {set;get;}
 
     public ApexPages.Component getInject() {
-        return (ApexPages.Component) Injector.getInstance(BindingNameValue, ParametersValue);
+        return (ApexPages.Component) Injector.Default.getInstance(BindingNameValue, ParametersValue);
     }
 }

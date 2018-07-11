@@ -8,12 +8,9 @@ public class TriggerInjector {
      * Looks for multiple "trigger handler" bindings for a given SObjectType
      **/
     public static void handle(SObjectType triggerType, TriggerHandlerContext ctx) {
-        // Discover ordered bindings made against the given sobject type 
-        List<Binding> bindings = 
-            Injector.Bindings
-                .with(Binding__mdt.BindingObject__c, triggerType.getDescribe().getName())
-                .orderBy(Binding__mdt.BindingSequence__c)
-                .get();
+        // Discover bindings made against the given sobject type 
+        //   (bindings are always returned in sequence if supplied)
+        List<Binding> bindings = Injector.Default.Bindings.bySObject(triggerType).get();
         // Construct the handlers
         List<TriggerHandler> handlers = new List<TriggerHandler>();        
         for(Binding binding : bindings) {
