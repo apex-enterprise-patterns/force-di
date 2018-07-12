@@ -33,7 +33,7 @@ public abstract class Binding implements Comparable {
     public BindingType BindingType {get;set;}
     public String NamespacePrefix {get;set;}
     public String DeveloperName {get;set;}
-    public SObjecType BindingObject {get;set;}
+    public SObjectType BindingObject {get;set;}
     public Integer BindingSequence {get;set;}
     public String To {get;set;}
 
@@ -54,22 +54,22 @@ public abstract class Binding implements Comparable {
      *   See toString()
      **/
     public Integer compareTo(Object compareTo) {
-        Binding binding = (compareTo) compareTo;
+        Binding binding = (Binding) compareTo;
         return this.toString().compareTo(binding.toString());        
     }
 
     /**
      * Calcualted based on binding object and sequence if specified
      **/
-    public String toString() {
+    public override String toString() {
         if(BindingObject!=null) {
             String hashValue = BindingObject.getDescribe().getName();
             if(BindingSequence!=null) {
                 hashValue+= '#'+BindingSequence;
             }
-            return hashValue.hashCode();
+            return hashValue;
         } else {
-            return DeveloperName.hashCode();
+            return DeveloperName;
         }
     }
 
@@ -87,7 +87,7 @@ public abstract class Binding implements Comparable {
 
         // Filter params for resolving bindings
         private String qualifiedDeveloperName;
-        private SObjecType sObjectType;
+        private SObjectType sObjectType;
 
         // Discovered bindings via the modules supplied to this resolver
         private List<Binding> bindings = new List<Binding>();
@@ -122,7 +122,8 @@ public abstract class Binding implements Comparable {
             List<Binding> matchedBindings = new List<Binding>();
             this.qualifiedDeveloperName = null;
             this.sObjectType = null;
-            return bindings.sort();
+            bindings.sort();
+            return bindings;
         }
     }
 
@@ -133,19 +134,19 @@ public abstract class Binding implements Comparable {
     /**
      * Returns the applicable Binding impl to resolve the type of binding provided
      **/
-    public static Binding newInstance(BindingType bindingType) {
+    public static Binding newInstance(BindingType bindType) {
         // Return an applicable Binding subclass for the given binding type
         Binding binding = null;
-        if(bindingType == BindingType.Apex || 
-           bindingType == BindingType.Module) {
+        if(bindType == BindingType.Apex || 
+           bindType == BindingType.Module) {
             binding = new ApexBinding();
-        } else if(bindingType == BindingType.LightningComponent) {
+        } else if(bindType == BindingType.LightningComponent) {
             binding = new LightningComponentBinding();
-        } else if(bindingType == BindingType.VisualforceComponent) {
+        } else if(bindType == BindingType.VisualforceComponent) {
             binding = new VisualForceComponentBinding();
         }
         if(binding!=null) {
-            binding.BindingType = bindingType;
+            binding.BindingType = bindType;
         }
         return binding;
     }

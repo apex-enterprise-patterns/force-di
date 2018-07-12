@@ -48,7 +48,7 @@ public abstract class Module {
         bindingType = Binding.BindingType.Apex;
         return this;
     }
-    public Module lightningCompnent() {
+    public Module lightningComponent() {
         bindingType = Binding.BindingType.LightningComponent;
         return this;
     }
@@ -83,21 +83,21 @@ public abstract class Module {
     public List<Binding> getBindings() {
         // Return this modules configured bindings
         List<Binding> moduleBindings = new List<Binding>();
-        for(Binding binding : bindings) {
+        for(Binding bind : bindings) {
             // Module bindings are expanded into the returned listed and removed
-            if(binding.BindingType == Binding.BindingType.Module) {
-                Module module = (Module) binding.getInstance();
+            if(bind.BindingType == Binding.BindingType.Module) {
+                Module module = (Module) bind.getInstance();
                 module.configure();
                 moduleBindings.addAll(module.getBindings());
             } else {
-                moduleBindings.add(binding);
+                moduleBindings.add(bind);
             }
         }
         return moduleBindings;
     }
     private Module addBinding() {
         // Construct binding and configure it
-        Binding newBinding = new Binding.newInstance(bindindType);
+        Binding newBinding = Binding.newInstance(bindingType);
         newBinding.DeveloperName = developerName;
         newBinding.BindingObject = bindingObject;
         newBinding.BindingSequence = bindingSequence;

@@ -29,7 +29,7 @@ public class Injector {
     /**
      * Default Injector instance configured via Custom Metadata bindings
      **/
-    public static final Injector Default = 
+    public static final Injector Org = 
         new Injector(
             new List<Module> { 
                 new CustomMetadataModule()});
@@ -70,7 +70,7 @@ public class Injector {
      **/
     private class CustomMetadataModule extends Module {
 
-        public void configure() {
+        public override void configure() {
             for(Binding__mdt bindingConfig : 
                 [select QualifiedAPIName, DeveloperName, NamespacePrefix, 
                         To__c, BindingObject__c, BindingSequence__c 
@@ -78,7 +78,7 @@ public class Injector {
                 bind(bindingConfig.DeveloperName);
                 // TODO: Convert to SObjectType
                 if(bindingConfig.BindingObject__c!=null) {                        
-                    SObjecType bindingObject = null;
+                    SObjectType bindingObject = null;
                     bind(bindingObject); 
                 }
                 // TODO: Utilize the new picklist field John is adding
@@ -87,13 +87,13 @@ public class Injector {
                 } else if(bindingConfig.DeveloperName.startsWith('vf')) {
                     visualforceComponent();
                 } else if(bindingConfig.DeveloperName.startsWith('lc')) {
-                    lightningCompnent();
+                    lightningComponent();
                 }
                 if(bindingConfig.DeveloperName.endsWith('Module')) {
                     module();
                 }
                 if(bindingConfig.BindingSequence__c!=null) {
-                    sequence(Integer.valueOf(indingConfig.BindingSequence__c));
+                    sequence(Integer.valueOf(bindingConfig.BindingSequence__c));
                 }
                 to(bindingConfig.To__c);
             }
