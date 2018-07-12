@@ -2,7 +2,7 @@
   "packageDirectories": [
     {
       "path": "force-di",
-      "default": true
+      "default": false
     },
     {
       "path": "force-di-trigger-demo",
@@ -18,7 +18,7 @@
     },
     {
       "path": "force-app-3",
-      "default": false
+      "default": true
     }
   ],
   "namespace": "",

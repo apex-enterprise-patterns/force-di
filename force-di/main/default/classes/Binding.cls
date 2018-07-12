@@ -25,25 +25,17 @@
 **/
 
 /**
- * Wrap the binding configuration to subclass it and aid in resolving the To__c field value
- *   (also leverages the Provider interface to allow for more advanced instantiation of the To__c value)
+ * Wrap a binding config to subclass it and aid in resolving target binding 
+ *   (also leverages the Provider interface to allow for more advanced instantiation)
  **/
-public abstract class Binding {
+public abstract class Binding implements Comparable {
 
-    public Binding__mdt Record {get;private set;}
-
-    public String NamespacePrefix {get { return Record.NamespacePrefix; } }
-
-    public String DeveloperName {get { return Record.DeveloperName; } }
-
-    public String To {get { return Record.To__c; } }
-
-    /** 
-     * Wrap the binding configuration to subclass it and aid in resolving the To__c field value
-     **/
-    private Binding(Binding__mdt record) {
-        this.record = record;
-    }
+    public BindingType BindingType {get;set;}
+    public String NamespacePrefix {get;set;}
+    public String DeveloperName {get;set;}
+    public SObjecType BindingObject {get;set;}
+    public Integer BindingSequence {get;set;}
+    public String To {get;set;}
 
     /**
      * Gets the instance of the thing the binding points to
@@ -58,6 +50,30 @@ public abstract class Binding {
     public abstract Object getInstance(Object params);
 
     /**
+     * Compare to impl to help sorted multiple matching bindings from the resolver
+     *   See toString()
+     **/
+    public Integer compareTo(Object compareTo) {
+        Binding binding = (compareTo) compareTo;
+        return this.toString().compareTo(binding.toString());        
+    }
+
+    /**
+     * Calcualted based on binding object and sequence if specified
+     **/
+    public String toString() {
+        if(BindingObject!=null) {
+            String hashValue = BindingObject.getDescribe().getName();
+            if(BindingSequence!=null) {
+                hashValue+= '#'+BindingSequence;
+            }
+            return hashValue.hashCode();
+        } else {
+            return DeveloperName.hashCode();
+        }
+    }
+
+    /**
     * Allows bindings to resolve dynamically (e.g. custom constructors) based passing in params if needed
     **/
     public interface Provider {
@@ -65,100 +81,79 @@ public abstract class Binding {
     }
 
     /**
-     * Simple fluent API to resolve Bindings
+     * Simple fluent API to resolve Bindings, used by Injector methods or called directly
      **/
-    public class Query {
+    public class Resolver {
 
+        // Filter params for resolving bindings
         private String qualifiedDeveloperName;
-        private Map<SObjectField, Object> withMap = new Map<SObjectField, Object>();
-        private SObjectField orderBy;
+        private SObjecType sObjectType;
 
-        public Query byName(String qualifiedDeveloperName) {
+        // Discovered bindings via the modules supplied to this resolver
+        private List<Binding> bindings = new List<Binding>();
+
+        public Resolver(List<Module> modules) {
+            // Ask each module to configure and aggregate the resulting bindings            
+            for(Module module : modules) {
+                module.configure();
+                bindings.addAll(module.getBindings());
+            }
+        }
+
+        /**
+         * Resolve by name
+         **/
+        public Resolver byName(String qualifiedDeveloperName) {
             this.qualifiedDeveloperName = qualifiedDeveloperName;
             return this;
         }
-        public Query with(SObjectField filterField, Object value) {
-            this.withMap.put(filterField, value);
+
+        /**
+         * Resolve by object type
+         **/
+        public Resolver bySObject(SObjectType sobjectType) {
             return this;
         }
-        public Query orderBy(SObjectField orderByField) {
-            this.orderBy = orderByField;
-            return this;
-        }
+
+        /**
+         * Returns a filtered and sorted list of known bindings
+         **/
         public List<Binding> get() {
-            // Construct fields to query
-            Set<SObjectField> fields = 
-                new Set<SObjectField> { 
-                    Binding__mdt.QualifiedAPIName, 
-                    Binding__mdt.DeveloperName,
-                    Binding__mdt.NamespacePrefix,
-                    Binding__mdt.To__c };
-            for(SObjectField withField : withMap.keySet()) {
-                fields.add(withField);                
-            }
-            if(orderBy!=null) {
-                fields.add(orderBy);
-            }
-            List<String> fieldNames = new List<String>();
-            for(SObjectField field : fields) {
-                fieldNames.add(field.getDescribe().getName());
-            }
-            // Query by QualifiedName?
-            String whereClause = '';
-            if(qualifiedDeveloperName!=null) {
-                whereClause = Binding__mdt.QualifiedAPIName.getDescribe().getName() + ' = :qualifiedDeveloperName';
-            }
-            // Additional critera?
-            if(withMap.size()>0) {                
-                for(SObjectField withField : withMap.keySet()) {
-                    String value = String.valueOf(withMap.get(withField)); // Assume String values for now
-                    String fieldName = withField.getDescribe().getName();
-                    whereClause+= (whereClause.length()>0 ? ' and ' : '') + fieldName + ' = \'' + String.escapeSingleQuotes(value) + '\''; 
-                }
-            }
-            // Query for bindings and wrap in the Binding class
-            List<Binding> bindings = new List<Binding>();
-            System.debug(whereClause);
-            for(Binding__mdt bindingRecord :
-                    Database.query(
-                        String.format('select {0} from Binding__mdt where {1} {2}', 
-                            new List<String> { 
-                                String.join(fieldNames, ','),                             
-                                whereClause,
-                                orderBy!=null ? 'order by ' + orderBy.getDescribe().getName() : '' }))) {
-                bindings.add(Binding.newInstance(bindingRecord));
-            }
+            List<Binding> matchedBindings = new List<Binding>();
             this.qualifiedDeveloperName = null;
-            this.withMap = new Map<SObjectField, Object>();
-            this.orderBy = null;
-            return bindings;
+            this.sObjectType = null;
+            return bindings.sort();
         }
     }
 
     public class BindingException extends Exception {}
 
+    public enum BindingType { Apex, VisualforceComponent, LightningComponent, Module }
+
     /**
      * Returns the applicable Binding impl to resolve the type of binding provided
      **/
-    public static Binding newInstance(Binding__mdt binding) {
+    public static Binding newInstance(BindingType bindingType) {
         // Return an applicable Binding subclass for the given binding type
-        if(binding.DeveloperName.startsWithIgnoreCase('apex_')) {
-            return new ApexBinding(binding);
-        } else if(binding.DeveloperName.startsWithIgnoreCase('lc_')) {
-            return new LightningComponentBinding(Binding);
-        } else if(binding.DeveloperName.startsWithIgnoreCase('vf_')) {
-            return new VisualForceComponentBinding(binding);
+        Binding binding = null;
+        if(bindingType == BindingType.Apex || 
+           bindingType == BindingType.Module) {
+            binding = new ApexBinding();
+        } else if(bindingType == BindingType.LightningComponent) {
+            binding = new LightningComponentBinding();
+        } else if(bindingType == BindingType.VisualforceComponent) {
+            binding = new VisualForceComponentBinding();
         }
-        throw new BindingException('Binding ' + binding.DeveloperName + ' is not recognized');
+        if(binding!=null) {
+            binding.BindingType = bindingType;
+        }
+        return binding;
     }
 
     /**
      * Bindings to Apex classes (optionally via Provider interface)
      **/
     private class ApexBinding extends Binding {
-        private ApexBinding(Binding__mdt record) {
-            super(record);
-        }
         public override Object getInstance(Object params) {
             // Apex bindings honour the namespace of the defining custom metadata type record
             Type toType = NameSpacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
@@ -181,9 +176,6 @@ public abstract class Binding {
      * Bindings to VF Components via Provider interface
      **/
     private class VisualForceComponentBinding extends Binding {
-        private VisualForceComponentBinding(Binding__mdt record) {
-            super(record);
-        }
         public  override Object getInstance(Object params) {
             // Visualforce Components references must be made via an Apex class implementing the Provider interface
             Type toType = NamespacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
@@ -203,9 +195,6 @@ public abstract class Binding {
      * Bindings to Lightning Components (Provider interface not currently supported)
      **/
     private class LightningComponentBinding extends Binding {
-        private LightningComponentBinding(Binding__mdt record) {
-            super(record);
-        }
         public  override Object getInstance(Object params) {
             // Lightning Component bindings are resolve by the Lightning Component 'inject' included in this library
             return To;
