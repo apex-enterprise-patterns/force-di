@@ -10,7 +10,7 @@
     },
     {
       "path": "force-app-1",
-      "default": false
+      "default": true
     },
     {
       "path": "force-app-2",
@@ -18,7 +18,7 @@
     },
     {
       "path": "force-app-3",
-      "default": true
+      "default": false
     }
   ],
   "namespace": "",

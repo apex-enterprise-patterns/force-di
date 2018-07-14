@@ -40,11 +40,33 @@ public class Injector {
     public Binding.Resolver Bindings {get; private set;}
 
     /**
+     * Configures the Injector with the bindings configured by the given Module
+     **/
+    public Injector(Module module) {
+        this(new List<Module> { module });
+    }   
+
+    /**
      * Configures the Injector with the bindings configured by the given Modules
      **/
     public Injector(List<Module> modules) {
         Bindings = new Binding.Resolver(modules);
     }   
+
+    /**
+     * Creates an instance of the object configured for the class name binding
+     **/
+    public Object getInstance(Type developerNameByType) {
+        return getInstance(developerNameByType.getName(), null);
+    }
+
+    /**
+     * Creates an instance of the object configured for the class name binding
+     *   (if params is specified, implicitly uses the Provider interface)     
+     **/
+    public Object getInstance(Type developerNameByType, Object params) {
+        return getInstance(developerNameByType.getName(), params);
+    }
 
     /**
      * Creates an instance of the object configured for the named binding

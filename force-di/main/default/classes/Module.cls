@@ -107,7 +107,15 @@ public virtual class Module {
     }
 
     /**
-     * Binding is related to a give a SObject
+     * Binding is related to a given Apex class
+     **/
+    public Module bind(Type bindingType) {
+        developerName = bindingType.getName();
+        return this;
+    }
+
+    /**
+     * Binding is related to a given SObject
      **/
     public Module bind(SObjectType sObjectType) {
         bindingObject = sObjectType;

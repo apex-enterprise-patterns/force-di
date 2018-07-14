@@ -7,4 +7,4 @@ try {
 
 insert new Widget__c();
 
-System.debug(WidgetInfoController.Provider.class.getName());
+System.debug(RuntimeBindingDemo.run());
