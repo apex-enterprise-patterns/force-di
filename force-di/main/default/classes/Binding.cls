@@ -36,6 +36,7 @@ public abstract class Binding implements Comparable {
     public SObjectType BindingObject {get;set;}
     public Integer BindingSequence {get;set;}
     public String To {get;set;}
+    public Object Data {get;set;}
 
     /**
      * Gets the instance of the thing the binding points to

@@ -38,6 +38,7 @@ public virtual class Module {
     private SObjectType bindingObject;
     private Integer bindingSequence;
     private String to;
+    private Object bindingData;
 
     /**
      * Module class can be extended and/or used directly
@@ -130,6 +131,14 @@ public virtual class Module {
     }
 
     /**
+     * Data associated with the binding by the binding configuration
+     **/
+    public Module data(Object data) {
+        bindingData = data;
+        return this;
+    }
+
+    /**
      * Binding implementation
      **/
     public Module to(String bindingTo) {
@@ -172,6 +181,7 @@ public virtual class Module {
         newBinding.BindingObject = bindingObject;
         newBinding.BindingSequence = bindingSequence;
         newBinding.To = to;
+        newBinding.Data = bindingData;
         bindings.add(newBinding);
         init();
         return this;       

@@ -88,6 +88,7 @@ public class Injector {
                 if(bindingConfig.BindingSequence__c!=null) {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence__c));
                 }
+                data(bindingConfig);
                 to(bindingConfig.To__c);
             }
         }
