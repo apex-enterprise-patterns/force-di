@@ -71,30 +71,19 @@ public class Injector {
     private class CustomMetadataModule extends Module {
 
         public override void configure() {
+            // TODO: Support Namespace
             for(Binding__mdt bindingConfig : 
                 [select QualifiedAPIName, DeveloperName, NamespacePrefix, 
-                        To__c, BindingObject__c, BindingSequence__c 
+                        Type__c, To__c, BindingObject__c, BindingSequence__c 
                     from Binding__mdt]) {
-                // TODO: Support Namespace
                 bind(bindingConfig.DeveloperName);
+                type(bindingConfig.Type__c);
                 if(bindingConfig.BindingObject__c!=null) {                        
-                    Schema.DescribeSobjectResult[] results = 
-                        Schema.describeSObjects(new String[] { bindingConfig.BindingObject__c });
-                    if(results.size()==0) {
+                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingConfig.BindingObject__c });
+                    if(results.size()!=1) {
                         throw new InjectorException('Failed to find SObject ' + bindingConfig.BindingObject__c + ' referened by binding ' + bindingConfig.DeveloperName );
                     }
                     bind(results[0].getSObjectType()); 
-                }
-                // TODO: Utilize the new picklist field John is adding
-                if(bindingConfig.DeveloperName.startsWith('apex')) {
-                    apex();
-                } else if(bindingConfig.DeveloperName.startsWith('vf')) {
-                    visualforceComponent();
-                } else if(bindingConfig.DeveloperName.startsWith('lc')) {
-                    lightningComponent();
-                }
-                if(bindingConfig.DeveloperName.endsWith('Module')) {
-                    module();
                 }
                 if(bindingConfig.BindingSequence__c!=null) {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence__c));

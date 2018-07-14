@@ -14,4 +14,8 @@
         <field>To__c</field>
         <value xsi:type="xsd:string">ForceApp3Module</value>
     </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">Module</value>
+    </values>
 </CustomMetadata>

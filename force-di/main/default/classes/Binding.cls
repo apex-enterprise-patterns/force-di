@@ -138,6 +138,9 @@ public abstract class Binding implements Comparable {
 
     public class BindingException extends Exception {}
 
+    /** 
+     * Types of Binding implementations supported by the framework
+     **/
     public enum BindingType { Apex, VisualforceComponent, LightningComponent, Module }
 
     /**
@@ -145,20 +148,23 @@ public abstract class Binding implements Comparable {
      **/
     public static Binding newInstance(BindingType bindType) {
         // Return an applicable Binding subclass for the given binding type
-        Binding binding = null;
-        if(bindType == BindingType.Apex || 
-           bindType == BindingType.Module) {
-            binding = new ApexBinding();
-        } else if(bindType == BindingType.LightningComponent) {
-            binding = new LightningComponentBinding();
-        } else if(bindType == BindingType.VisualforceComponent) {
-            binding = new VisualForceComponentBinding();
-        }
-        if(binding!=null) {
+        Type implType = bindingImplsByType.get(bindType);
+        if(implType!=null) {
+            Binding binding = (Binding) implType.newInstance();
             binding.BindingType = bindType;
+            return binding;
         }
-        return binding;
+        throw new BindingException('Binding type ' + bindType + ' has not implementation.');
     }
+
+    // Maps binding type to the applicable impl
+    private static final Map<BindingType, Type> bindingImplsByType = 
+        new Map<BindingType, Type> { 
+            BindingType.Apex => ApexBinding.class,
+            BindingType.LightningComponent => LightningComponentBinding.class,
+            BindingType.VisualforceComponent => VisualForceComponentBinding.class,
+            BindingType.Module => ApexBinding.class
+        };
 
     /**
      * Bindings to Apex classes (optionally via Provider interface)
@@ -183,7 +189,7 @@ public abstract class Binding implements Comparable {
     }
 
     /**
-     * Bindings to VF Components via Provider interface
+     * Bindings to VF Components via Provider interface (required)
      **/
     private class VisualForceComponentBinding extends Binding {
         public  override Object getInstance(Object params) {
@@ -206,7 +212,7 @@ public abstract class Binding implements Comparable {
      **/
     private class LightningComponentBinding extends Binding {
         public  override Object getInstance(Object params) {
-            // Lightning Component bindings are resolve by the Lightning Component 'inject' included in this library
+            // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
             return To;
         }
     }

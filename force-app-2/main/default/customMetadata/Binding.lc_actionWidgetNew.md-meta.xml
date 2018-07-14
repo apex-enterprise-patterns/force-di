@@ -6,4 +6,8 @@
         <field>To__c</field>
         <value xsi:type="xsd:string">c:widgetWizard</value>
     </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">LightningComponent</value>
+    </values>
 </CustomMetadata>
