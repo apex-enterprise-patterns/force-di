@@ -59,13 +59,13 @@ public abstract class Binding implements Comparable {
     }
 
     /**
-     * Calcualted based on binding object and sequence if specified
+     * Defaults to DeveloperName or binding object and sequence if specified
      **/
     public override String toString() {
         if(BindingObject!=null) {
             String hashValue = BindingObject.getDescribe().getName();
             if(BindingSequence!=null) {
-                hashValue+= '#'+BindingSequence;
+                hashValue+= '#'+String.valueOf(BindingSequence).leftPad(4,'0');
             }
             return hashValue;
         } else {
@@ -86,8 +86,8 @@ public abstract class Binding implements Comparable {
     public class Resolver {
 
         // Filter params for resolving bindings
-        private String qualifiedDeveloperName;
-        private SObjectType sObjectType;
+        private String developerName;
+        private SObjectType bindingObject;
 
         // Discovered bindings via the modules supplied to this resolver
         private List<Binding> bindings = new List<Binding>();
@@ -103,27 +103,36 @@ public abstract class Binding implements Comparable {
         /**
          * Resolve by name
          **/
-        public Resolver byName(String qualifiedDeveloperName) {
-            this.qualifiedDeveloperName = qualifiedDeveloperName;
+        public Resolver byName(String developerName) {
+            this.developerName = developerName;
             return this;
         }
 
         /**
          * Resolve by object type
          **/
-        public Resolver bySObject(SObjectType sobjectType) {
+        public Resolver bySObject(SObjectType bindingObject) {
+            this.bindingObject = bindingObject;
             return this;
         }
 
         /**
          * Returns a filtered and sorted list of known bindings
+         * Priority is given to filtering by DeveloperName if specified
          **/
         public List<Binding> get() {
             List<Binding> matchedBindings = new List<Binding>();
-            this.qualifiedDeveloperName = null;
-            this.sObjectType = null;
-            bindings.sort();
-            return bindings;
+            for(Binding bind : bindings) {
+                if(developerName!=null && bind.DeveloperName!=null && bind.DeveloperName.equals(developerName)) {
+                    matchedBindings.add(bind);
+                } else if (bindingObject!=null && bind.BindingObject == bindingObject) {
+                    matchedBindings.add(bind);
+                }
+            }
+            this.developerName = null;
+            this.bindingObject = null;
+            matchedBindings.sort();
+            return matchedBindings;
         }
     }
 

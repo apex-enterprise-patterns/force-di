@@ -11,9 +11,9 @@ public class ForceApp3Module extends Module {
         bind(Account.getSObjectType()).sequence(20).to(CheckBalanceAccountTrigger.class);
 
         // Example named binding to a Lightning component
-        bind('actionWidgetManage').lightningComponent().to('wdigetManager');
+        bind('lc_actionWidgetManage').lightningComponent().to('wdigetManager');
 
         // Example named binding to a Visualforce component (via Provider)
-        bind('layoutWidgetInfo').visualforceComponent().to(WidgetInfoController.Provider.class);
+        bind('vf_layoutWidgetInfo').visualforceComponent().to(WidgetInfoController.Provider.class);
     }
 }

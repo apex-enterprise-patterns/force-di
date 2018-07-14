@@ -49,18 +49,18 @@ public class Injector {
     /**
      * Creates an instance of the object configured for the named binding
      **/
-    public Object getInstance(String qualifiedBindingName) {
-        return getInstance(qualifiedBindingName, null);
+    public Object getInstance(String developerName) {
+        return getInstance(developerName, null);
     }
 
     /**
      * Creates an instance of the object configured for the named binding
      *   (if params is specified, implicitly uses the Provider interface)
      **/
-    public Object getInstance(String qualifiedBindingName, Object params) {        
-        List<Binding> bindings = Bindings.byName(qualifiedBindingName).get();
+    public Object getInstance(String developerName, Object params) {        
+        List<Binding> bindings = Bindings.byName(developerName).get();
         if(bindings==null || bindings.size()==0) {
-            throw new InjectorException('Binding for ' + qualifiedBindingName + ' not found');
+            throw new InjectorException('Binding for ' + developerName + ' not found');
         }
         return bindings[0].getInstance(params);
     }
@@ -75,11 +75,15 @@ public class Injector {
                 [select QualifiedAPIName, DeveloperName, NamespacePrefix, 
                         To__c, BindingObject__c, BindingSequence__c 
                     from Binding__mdt]) {
+                // TODO: Support Namespace
                 bind(bindingConfig.DeveloperName);
-                // TODO: Convert to SObjectType
                 if(bindingConfig.BindingObject__c!=null) {                        
-                    SObjectType bindingObject = null;
-                    bind(bindingObject); 
+                    Schema.DescribeSobjectResult[] results = 
+                        Schema.describeSObjects(new String[] { bindingConfig.BindingObject__c });
+                    if(results.size()==0) {
+                        throw new InjectorException('Failed to find SObject ' + bindingConfig.BindingObject__c + ' referened by binding ' + bindingConfig.DeveloperName );
+                    }
+                    bind(results[0].getSObjectType()); 
                 }
                 // TODO: Utilize the new picklist field John is adding
                 if(bindingConfig.DeveloperName.startsWith('apex')) {

@@ -39,6 +39,10 @@ public abstract class Module {
     private Integer bindingSequence;
     private String to;
 
+    public Module() {
+        init();
+    }
+
     /** 
      * Called by the framework when its ready to receive the binding config
      **/
@@ -77,7 +81,7 @@ public abstract class Module {
         return addBinding();
     }
     public Module to(Type bindingTo) {
-        to = bindingTo.toString();        
+        to = bindingTo.getName(); 
         return addBinding();
     }
     public List<Binding> getBindings() {
@@ -103,11 +107,15 @@ public abstract class Module {
         newBinding.BindingSequence = bindingSequence;
         newBinding.To = to;
         bindings.add(newBinding);
+        init();
+        return this;       
+    }
+    private void init() {
         // Reset state
+        bindingType = Binding.BindingType.Apex;
         developerName = null;
         bindingObject = null;
         bindingSequence = null;
         to = null; 
-        return this;       
     }
 }
