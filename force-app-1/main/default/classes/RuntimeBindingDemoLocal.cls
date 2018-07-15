@@ -34,9 +34,22 @@ public class RuntimeBindingDemoLocal {
     }
 
     /**
+     * This example uses purely runtime binding configuration
+     **/
+    public static void run() {
+
+        // Configure the apps dependencies
+        Injector injector = configureBindings();
+
+        // Run the app!
+        WelcomeApp welcomeApp = new WelcomeApp(injector);
+        System.debug(welcomeApp.greetings());
+    }
+
+    /**
      * The applications dependencies are configured dynamically via the above Injector
      **/
-    public static Injector appConfig() {
+    public static Injector configureBindings() {
 
         // Vary Message and Display implementations depending on the users out of office
         return
@@ -72,18 +85,5 @@ public class RuntimeBindingDemoLocal {
         public String say(Message message) {
             return 'Party time! ' + message.saySomething();
         }
-    }
-
-    /**
-     * This example uses purely runtime binding configuration
-     **/
-    public static void run() {
-
-        // Configure the apps dependencies
-        Injector injector = appConfig();
-
-        // Run the app!
-        WelcomeApp welcomeApp = new WelcomeApp(injector);
-        System.debug(welcomeApp.greetings());
     }
 }

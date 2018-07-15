@@ -28,6 +28,16 @@ public class RuntimeBindingDemoOrg {
     }
 
     /**
+     * This example uses purely runtime binding configuration
+     **/
+    public static void run() {
+
+        // Run the app!
+        WelcomeApp welcomeApp = new WelcomeApp();
+        System.debug(welcomeApp.greetings());
+    }
+
+    /**
      * This class to configure the bindings is injected into the Injector.Org instance via Binding__mdt
      **/
     public class WelcomeAppBindings extends Module {
@@ -69,15 +79,5 @@ public class RuntimeBindingDemoOrg {
         public String say(Message message) {
             return 'Party time! ' + message.saySomething();
         }
-    }
-
-    /**
-     * This example uses purely runtime binding configuration
-     **/
-    public static void run() {
-
-        // Run the app!
-        WelcomeApp welcomeApp = new WelcomeApp();
-        System.debug(welcomeApp.greetings());
     }
 }
