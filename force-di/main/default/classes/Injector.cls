@@ -29,7 +29,7 @@ public class Injector {
     /**
      * Default Injector instance configured via Custom Metadata bindings
      **/
-    public static final Injector Default = 
+    public static final Injector Org = 
         new Injector(
             new List<Module> { 
                 new CustomMetadataModule()});
@@ -40,6 +40,13 @@ public class Injector {
     public Binding.Resolver Bindings {get; private set;}
 
     /**
+     * Configures the Injector with the bindings configured by the given Module
+     **/
+    public Injector(Module module) {
+        this(new List<Module> { module });
+    }   
+
+    /**
      * Configures the Injector with the bindings configured by the given Modules
      **/
     public Injector(List<Module> modules) {
@@ -47,20 +54,35 @@ public class Injector {
     }   
 
     /**
+     * Creates an instance of the object configured for the class name binding
+     **/
+    public Object getInstance(Type developerNameByType) {
+        return getInstance(developerNameByType.getName(), null);
+    }
+
+    /**
+     * Creates an instance of the object configured for the class name binding
+     *   (if params is specified, implicitly uses the Provider interface)     
+     **/
+    public Object getInstance(Type developerNameByType, Object params) {
+        return getInstance(developerNameByType.getName(), params);
+    }
+
+    /**
      * Creates an instance of the object configured for the named binding
      **/
-    public Object getInstance(String qualifiedBindingName) {
-        return getInstance(qualifiedBindingName, null);
+    public Object getInstance(String developerName) {
+        return getInstance(developerName, null);
     }
 
     /**
      * Creates an instance of the object configured for the named binding
      *   (if params is specified, implicitly uses the Provider interface)
      **/
-    public Object getInstance(String qualifiedBindingName, Object params) {        
-        List<Binding> bindings = Bindings.byName(qualifiedBindingName).get();
+    public Object getInstance(String developerName, Object params) {        
+        List<Binding> bindings = Bindings.byName(developerName).get();
         if(bindings==null || bindings.size()==0) {
-            throw new InjectorException('Binding for ' + qualifiedBindingName + ' not found');
+            throw new InjectorException('Binding for ' + developerName + ' not found');
         }
         return bindings[0].getInstance(params);
     }
@@ -70,31 +92,25 @@ public class Injector {
      **/
     private class CustomMetadataModule extends Module {
 
-        public void configure() {
+        public override void configure() {
+            // TODO: Support Namespace
             for(Binding__mdt bindingConfig : 
                 [select QualifiedAPIName, DeveloperName, NamespacePrefix, 
-                        To__c, BindingObject__c, BindingSequence__c 
+                        Type__c, To__c, BindingObject__c, BindingSequence__c 
                     from Binding__mdt]) {
                 bind(bindingConfig.DeveloperName);
-                // TODO: Convert to SObjectType
+                type(bindingConfig.Type__c);
                 if(bindingConfig.BindingObject__c!=null) {                        
-                    SObjecType bindingObject = null;
-                    bind(bindingObject); 
-                }
-                // TODO: Utilize the new picklist field John is adding
-                if(bindingConfig.DeveloperName.startsWith('apex')) {
-                    apex();
-                } else if(bindingConfig.DeveloperName.startsWith('vf')) {
-                    visualforceComponent();
-                } else if(bindingConfig.DeveloperName.startsWith('lc')) {
-                    lightningCompnent();
-                }
-                if(bindingConfig.DeveloperName.endsWith('Module')) {
-                    module();
+                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingConfig.BindingObject__c });
+                    if(results.size()!=1) {
+                        throw new InjectorException('Failed to find SObject ' + bindingConfig.BindingObject__c + ' referened by binding ' + bindingConfig.DeveloperName );
+                    }
+                    bind(results[0].getSObjectType()); 
                 }
                 if(bindingConfig.BindingSequence__c!=null) {
-                    sequence(Integer.valueOf(indingConfig.BindingSequence__c));
+                    sequence(Integer.valueOf(bindingConfig.BindingSequence__c));
                 }
+                data(bindingConfig);
                 to(bindingConfig.To__c);
             }
         }

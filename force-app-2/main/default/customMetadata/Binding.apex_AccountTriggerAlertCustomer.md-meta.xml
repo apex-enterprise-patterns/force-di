@@ -14,4 +14,8 @@
         <field>To__c</field>
         <value xsi:type="xsd:string">AlertCustomerAccountTrigger</value>
     </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">Apex</value>
+    </values>
 </CustomMetadata>

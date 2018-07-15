@@ -33,9 +33,10 @@ public abstract class Binding implements Comparable {
     public BindingType BindingType {get;set;}
     public String NamespacePrefix {get;set;}
     public String DeveloperName {get;set;}
-    public SObjecType BindingObject {get;set;}
+    public SObjectType BindingObject {get;set;}
     public Integer BindingSequence {get;set;}
     public String To {get;set;}
+    public Object Data {get;set;}
 
     /**
      * Gets the instance of the thing the binding points to
@@ -54,22 +55,22 @@ public abstract class Binding implements Comparable {
      *   See toString()
      **/
     public Integer compareTo(Object compareTo) {
-        Binding binding = (compareTo) compareTo;
+        Binding binding = (Binding) compareTo;
         return this.toString().compareTo(binding.toString());        
     }
 
     /**
-     * Calcualted based on binding object and sequence if specified
+     * Defaults to DeveloperName or binding object and sequence if specified
      **/
-    public String toString() {
+    public override String toString() {
         if(BindingObject!=null) {
             String hashValue = BindingObject.getDescribe().getName();
             if(BindingSequence!=null) {
-                hashValue+= '#'+BindingSequence;
+                hashValue+= '#'+String.valueOf(BindingSequence).leftPad(4,'0');
             }
-            return hashValue.hashCode();
+            return hashValue;
         } else {
-            return DeveloperName.hashCode();
+            return DeveloperName;
         }
     }
 
@@ -86,8 +87,8 @@ public abstract class Binding implements Comparable {
     public class Resolver {
 
         // Filter params for resolving bindings
-        private String qualifiedDeveloperName;
-        private SObjecType sObjectType;
+        private String developerName;
+        private SObjectType bindingObject;
 
         // Discovered bindings via the modules supplied to this resolver
         private List<Binding> bindings = new List<Binding>();
@@ -103,52 +104,68 @@ public abstract class Binding implements Comparable {
         /**
          * Resolve by name
          **/
-        public Resolver byName(String qualifiedDeveloperName) {
-            this.qualifiedDeveloperName = qualifiedDeveloperName;
+        public Resolver byName(String developerName) {
+            this.developerName = developerName;
             return this;
         }
 
         /**
          * Resolve by object type
          **/
-        public Resolver bySObject(SObjectType sobjectType) {
+        public Resolver bySObject(SObjectType bindingObject) {
+            this.bindingObject = bindingObject;
             return this;
         }
 
         /**
          * Returns a filtered and sorted list of known bindings
+         * Priority is given to filtering by DeveloperName if specified
          **/
         public List<Binding> get() {
             List<Binding> matchedBindings = new List<Binding>();
-            this.qualifiedDeveloperName = null;
-            this.sObjectType = null;
-            return bindings.sort();
+            for(Binding bind : bindings) {
+                if(developerName!=null && bind.DeveloperName!=null && bind.DeveloperName.equals(developerName)) {
+                    matchedBindings.add(bind);
+                } else if (bindingObject!=null && bind.BindingObject == bindingObject) {
+                    matchedBindings.add(bind);
+                }
+            }
+            this.developerName = null;
+            this.bindingObject = null;
+            matchedBindings.sort();
+            return matchedBindings;
         }
     }
 
     public class BindingException extends Exception {}
 
+    /** 
+     * Types of Binding implementations supported by the framework
+     **/
     public enum BindingType { Apex, VisualforceComponent, LightningComponent, Module }
 
     /**
      * Returns the applicable Binding impl to resolve the type of binding provided
      **/
-    public static Binding newInstance(BindingType bindingType) {
+    public static Binding newInstance(BindingType bindType) {
         // Return an applicable Binding subclass for the given binding type
-        Binding binding = null;
-        if(bindingType == BindingType.Apex || 
-           bindingType == BindingType.Module) {
-            binding = new ApexBinding();
-        } else if(bindingType == BindingType.LightningComponent) {
-            binding = new LightningComponentBinding();
-        } else if(bindingType == BindingType.VisualforceComponent) {
-            binding = new VisualForceComponentBinding();
+        Type implType = bindingImplsByType.get(bindType);
+        if(implType!=null) {
+            Binding binding = (Binding) implType.newInstance();
+            binding.BindingType = bindType;
+            return binding;
         }
-        if(binding!=null) {
-            binding.BindingType = bindingType;
-        }
-        return binding;
+        throw new BindingException('Binding type ' + bindType + ' has not implementation.');
     }
+
+    // Maps binding type to the applicable impl
+    private static final Map<BindingType, Type> bindingImplsByType = 
+        new Map<BindingType, Type> { 
+            BindingType.Apex => ApexBinding.class,
+            BindingType.LightningComponent => LightningComponentBinding.class,
+            BindingType.VisualforceComponent => VisualForceComponentBinding.class,
+            BindingType.Module => ApexBinding.class
+        };
 
     /**
      * Bindings to Apex classes (optionally via Provider interface)
@@ -173,7 +190,7 @@ public abstract class Binding implements Comparable {
     }
 
     /**
-     * Bindings to VF Components via Provider interface
+     * Bindings to VF Components via Provider interface (required)
      **/
     private class VisualForceComponentBinding extends Binding {
         public  override Object getInstance(Object params) {
@@ -196,7 +213,7 @@ public abstract class Binding implements Comparable {
      **/
     private class LightningComponentBinding extends Binding {
         public  override Object getInstance(Object params) {
-            // Lightning Component bindings are resolve by the Lightning Component 'inject' included in this library
+            // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
             return To;
         }
     }

@@ -10,5 +10,6 @@ public class CheckBalanceAccountTrigger extends TriggerInjector.TriggerHandler {
         // Query Contacts
         List<Contact> contacts = (List<Contact>) 
             ((TriggerHandlerFieldSetContext) ctx).getRelatedRecordSet(Contact.fields.AccountId);
+        System.debug('CheckBalanceAccountTrigger');            
     }
 }

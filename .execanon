@@ -6,3 +6,6 @@ try {
 }
 
 insert new Widget__c();
+
+RuntimeBindingDemoOrg.run();
+RuntimeBindingDemoLocal.run();
