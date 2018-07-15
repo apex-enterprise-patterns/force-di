@@ -1,5 +1,5 @@
 /**
- * Example Injector.Binding.. usage showing how to return multiple bindings based on custom criteria
+ * Example Injector.Binding.. usage showing how to return multiple bindings based on sobject criteria
  *   (also includes an example of a multiple pass approach to allow binding impls to optimize each other)
  **/
 public class TriggerInjector {
@@ -9,11 +9,12 @@ public class TriggerInjector {
      **/
     public static void handle(SObjectType triggerType, TriggerHandlerContext ctx) {
         // Discover bindings made against the given sobject type 
-        //   (bindings are always returned in sequence if supplied)
+        //   (bindings are always returned in sequence if specified)
         List<Binding> bindings = Injector.Org.Bindings.bySObject(triggerType).get();
         // Construct the handlers
         List<TriggerHandler> handlers = new List<TriggerHandler>();        
         for(Binding binding : bindings) {
+            Object data = binding.Data; // e.g. access to Binding__mdt if additional fields have been added
             Object handler = binding.getInstance();
             if(handler instanceof TriggerHandler) {
                 handlers.add((TriggerHandler) handler);
