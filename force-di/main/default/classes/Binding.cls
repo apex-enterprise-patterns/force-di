@@ -37,6 +37,7 @@ public abstract class Binding implements Comparable {
     public Integer BindingSequence {get;set;}
     public String To {get;set;}
     public Object Data {get;set;}
+    private Object Injected;
 
     /**
      * Gets the instance of the thing the binding points to
@@ -48,7 +49,17 @@ public abstract class Binding implements Comparable {
     /**
      * Gets the instance of the thing the binding points to
      **/
-    public abstract Object getInstance(Object params);
+    public Object getInstance(Object params) {
+        if(Injected==null) {
+            Injected = newInstance(params);
+        }
+        return Injected;
+    }
+
+    /**
+     * Gets the instance of the thing the binding points to
+     **/
+    public abstract Object newInstance(Object params);
 
     /**
      * Compare to impl to help sorted multiple matching bindings from the resolver
@@ -171,7 +182,7 @@ public abstract class Binding implements Comparable {
      * Bindings to Apex classes (optionally via Provider interface)
      **/
     private class ApexBinding extends Binding {
-        public override Object getInstance(Object params) {
+        public override Object newInstance(Object params) {
             // Apex bindings honour the namespace of the defining custom metadata type record
             Type toType = NameSpacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
             if(toType==null) {
@@ -193,7 +204,7 @@ public abstract class Binding implements Comparable {
      * Bindings to VF Components via Provider interface (required)
      **/
     private class VisualForceComponentBinding extends Binding {
-        public  override Object getInstance(Object params) {
+        public  override Object newInstance(Object params) {
             // Visualforce Components references must be made via an Apex class implementing the Provider interface
             Type toType = NamespacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
             if(toType==null) {
@@ -212,7 +223,7 @@ public abstract class Binding implements Comparable {
      * Bindings to Lightning Components (Provider interface not currently supported)
      **/
     private class LightningComponentBinding extends Binding {
-        public  override Object getInstance(Object params) {
+        public  override Object newInstance(Object params) {
             // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
             return To;
         }
