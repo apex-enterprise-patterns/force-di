@@ -8,7 +8,7 @@ public class ForceApp3Module extends Module {
     public override void configure() {
 
         // Example SObject binding (can be used by trigger frameworks, see force-di-demo-trigger)
-        bind(Account.getSObjectType()).sequence(20).to(CheckBalanceAccountTrigger.class);
+        bind(Account.getSObjectType()).apex().sequence(20).to(CheckBalanceAccountTrigger.class);
 
         // Example named binding to a Lightning component
         bind('lc_actionWidgetManage').lightningComponent().to('c:widgetManager');

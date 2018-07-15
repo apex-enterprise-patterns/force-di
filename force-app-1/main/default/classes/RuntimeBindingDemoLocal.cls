@@ -1,7 +1,7 @@
 /**
- * Demonstration of code configured Dependency Injection bindings
+ * Demonstration of local code configured bindings
  **/
-public class RuntimeBindingDemo {
+public class RuntimeBindingDemoLocal {
 
     /**
      * This application has two dependencies defined as follows

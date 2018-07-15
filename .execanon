@@ -7,4 +7,5 @@ try {
 
 insert new Widget__c();
 
-RuntimeBindingDemo.run();
+RuntimeBindingDemoOrg.run();
+RuntimeBindingDemoLocal.run();
