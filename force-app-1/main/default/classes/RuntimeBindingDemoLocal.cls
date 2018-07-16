@@ -73,7 +73,7 @@ public class RuntimeBindingDemoLocal {
     }
     public class Weekend extends Message {
         public override String saySomething() {
-            return 'Have a great weelend!';
+            return 'Have a great weekend!';
         }
     }
     public class BeAwesome implements Display {
