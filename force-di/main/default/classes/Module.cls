@@ -57,8 +57,9 @@ public virtual class Module {
      **/
     public Module type(String value) {
         List<Binding.BindingType> bindEnumValues = Binding.BindingType.values();
+        String valueToCompare = String.isBlank(value) ? null : value.toLowerCase().trim();
         for(Binding.BindingType bindEnumValue : bindEnumValues) {
-            if(bindEnumValue.name().equals(value)) {
+            if(bindEnumValue.name().equalsIgnoreCase(valueToCompare)) {
                 bindingType = bindEnumValue;
                 return this;
             }
@@ -110,7 +111,7 @@ public virtual class Module {
      * Binding is related to a given Apex class
      **/
     public Module bind(Type bindingType) {
-        developerName = bindingType.getName();
+        developerName = bindingType == null ? null : bindingType.getName().toLowerCase();
         return this;
     }
 
@@ -126,7 +127,7 @@ public virtual class Module {
      * Binding is related to a given developer name
      **/
     public Module bind(String bindingName) {
-        developerName = bindingName;
+        developerName = String.isBlank(bindingName) ? null : bindingName.toLowerCase().trim();
         return this;
     }
 
@@ -150,7 +151,7 @@ public virtual class Module {
      * Binding implementation
      **/
     public Module to(String bindingTo) {
-        to = bindingTo;
+        to = String.isBlank(bindingTo) ? null : bindingTo.toLowerCase().trim();
         return addBinding();
     }
 
@@ -158,7 +159,7 @@ public virtual class Module {
      * Binding implementation
      **/
     public Module to(Type bindingTo) {
-        to = bindingTo.getName(); 
+        to = bindingTo == null ? null : bindingTo.getName().toLowerCase(); 
         return addBinding();
     }
 
