@@ -57,7 +57,7 @@ public class Injector {
      * Creates an instance of the object configured for the class name binding
      **/
     public Object getInstance(Type developerNameByType) {
-        return getInstance(developerNameByType.getName(), null);
+        return getInstance( developerNameByType == null ? null : developerNameByType.getName().toLowerCase(), null);
     }
 
     /**
@@ -65,7 +65,7 @@ public class Injector {
      *   (if params is specified, implicitly uses the Provider interface)     
      **/
     public Object getInstance(Type developerNameByType, Object params) {
-        return getInstance(developerNameByType.getName(), params);
+        return getInstance(developerNameByType == null ? null : developerNameByType.getName().toLowerCase(), params);
     }
 
     /**
@@ -79,9 +79,13 @@ public class Injector {
      * Creates an instance of the object configured for the named binding
      *   (if params is specified, implicitly uses the Provider interface)
      **/
-    public Object getInstance(String developerName, Object params) {        
-        List<Binding> bindings = Bindings.byName(developerName).get();
-        if(bindings==null || bindings.size()==0) {
+    public Object getInstance(String developerName, Object params) {
+        if ( string.isBlank(developerName) ) {
+            throw new InjectorException('Request for Binding cannot take "developerName" parameter of null');
+        }
+
+        List<Binding> bindings = Bindings.byName( developerName.toLowerCase().trim() ).get();
+        if ( bindings == null || bindings.isEmpty() ) {
             throw new InjectorException('Binding for ' + developerName + ' not found');
         }
         return bindings[0].getInstance(params);
@@ -100,14 +104,14 @@ public class Injector {
                     from Binding__mdt]) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type__c);
-                if(bindingConfig.BindingObject__c!=null) {                        
-                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingConfig.BindingObject__c });
-                    if(results.size()!=1) {
+                if(String.isNotBlank(bindingConfig.BindingObject__c)) {                        
+                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingConfig.BindingObject__c.toLowerCase().trim() });
+                    if(results.size() != 1) {
                         throw new InjectorException('Failed to find SObject ' + bindingConfig.BindingObject__c + ' referened by binding ' + bindingConfig.DeveloperName );
                     }
                     bind(results[0].getSObjectType()); 
                 }
-                if(bindingConfig.BindingSequence__c!=null) {
+                if(bindingConfig.BindingSequence__c != null) {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence__c));
                 }
                 data(bindingConfig);
