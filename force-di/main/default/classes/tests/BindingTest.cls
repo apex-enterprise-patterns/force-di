@@ -26,4 +26,41 @@
 
 @IsTest
 private class BindingTest {
+
+    @IsTest
+    private static void givenApexBindingWhenGetInstanceThenInstance() {
+        // Given
+        Binding binding = Binding.newInstance(
+            Binding.BIndingType.Apex, 
+            Bob.class.getName(), null, null, Bob.class.getName(), null);
+        // When
+        Object boundInstance = Binding.getInstance();
+        // Then
+        System.assert(boundInstance instanceof Bob);
+    }
+
+    @IsTest
+    private static void givenApexBindingWhenGetInstanceWithParamThenInstanceWithParam() {
+        // Given
+        Binding binding = Binding.newInstance(
+            Binding.BIndingType.Apex, 
+            Bob.class.getName(), null, null, ProviderImpl.class.getName(), null);
+        // When
+        Object boundInstance = Binding.getInstance('Some value');
+        // Then
+        System.assert(boundInstance instanceof Bob);
+        System.assertEquals('Some value', ((Bob) boundInstance).Name);
+    }
+
+    public class Bob { 
+        public String Name {get;private set;}
+        public Bob() { }
+        public Bob(String name) { this.Name = name; }
+    }
+
+    public class ProviderImpl implements Binding.Provider { 
+        public Object newInstance(Object params) {
+            return new Bob((String) params);
+        }
+    }
 }
