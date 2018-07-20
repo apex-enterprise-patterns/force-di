@@ -34,10 +34,11 @@ private class BindingTest {
             Binding.BIndingType.Apex, 
             Bob.class.getName(), null, null, Bob.class.getName(), null);
         // When
-        Object boundInstance = binding.getInstance();
+        Object boundInstance1 = binding.getInstance();
+        Object boundInstance2 = binding.getInstance();
         // Then
-        System.assert(boundInstance instanceof Bob);
-        System.assert(boundInstance === binding.getInstance());
+        System.assert(boundInstance1 instanceof Bob);
+        System.assert(boundInstance1 === boundInstance2);
     }
 
     @IsTest
