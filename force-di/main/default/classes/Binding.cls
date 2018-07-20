@@ -30,14 +30,14 @@
  **/
 public abstract class Binding implements Comparable {
 
-    public BindingType BindingType {get;set;}
-    public String NamespacePrefix {get;set;}
-    public String DeveloperName {get;set;}
-    public SObjectType BindingObject {get;set;}
-    public Integer BindingSequence {get;set;}
-    public String To {get;set;}
-    public Object Data {get;set;}
-    private Object Injected;
+    public BindingType BindingType {get; private set;}
+    public String NamespacePrefix {get;private set;}
+    public String DeveloperName {get;private set;}
+    public SObjectType BindingObject {get;private set;}
+    public Integer BindingSequence {get;private set;}
+    public String To {get;private set;}
+    public Object Data {get;private set;}
+    private Object Injected {get;private set;}
 
     /**
      * Gets the instance of the thing the binding points to
@@ -158,12 +158,23 @@ public abstract class Binding implements Comparable {
     /**
      * Returns the applicable Binding impl to resolve the type of binding provided
      **/
-    public static Binding newInstance(BindingType bindType) {
+    public static Binding newInstance(
+            BindingType bindType,
+            String developerName,
+            SObjectType bindingObject,
+            Integer bindingSequence,
+            String to,
+            Object bindingData) {
         // Return an applicable Binding subclass for the given binding type
         Type implType = bindingImplsByType.get(bindType);
         if(implType!=null) {
             Binding binding = (Binding) implType.newInstance();
             binding.BindingType = bindType;
+            binding.DeveloperName = developerName;
+            binding.BindingObject = bindingObject;
+            binding.BindingSequence = bindingSequence;
+            binding.To = to;
+            binding.Data = bindingData;
             return binding;
         }
         throw new BindingException('Binding type ' + bindType + ' has not implementation.');

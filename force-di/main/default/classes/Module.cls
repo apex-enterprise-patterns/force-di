@@ -184,12 +184,13 @@ public virtual class Module {
 
     private Module addBinding() {
         // Construct binding and configure it
-        Binding newBinding = Binding.newInstance(bindingType);
-        newBinding.DeveloperName = developerName;
-        newBinding.BindingObject = bindingObject;
-        newBinding.BindingSequence = bindingSequence;
-        newBinding.To = to;
-        newBinding.Data = bindingData;
+        Binding newBinding = Binding.newInstance(
+            bindingType,
+            developerName,
+            bindingObject,
+            bindingSequence,
+            to,
+            bindingData);
         bindings.add(newBinding);
         init();
         return this;       
