@@ -34,9 +34,10 @@ private class BindingTest {
             Binding.BIndingType.Apex, 
             Bob.class.getName(), null, null, Bob.class.getName(), null);
         // When
-        Object boundInstance = Binding.getInstance();
+        Object boundInstance = binding.getInstance();
         // Then
         System.assert(boundInstance instanceof Bob);
+        System.assert(boundInstance === binding.getInstance());
     }
 
     @IsTest
@@ -46,10 +47,13 @@ private class BindingTest {
             Binding.BIndingType.Apex, 
             Bob.class.getName(), null, null, ProviderImpl.class.getName(), null);
         // When
-        Object boundInstance = Binding.getInstance('Some value');
+        Object boundInstance1 = binding.getInstance('Some value 1');
+        Object boundInstance2 = binding.getInstance('Some value 2');
         // Then
-        System.assert(boundInstance instanceof Bob);
-        System.assertEquals('Some value', ((Bob) boundInstance).Name);
+        System.assert(boundInstance1 instanceof Bob);
+        System.assertEquals('Some value 1', ((Bob) boundInstance1).Name);
+        System.assert(boundInstance2 instanceof Bob);
+        System.assertEquals('Some value 2', ((Bob) boundInstance2).Name);
     }
 
     public class Bob { 

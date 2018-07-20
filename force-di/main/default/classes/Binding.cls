@@ -37,7 +37,8 @@ public abstract class Binding implements Comparable {
     public Integer BindingSequence {get;private set;}
     public String To {get;private set;}
     public Object Data {get;private set;}
-    private Object Injected {get;private set;}
+    private Boolean IsProvider = false;
+    private Object Injected = null;
 
     /**
      * Gets the instance of the thing the binding points to
@@ -50,7 +51,9 @@ public abstract class Binding implements Comparable {
      * Gets the instance of the thing the binding points to
      **/
     public Object getInstance(Object params) {
-        if(Injected==null) {
+        if(IsProvider) { 
+            return newInstance(params);
+        } else if(Injected==null) {
             Injected = newInstance(params);
         }
         return Injected;
@@ -201,7 +204,8 @@ public abstract class Binding implements Comparable {
             }
             Object toObject = toType.newInstance();
             // Is this Apex binding resolved via a Provider?
-            if(toObject instanceof Provider) {
+            IsProvider = toObject instanceof Provider; 
+            if(IsProvider) {                
                 return ((Provider) toObject).newInstance(params);
             } else if(params!=null) {
                 // Params supplied but the binding does not reference a Provider?
@@ -223,7 +227,8 @@ public abstract class Binding implements Comparable {
             }
             // Visualforce Components have to be resolved via a Provider
             Object toObject = toType.newInstance();
-            if(toObject instanceof Provider) {
+            IsProvider = toObject instanceof Provider; 
+            if(IsProvider) {
                 return ((Provider) toObject).newInstance(params);
             }
             throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the Provider interface.');
