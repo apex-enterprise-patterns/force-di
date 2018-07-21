@@ -1,23 +1,23 @@
 /**
- * Copyright (c) 2017, Andrew Fawcett
+ * Copyright (c) 2018, Andrew Fawcett
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, 
+ * Redistribution and use in source and binary forms, with or without modification,
  *   are permitted provided that the following conditions are met:
  *
- * - Redistributions of source code must retain the above copyright notice, 
+ * - Redistributions of source code must retain the above copyright notice,
  *      this list of conditions and the following disclaimer.
- * - Redistributions in binary form must reproduce the above copyright notice, 
- *      this list of conditions and the following disclaimer in the documentation 
+ * - Redistributions in binary form must reproduce the above copyright notice,
+ *      this list of conditions and the following disclaimer in the documentation
  *      and/or other materials provided with the distribution.
- * - Neither the name of the Andrew Fawcett, nor the names of its contributors 
- *      may be used to endorse or promote products derived from this software without 
+ * - Neither the name of the Andrew Fawcett, nor the names of its contributors
+ *      may be used to endorse or promote products derived from this software without
  *      specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
- *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
- *  THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ *  THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
  *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
@@ -26,7 +26,7 @@
 
 ({
     doInit : function(cmp, event, helper) {
-        
+
         // Resolve the given binding
         var action = cmp.get("c.getInstance");
         action.setStorable(true); // TODO: Investigate a means to have a more global client side cache for all vc bindings on the client
@@ -34,15 +34,19 @@
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {
+                var componentName = response.getReturnValue();
                 // Construct attributes to pass on to injected component
                 var componentAttrs = {};
                 var injectAttrs = cmp.get("v.body");
-                for(var attrIdx in injectAttrs) {
-                    var injectAttr = injectAttrs[attrIdx];
-                    componentAttrs[injectAttr.get('v.name')] = injectAttr.get('v.value');
+                if (componentName.toLowerCase().endsWith(":injectorflowproxy")) {
+                    componentAttrs['injectorAttributes'] = injectAttrs;
+                } else {
+                    for (var attrIdx in injectAttrs) {
+                        var injectAttr = injectAttrs[attrIdx];
+                        componentAttrs[injectAttr.get('v.name')] = injectAttr.get('v.value');
+                    }
                 }
                 // Inject the component bound to the given binding
-                var componentName = response.getReturnValue();
                 $A.createComponent(
                     componentName,
                     componentAttrs,
@@ -62,7 +66,7 @@
                             // Show error message
                         }
                     }
-                );                
+                );
             }
             else if (state === "INCOMPLETE") {
             }
