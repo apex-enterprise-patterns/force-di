@@ -31,12 +31,21 @@
 public abstract class Binding implements Comparable {
 
     public BindingType BindingType {get; private set;}
+    @AuraEnabled
+    public String BindingTypeAsString {get { return BindingType.name();} }
+    @AuraEnabled
     public String NamespacePrefix {get;private set;}
+    @AuraEnabled
     public String DeveloperName {get;private set;}
+    @AuraEnabled
     public SObjectType BindingObject {get;private set;}
+    @AuraEnabled
     public Integer BindingSequence {get;private set;}
+    @AuraEnabled
     public String To {get;private set;}
+    @AuraEnabled
     public Object Data {get;private set;}
+
     private Boolean IsProvider = false;
     private Object Injected = null;
 
@@ -156,7 +165,7 @@ public abstract class Binding implements Comparable {
     /** 
      * Types of Binding implementations supported by the framework
      **/
-    public enum BindingType { Apex, VisualforceComponent, LightningComponent, Module }
+    public enum BindingType { Apex, VisualforceComponent, LightningComponent, Flow, Module }
 
     /**
      * Returns the applicable Binding impl to resolve the type of binding provided
@@ -189,6 +198,7 @@ public abstract class Binding implements Comparable {
             BindingType.Apex => ApexBinding.class,
             BindingType.LightningComponent => LightningComponentBinding.class,
             BindingType.VisualforceComponent => VisualForceComponentBinding.class,
+            BindingType.Flow => FlowBinding.class,
             BindingType.Module => ApexBinding.class
         };
 
@@ -242,6 +252,18 @@ public abstract class Binding implements Comparable {
         public  override Object newInstance(Object params) {
             // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
             return To;
+        }
+    }
+
+    /**
+     * Bindings to Flows (Provider interface not currently supported)
+     **/
+    private class FlowBinding extends Binding {
+        public  override Object newInstance(Object params) {
+            if(params instanceof Map<String, Object>) {
+                return Flow.Interview.createInterview(To, (Map<String, Object>) params);
+            }
+            return Flow.Interview.createInterview(To, new Map<String, Object>());               
         }
     }
 }

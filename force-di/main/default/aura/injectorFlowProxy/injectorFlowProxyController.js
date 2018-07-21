@@ -1,7 +1,7 @@
 ({
     doInit: function ( component, event, helper ) {
 
-        var flowName = '';
+        var flowName = component.get('v.flowName');
         var flowInputVariables = [];
 
         var injectAttrs = component.get( 'v.injectorAttributes' );
@@ -19,16 +19,11 @@
 
             console.log( flowInputVar );
 
-            if ( flowInputVar.name.toLowerCase() == 'flowname' ) {
-                flowName = flowInputVar.value;
-            } else {
-                // lightning:flow will throw error if we send more
-                // input variables than are actually defined in the flow.
-                // therefore, since 'flowName' is specific to our proxy component,
-                // then we don't assume we can pass it to the flow.
-                flowInputVariables.push( flowInputVar );
-            }
-
+            // lightning:flow will throw error if we send more
+            // input variables than are actually defined in the flow.
+            // therefore, since 'flowName' is specific to our proxy component,
+            // then we don't assume we can pass it to the flow.
+            flowInputVariables.push( flowInputVar );
         }
 
         if ( !$A.util.isEmpty( flowName ) ) {

@@ -26,6 +26,11 @@
                 <label>Visualforce Component</label>
             </value>
             <value>
+                <fullName>Flow</fullName>
+                <default>false</default>
+                <label>Flow</label>
+            </value>
+            <value>
                 <fullName>Module</fullName>
                 <default>false</default>
                 <label>Module</label>

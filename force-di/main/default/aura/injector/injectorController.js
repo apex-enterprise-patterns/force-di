@@ -34,17 +34,24 @@
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {
-                var componentName = response.getReturnValue();
-                // Construct attributes to pass on to injected component
-                var componentAttrs = {};
+                var bindingInfo = response.getReturnValue();
                 var injectAttrs = cmp.get("v.body");
-                if (componentName.toLowerCase().endsWith(":injectorflowproxy")) {
+                // Construct attributes to pass on to injected component
+                var componentName = null;
+                var componentAttrs = {};
+                if(bindingInfo.BindingTypeAsString == 'Flow') {
+                    componentName = 'c:injectorFlowProxy';
+                    componentAttrs['flowName'] = bindingInfo.To;
                     componentAttrs['injectorAttributes'] = injectAttrs;
-                } else {
+                } else if(bindingInfo.BindingTypeAsString == 'LightningComponent') {
+                    componentName = bindingInfo.To;
                     for (var attrIdx in injectAttrs) {
                         var injectAttr = injectAttrs[attrIdx];
                         componentAttrs[injectAttr.get('v.name')] = injectAttr.get('v.value');
                     }
+                } else {
+                    console.log("Binding type " + bindingInfo.BindingTypeAsString + ' not supported');
+                    return;
                 }
                 // Inject the component bound to the given binding
                 $A.createComponent(

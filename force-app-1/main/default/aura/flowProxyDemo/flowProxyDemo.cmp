@@ -11,13 +11,8 @@
 
     <lightning:card title="Flow Proxy Demo">
 
-        <!--
-            Use a binding to "c:injectorFlowProxy".
-            Required injector attribute is "flowName" to know which flow to run.
-            All other injector attributes become input variables passed to the flow.
-         -->
-        <c:injector bindingName="lc_flow_proxy">
-            <c:injectorAttribute name="flowName" value="DisplayRecordIdFlow"/> <!-- TODO move this to default param in binding_mdt definition -->
+        <!-- Injector attributes become input variables passed to the Flow. -->
+        <c:injector bindingName="flow_AccountRecord">
             <c:injectorAttribute name="recordId" value="{!v.recordId}"/>
         </c:injector>
 

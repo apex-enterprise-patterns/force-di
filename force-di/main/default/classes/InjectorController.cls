@@ -37,7 +37,7 @@ public with sharing class InjectorController {
     }
 
     @AuraEnabled
-    public static String getInstance(String bindingName) {
-        return (String) Injector.Org.getInstance(bindingName);
+    public static Binding getInstance(String bindingName) {
+        return Injector.Org.Bindings.byName(bindingName).get()[0];
     }
 }
