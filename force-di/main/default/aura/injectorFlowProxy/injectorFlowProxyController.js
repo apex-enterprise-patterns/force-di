@@ -17,8 +17,6 @@
                                  // https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/components_config_for_flow_tips_map.htm
             };
 
-            console.log( flowInputVar );
-
             // lightning:flow will throw error if we send more
             // input variables than are actually defined in the flow.
             // therefore, since 'flowName' is specific to our proxy component,
@@ -59,14 +57,13 @@
 
             })).catch( $A.getCallback( function( err ) {
 
-                console.error( 'Error creating flow component' ); // TODO raise error?
-                console.error( err );
+                console.error( 'Error creating flow component', err );
 
             }));
 
         } else {
 
-            console.error( '"flowName" attribute required' ); // TODO raise error?
+            console.error( '"flowName" attribute required' );
 
         }
 

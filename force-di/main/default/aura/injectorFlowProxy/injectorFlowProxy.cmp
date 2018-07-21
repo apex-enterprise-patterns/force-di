@@ -1,7 +1,8 @@
 <aura:component>
 
     <!-- Flow name to inject -->
-    <aura:attribute name="flowName" type="String"/>
+    <aura:attribute name="flowName" type="String" required="true"/>
+
     <!--
         Design is for <c:injector> to pass all of its <c:injectorAttribute> tags
         as-is to this attribute, and then this component will parse the attributes.
