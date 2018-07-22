@@ -15,6 +15,14 @@
         <object>Widget__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <pageAccesses>
+        <apexPage>accountRecordFlow</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>layoutWidgetInfo</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
     <tabSettings>
         <tab>DI_Demo</tab>
         <visibility>Visible</visibility>
