@@ -1,0 +1,6 @@
+<aura:event type="COMPONENT">
+    <aura:attribute name="flowTitle" type="String"/>
+    <aura:attribute name="status" type="String"/>
+    <aura:attribute name="guid" type="String"/>
+    <aura:attribute name="outputVariables" type="Object[]"/>
+</aura:event>

@@ -24,20 +24,17 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-public with sharing class InjectorController {
+public with sharing class InjectorComponentFlowProxyController {
 
-    public ApexPages.StandardController StandardController {get;set;}
+    public String FlowNameValue { get; set; }
 
-    public InjectorController(ApexPages.StandardController StandardController) {
-        this.StandardController = StandardController;
+    public Object InputVariablesValue { get; set; }
+
+    public Component.Flow.Interview getInject() {
+        Component.Flow.Interview interview = new Component.Flow.Interview();
+        interview.name = FlowNameValue;
+        // TODO how to pass input variables into Component.Flow.Interview?
+        return interview;
     }
 
-    public InjectorController getThis() {
-        return this;
-    }
-
-    @AuraEnabled
-    public static Binding getBinding(String bindingName) {
-        return Injector.Org.Bindings.byName(bindingName).get()[0];
-    }
 }

@@ -24,20 +24,14 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-public with sharing class InjectorController {
+public with sharing class AccountRecordFlowController {
 
-    public ApexPages.StandardController StandardController {get;set;}
+    public Map<String, Object> flowInputVariables { get; set; }
 
-    public InjectorController(ApexPages.StandardController StandardController) {
-        this.StandardController = StandardController;
+    public AccountRecordFlowController( ApexPages.StandardController stdController ) {
+        this.flowInputVariables = new Map<String, Object>{
+            'recordId' => stdController.getId()
+        };
     }
 
-    public InjectorController getThis() {
-        return this;
-    }
-
-    @AuraEnabled
-    public static Binding getBinding(String bindingName) {
-        return Injector.Org.Bindings.byName(bindingName).get()[0];
-    }
 }
