@@ -48,7 +48,7 @@ public abstract class Binding implements Comparable {
     public Integer BindingSequence {get;private set;}
 
     @AuraEnabled
-    public String To {get;private set;}
+    public Object To {get;private set;}
 
     @AuraEnabled
     public Object Data {get;private set;}
@@ -119,16 +119,35 @@ public abstract class Binding implements Comparable {
         // Filter params for resolving bindings
         private String developerName;
         private SObjectType bindingObject;
-
+        // Modules used by the Resolver to discover bindings
+        private List<Module> modules = null;        
         // Discovered bindings via the modules supplied to this resolver
-        private List<Binding> bindings = new List<Binding>();
+        private List<Binding> bindings = null;
 
+        /**
+         * Resolver will call .configure() followed by getBindings() on each Modue
+         **/
         public Resolver(List<Module> modules) {
-            // Ask each module to configure and aggregate the resulting bindings
-            for(Module module : modules) {
-                module.configure();
-                bindings.addAll(module.getBindings());
-            }
+            this.modules = modules;
+        }
+
+        /**
+         * Clear any modules known to this resolver and add the one given
+         **/
+        public Resolver set(Module module) {
+            modules.clear();
+            modules.add(module);
+            bindings = null; // Force reload of bindings
+            return this;
+        }
+
+        /**
+         * Add the module to those already known to this resolver
+         **/
+        public Resolver add(Module module) {
+            modules.add(module);
+            bindings = null; // Force reload of bindings
+            return this;
         }
 
         /**
@@ -152,6 +171,16 @@ public abstract class Binding implements Comparable {
          * Priority is given to filtering by DeveloperName if specified
          **/
         public List<Binding> get() {
+            // Late resolve bindings to allow runtime module injection via set and add methods
+            if(bindings==null) {
+                // Ask each module to configure and aggregate the resulting bindings
+                bindings = new List<Binding>();
+                for(Module module : modules) {
+                    module.configure();
+                    bindings.addAll(module.getBindings());
+                }
+            }
+            // Filter bindings returned by preconfigured criteria
             List<Binding> matchedBindings = new List<Binding>();
             for(Binding bind : bindings) {
                 if(developerName!=null && bind.DeveloperName!=null && bind.DeveloperName.equals(developerName)) {
@@ -182,7 +211,7 @@ public abstract class Binding implements Comparable {
             String developerName,
             SObjectType bindingObject,
             Integer bindingSequence,
-            String to,
+            Object to,
             Object bindingData) {
         // Return an applicable Binding subclass for the given binding type
         Type implType = bindingImplsByType.get(bindType);
@@ -214,21 +243,27 @@ public abstract class Binding implements Comparable {
      **/
     private class ApexBinding extends Binding {
         public override Object newInstance(Object params) {
-            // Apex bindings honour the namespace of the defining custom metadata type record
-            Type toType = NameSpacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
-            if(toType==null) {
-                throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not exist');
+            // Type binding?
+            if(To instanceof String) {
+                // Leverage namespace if the Binding has one
+                String className = (String) To;
+                Type toType = NameSpacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
+                if(toType==null) {
+                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not exist');
+                }
+                Object toObject = toType.newInstance();
+                // Is this Apex binding resolved via a Provider?
+                IsProvider = toObject instanceof Provider;
+                if(IsProvider) {
+                    return ((Provider) toObject).newInstance(params);
+                } else if(params!=null) {
+                    // Params supplied but the binding does not reference a Provider?
+                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + className + ' does not implement the Provider interaface.');
+                }
+                return toObject;
             }
-            Object toObject = toType.newInstance();
-            // Is this Apex binding resolved via a Provider?
-            IsProvider = toObject instanceof Provider;
-            if(IsProvider) {
-                return ((Provider) toObject).newInstance(params);
-            } else if(params!=null) {
-                // Params supplied but the binding does not reference a Provider?
-                throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not implement the Provider interaface.');
-            }
-            return toObject;
+            // Instance binding
+            return To;
         }
     }
 
@@ -237,18 +272,24 @@ public abstract class Binding implements Comparable {
      **/
     private class VisualForceComponentBinding extends Binding {
         public  override Object newInstance(Object params) {
-            // Visualforce Components references must be made via an Apex class implementing the Provider interface
-            Type toType = NamespacePrefix==null ? Type.forName(To) : Type.forName(NamespacePrefix, To);
-            if(toType==null) {
-                throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + To + ' does not exist.');
+            // Type binding?
+            if(To instanceof String) {
+                // Visualforce Components references must be made via an Apex class implementing the Provider interface
+                String className = (String) To;
+                Type toType = NamespacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
+                if(toType==null) {
+                    throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + className + ' does not exist.');
+                }
+                // Visualforce Components have to be resolved via a Provider
+                Object toObject = toType.newInstance();
+                IsProvider = toObject instanceof Provider;
+                if(IsProvider) {
+                    return ((Provider) toObject).newInstance(params);
+                }
+                throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the Provider interface.');
             }
-            // Visualforce Components have to be resolved via a Provider
-            Object toObject = toType.newInstance();
-            IsProvider = toObject instanceof Provider;
-            if(IsProvider) {
-                return ((Provider) toObject).newInstance(params);
-            }
-            throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the Provider interface.');
+            // Instance binding
+            return To;
         }
     }
 
@@ -256,7 +297,7 @@ public abstract class Binding implements Comparable {
      * Bindings to Lightning Components (Provider interface not currently supported)
      **/
     private class LightningComponentBinding extends Binding {
-        public  override Object newInstance(Object params) {
+        public override Object newInstance(Object params) {
             // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
             return To;
         }
@@ -267,10 +308,16 @@ public abstract class Binding implements Comparable {
      **/
     private class FlowBinding extends Binding {
         public  override Object newInstance(Object params) {
-            if(params instanceof Map<String, Object>) {
-                return Flow.Interview.createInterview(To, (Map<String, Object>) params);
+            // Flow name binding?
+            if(To instanceof String) {
+                String flowName = (String) To;
+                if(params instanceof Map<String, Object>) {
+                    return new Flow(Flow.Interview.createInterview(flowName, (Map<String, Object>) params));
+                }
+                return new Flow(Flow.Interview.createInterview(flowName, new Map<String, Object>()));
             }
-            return Flow.Interview.createInterview(To, new Map<String, Object>());
+            // Instance binding
+            return To;
         }
     }
 }

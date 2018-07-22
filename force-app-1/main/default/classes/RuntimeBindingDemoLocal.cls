@@ -4,14 +4,8 @@
 public class RuntimeBindingDemoLocal {
 
     /**
-     * This application has two dependencies defined as follows
+     * This application has two dependencies defined via the Display interface and Message base class
      **/
-    public interface Display {
-        String say(Message message);
-    }
-    public abstract class Message {
-        public abstract String saySomething();
-    }
 
     /**
      * The application outputs a message to the user
@@ -29,7 +23,7 @@ public class RuntimeBindingDemoLocal {
         }
 
         public String greetings() {
-            return display.say(message);
+            return display.startup() + ':' + message.saySomething();
         }
     }
 
@@ -77,13 +71,13 @@ public class RuntimeBindingDemoLocal {
         }
     }
     public class BeAwesome implements Display {
-        public String say(Message message) {
-            return 'Go be awesome! ' + message.saySomething();
+        public String startup() {
+            return 'Go be awesome!';
         }
     }    
     public class Fun implements Display {
-        public String say(Message message) {
-            return 'Party time! ' + message.saySomething();
+        public String startup() {
+            return 'Party time!';
         }
     }
 }

@@ -37,7 +37,7 @@ public virtual class Module {
     private String developerName;
     private SObjectType bindingObject;
     private Integer bindingSequence;
-    private String to;
+    private Object to;
     private Object bindingData;
 
     /**
@@ -98,6 +98,14 @@ public virtual class Module {
         return this;
     }
 
+    /** 
+     * Sets the binding type to Flow
+     **/
+    public Module flow() {
+        bindingType = Binding.BindingType.Flow;
+        return this;
+    }
+
     /**
      * Sets the binding type to Module (Apex class binding must extend Module class)
      **/
@@ -150,15 +158,26 @@ public virtual class Module {
      * Binding implementation
      **/
     public Module to(String bindingTo) {
-        to = bindingTo;
-        return addBinding();
+        return toObject(bindingTo);
     }
 
     /**
      * Binding implementation
      **/
     public Module to(Type bindingTo) {
-        to = bindingTo.getName(); 
+        return toObject(bindingTo.getName());
+    }
+
+    /**
+     * Binding to an actual instance of the implementation (as apposed to class name)
+     **/
+    public Module toObject(Object to) {
+        // This can be a string (typically late binding) or an object (instance binding)
+        this.to = to;
+        // Attempt to auto infer type of binding
+        if(to instanceof Flow) {
+            return flow().addBinding();
+        }
         return addBinding();
     }
 

@@ -9,3 +9,5 @@ insert new Widget__c();
 
 RuntimeBindingDemoOrg.run();
 RuntimeBindingDemoLocal.run();
+
+System.debug(AutoLaunchFlowDemo.reverseFlowString());
