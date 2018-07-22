@@ -42,7 +42,7 @@ public with sharing class InjectorComponentFlowProxyController {
                 newMap.put( String.valueOf( key ), oldMap.get( key ) );
             }
         } else if ( InputVariablesValue instanceof Map<String, Object> ) {
-            RequestScopeInvocable.parameters = (Map<String, Object>) InputVariablesValue;
+            BindingParam.parameters = (Map<String, Object>) InputVariablesValue;
         }
 
         return interview;
