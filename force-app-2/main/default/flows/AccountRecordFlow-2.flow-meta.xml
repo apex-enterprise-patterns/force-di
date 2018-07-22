@@ -44,8 +44,9 @@
             <targetReference>Screen</targetReference>
         </connector>
     </assignments>
-    <interviewLabel>DisplayRecordIdFlow {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>DisplayRecordIdFlow</label>
+    <description>Given &#39;recordId&#39; then displays account name.</description>
+    <interviewLabel>Account Record Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account Record Flow</label>
     <processType>Flow</processType>
     <recordLookups>
         <name>Get_Account</name>

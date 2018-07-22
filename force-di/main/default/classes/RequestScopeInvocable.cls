@@ -1,3 +1,28 @@
+/**
+ * Copyright (c) 2018, Andrew Fawcett
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ *   are permitted provided that the following conditions are met:
+ *
+ * - Redistributions of source code must retain the above copyright notice,
+ *      this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright notice,
+ *      this list of conditions and the following disclaimer in the documentation
+ *      and/or other materials provided with the distribution.
+ * - Neither the name of the Andrew Fawcett, nor the names of its contributors
+ *      may be used to endorse or promote products derived from this software without
+ *      specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ *  THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**/
 
 public with sharing class RequestScopeInvocable {
 
@@ -8,56 +33,77 @@ public with sharing class RequestScopeInvocable {
     @InvocableMethod(
         label = 'Get Value'
     )
-    public static List<Result> invoke( List<String> paramNames ) {
+    public static List<Response> invoke( List<Request> requests ) {
 
-        List<Result> paramValues = new List<Result>();
+        List<Response> responses = new List<Response>();
 
-        for ( String paramName : paramNames ) {
+        for ( Request req : requests ) {
 
-            Result r = new Result();
+            Response res = new Response();
 
             if ( parameters != null ) {
 
-                Object value = parameters.get( paramName );
+                Object value = parameters.get( req.paramName );
 
                 if ( value != null ) {
 
                     if ( value instanceof Decimal ) {
 
                         Decimal decimalValue = (Decimal) value;
-                        r.longValue = decimalValue.longValue();
-                        r.decimalValue = decimalValue;
-                        r.stringValue = String.valueOf( decimalValue );
-                        r.booleanValue = ( decimalValue != 0 );
+                        res.longValue = decimalValue.longValue();
+                        res.decimalValue = decimalValue;
+                        res.stringValue = String.valueOf( decimalValue );
+                        res.booleanValue = ( decimalValue != 0 );
 
                     } else if ( value instanceof String ) {
 
                         String stringValue = (String) value;
                         if ( stringValue.isNumeric() ) {
-                            r.longValue = Long.valueOf( stringValue );
-                            r.decimalValue = Decimal.valueOf( stringValue );
+                            res.longValue = Long.valueOf( stringValue );
+                            res.decimalValue = Decimal.valueOf( stringValue );
                         }
-                        r.stringValue = stringValue;
-                        r.booleanValue = ( String.isNotBlank( stringValue ) && stringValue != 'false' && stringValue != '0' );
+                        res.stringValue = stringValue;
+                        res.booleanValue = ( String.isNotBlank( stringValue ) && stringValue != 'false' && stringValue != '0' );
+
+                        try { res.dateValue = Date.parse( stringValue ); } catch ( Exception e ) { }
+                        try { res.dateTimeValue = DateTime.parse( stringValue ); } catch ( Exception e ) { }
 
                     } else if ( value instanceof Boolean ) {
 
                         Boolean booleanValue = (Boolean) value;
-                        r.longValue = ( booleanValue ? 1 : 0 );
-                        r.decimalValue = ( booleanValue ? 1 : 0 );
-                        r.stringValue = String.valueOf( booleanValue );
-                        r.booleanValue = booleanValue;
+                        res.longValue = ( booleanValue ? 1 : 0 );
+                        res.decimalValue = ( booleanValue ? 1 : 0 );
+                        res.stringValue = String.valueOf( booleanValue );
+                        res.booleanValue = booleanValue;
+
+                    } else if ( value instanceof Date ) {
+
+                        Date dateValue = (Date) value;
+                        res.stringValue = dateValue.format();
+                        res.booleanValue = true;
+                        res.dateValue = dateValue;
+                        res.dateTimeValue = DateTime.newInstance( dateValue.year(), dateValue.month(), dateValue.day() );
+
+                    } else if ( value instanceof DateTime ) {
+
+                        DateTime dateTimeValue = (DateTime) value;
+                        res.stringValue = dateTimeValue.format();
+                        res.booleanValue = true;
+                        res.dateValue = dateTimeValue.date();
+                        res.dateTimeValue = dateTimeValue;
 
                     }
 
-                    if ( r.longValue    != null ) { r.longValues.add( r.longValue ); }
-                    if ( r.decimalValue != null ) { r.decimalValues.add( r.decimalValue ); }
-                    if ( r.stringValue  != null ) { r.stringValues.add( r.stringValue ); }
-                    if ( r.booleanValue != null ) { r.booleanValues.add( r.booleanValue ); }
+                    if ( res.longValue     != null ) { res.longValues.add( res.longValue ); }
+                    if ( res.decimalValue  != null ) { res.decimalValues.add( res.decimalValue ); }
+                    if ( res.stringValue   != null ) { res.stringValues.add( res.stringValue ); }
+                    if ( res.booleanValue  != null ) { res.booleanValues.add( res.booleanValue ); }
+                    if ( res.dateValue     != null ) { res.dateValues.add( res.dateValue ); }
+                    if ( res.dateTimeValue != null ) { res.dateTimeValues.add( res.dateTimeValue ); }
 
                 } else {
 
-                    System.debug( LoggingLevel.WARN, 'RequestScopeInvocable.parameters.get("' + paramName + '") is null' );
+                    System.debug( LoggingLevel.WARN, 'RequestScopeInvocable.parameters.get("' + req + '") is null' );
 
                 }
 
@@ -67,41 +113,97 @@ public with sharing class RequestScopeInvocable {
 
             }
 
-            System.debug( 'paramName=' + paramName );
-            System.debug( r );
+            System.debug( 'paramName=' + req );
+            System.debug( res );
 
-            paramValues.add( r );
+            responses.add( res );
 
         }
 
-        return paramValues;
+        return responses;
     }
 
-    public class Result {
+    public class Request {
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Parameter Name'
+            required = true
+        )
+        public String paramName;
+
+    }
+
+    public class Response {
+
+        @InvocableVariable(
+            label = 'Number'
+            description = 'Whole number (no decimals)'
+        )
         public Long longValue;
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Decimal'
+            description = 'Number that may include decimal places'
+        )
         public Decimal decimalValue;
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Text'
+            description = 'Text value'
+        )
         public String stringValue;
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Boolean'
+            description = 'true/false'
+        )
         public Boolean booleanValue;
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Date'
+        )
+        public Date dateValue;
+
+        @InvocableVariable(
+            label = 'Date/Time'
+        )
+        public DateTime dateTimeValue;
+
+        @InvocableVariable(
+            label = 'Number Collection'
+            description = 'Collection of whole numbers'
+        )
         public Long[] longValues = new Long[] {};
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Decimal Collection'
+            description = 'Collection of numbers that may include decimal places'
+        )
         public Decimal[] decimalValues = new Decimal[] {};
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Text Collection'
+            description = 'Collection of text values'
+        )
         public String[] stringValues = new String[] {};
 
-        @InvocableVariable
+        @InvocableVariable(
+            label = 'Boolean Collection'
+            description = 'Collection of true/false values'
+        )
         public Boolean[] booleanValues = new Boolean[] {};
+
+        @InvocableVariable(
+            label = 'Date Collection'
+            description = 'Collection of date values'
+        )
+        public Date[] dateValues = new Date[] {};
+
+        @InvocableVariable(
+            label = 'Date/Time Collection'
+            description = 'Collection of date/time values'
+        )
+        public DateTime[] dateTimeValues = new DateTime[] {};
 
     }
 
