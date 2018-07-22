@@ -30,11 +30,12 @@
 public class Flow {
 
     private Flow.Interview flow = null;
-    private Set<String> outputVarsNames = new Set<String>();
-    private Set<String> outputVarsNamesRequired = new Set<String>();
+    private Set<String> outputVarsNames;
+    private Set<String> outputVarsNamesRequired;
 
     public Flow(Flow.Interview flow) {
         this.flow = flow;
+        init();
     }
 
     /**
@@ -58,17 +59,22 @@ public class Flow {
     * Runs the Flow
     **/
     public Map<String, Object> run() {
-        flow.start();
-        Map<String, Object> outputVars = new Map<String, Object>();
-        for(String outputVar : outputVarsNames) {
-            Object outputVarValue = flow.getVariableValue(outputVar);
-            if(outputVarValue!=null) {
-                outputVars.put(outputVar, outputVarValue);
-            } else if(outputVarsNamesRequired.contains(outputVar)) {
-                throw new FlowException('Output variable ' + outputVar + ' expected but not returned from Flow');
-            }                                
+        try {
+            flow.start();
+            Map<String, Object> outputVars = new Map<String, Object>();
+            for(String outputVar : outputVarsNames) {
+                Object outputVarValue = flow.getVariableValue(outputVar);
+                if(outputVarValue!=null) {
+                    outputVars.put(outputVar, outputVarValue);
+                } else if(outputVarsNamesRequired.contains(outputVar)) {
+                    throw new FlowException('Output variable ' + outputVar + ' expected but not returned from Flow');
+                }                                
+            }
+            return outputVars;
         }
-        return outputVars;
+        finally {
+            init();
+        }
     }
 
     /**
@@ -76,6 +82,14 @@ public class Flow {
     **/
     public Object returning(String outputVariableName) {
         return required(outputVariableName).run().get(outputVariableName);
+    }
+
+    /**
+     * Reset the state of this Flow after each run
+     **/
+    private void init() {
+        outputVarsNames = new Set<String>();
+        outputVarsNamesRequired = new Set<String>();
     }
 
     public class FlowException extends Exception {}
