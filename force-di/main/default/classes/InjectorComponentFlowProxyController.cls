@@ -31,9 +31,20 @@ public with sharing class InjectorComponentFlowProxyController {
     public Object InputVariablesValue { get; set; }
 
     public Component.Flow.Interview getInject() {
+
         Component.Flow.Interview interview = new Component.Flow.Interview();
         interview.name = FlowNameValue;
-        // TODO how to pass input variables into Component.Flow.Interview?
+
+        if ( InputVariablesValue instanceof Map<Object, Object> ) {
+            Map<Object, Object> oldMap = (Map<Object, Object>) InputVariablesValue;
+            Map<String, Object> newMap = new Map<String, Object>();
+            for ( Object key : oldMap.keySet() ) {
+                newMap.put( String.valueOf( key ), oldMap.get( key ) );
+            }
+        } else if ( InputVariablesValue instanceof Map<String, Object> ) {
+            BindingParam.parameters = (Map<String, Object>) InputVariablesValue;
+        }
+
         return interview;
     }
 
