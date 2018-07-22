@@ -1,7 +1,7 @@
 <!--
     Example of dependency injecting a flow into a lightning component.
  -->
-<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId">
+ <aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId">
 
     <!--
         Receive events when flow status changes, like STARTED and FINISHED,

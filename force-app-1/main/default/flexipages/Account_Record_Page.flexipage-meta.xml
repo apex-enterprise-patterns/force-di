@@ -145,7 +145,7 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <componentInstances>
-            <componentName>flowProxyDemo</componentName>
+            <componentName>accountRecordFlow</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
