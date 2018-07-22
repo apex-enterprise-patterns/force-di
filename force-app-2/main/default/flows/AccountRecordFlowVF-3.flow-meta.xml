@@ -13,7 +13,7 @@
         <inputParameters>
             <name>paramName</name>
             <value>
-                <elementReference>recordId</elementReference>
+                <stringValue>recordId</stringValue>
             </value>
         </inputParameters>
         <outputParameters>
