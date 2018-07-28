@@ -290,7 +290,7 @@ public with sharing class BindingParam {
 
     private static Date toDateValue( String value ) {
         try {
-            return ( value == null ? null : Date.valueOf( value ) );
+            return ( value == null ? null : Date.valueOf( value ) ); // yyyy-MM-dd or yyyy-MM-dd HH:mm:ss
         } catch ( Exception e ) {
             return null;
         }
@@ -317,9 +317,9 @@ public with sharing class BindingParam {
 
     private static DateTime toDateTimeValue( String value ) {
         try {
-            return ( value == null ? null : DateTime.valueOf( value ) );
+            return ( value == null ? null : DateTime.valueOf( value ) ); // yyyy-MM-dd HH:mm:ss
         } catch ( Exception e ) {
-            return null;
+            return toDateValue( value ); // maybe string is only yyyy-MM-dd
         }
     }
 

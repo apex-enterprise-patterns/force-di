@@ -35,8 +35,8 @@ private class BindingParamTest {
             'number' => '42',
             'truthy' => 'true',
             'falsey' => 'false',
-            'date' => Date.newInstance( 2018, 8, 18 ),
-            'dateTime' => DateTime.newInstance( 2018, 8, 18, 8, 8, 8 ),
+            'date' => '2018-08-08', // yyyy-MM-dd
+            'dateTime' => '2018-08-08 08:08:08', // yyyy-MM-dd HH:mm:ss
             'strings' => new String[] { 'apple', '1', null }
         };
 
@@ -77,11 +77,59 @@ private class BindingParamTest {
 
         // truthy
 
+        request = new BindingParam.Request();
+        request.paramName = 'truthy';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( null, response.longValue );
+        System.assertEquals( null, response.decimalValue );
+        System.assertEquals( inputs.get('truthy'), response.stringValue );
+        System.assertEquals( true, response.booleanValue );
+        System.assertEquals( null, response.dateValue );
+        System.assertEquals( null, response.dateTimeValue );
+
         // falsey
+
+        request = new BindingParam.Request();
+        request.paramName = 'falsey';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( null, response.longValue );
+        System.assertEquals( null, response.decimalValue );
+        System.assertEquals( inputs.get('falsey'), response.stringValue );
+        System.assertEquals( false, response.booleanValue );
+        System.assertEquals( null, response.dateValue );
+        System.assertEquals( null, response.dateTimeValue );
 
         // date
 
+        request = new BindingParam.Request();
+        request.paramName = 'date';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( null, response.longValue );
+        System.assertEquals( null, response.decimalValue );
+        System.assertEquals( inputs.get('date'), response.stringValue );
+        System.assertEquals( false, response.booleanValue );
+        System.assertEquals( Date.newInstance( 2018, 8, 8 ), response.dateValue );
+        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ).date(), response.dateTimeValue );
+
         // dateTime
+
+        request = new BindingParam.Request();
+        request.paramName = 'dateTime';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( null, response.longValue );
+        System.assertEquals( null, response.decimalValue );
+        System.assertEquals( inputs.get('dateTime'), response.stringValue );
+        System.assertEquals( false, response.booleanValue );
+        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ).date(), response.dateValue );
+        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ), response.dateTimeValue );
 
         Test.stopTest();
 
