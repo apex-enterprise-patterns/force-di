@@ -30,13 +30,21 @@ private class BindingParamTest {
     @IsTest
     private static void givenStringsWhenGetParameterThenGetValues() {
 
+        TimeZone userTimeZone = UserInfo.getTimeZone();
+        DateTime testDateTime = DateTime.newInstance(2018,8,8,8,8,8);
+        Long offsetMillis = userTimeZone.getOffset( testDateTime );
+        Long offsetHours = offsetMillis / ( 1000 * 60 * 60 );
+        String offset = ( offsetHours > 0 ? '+' + offsetHours : '' + offsetHours );
+        String dateFormat = 'yyyy-MM-dd';
+        String dateTimeFormat = 'yyyy-MM-dd HH:mm:ss' + offset;
+
         Map<String, Object> inputs = new Map<String, Object>{
             'text' => 'Quick brown fox',
             'number' => '42',
             'truthy' => 'true',
             'falsey' => 'false',
-            'date' => '2018-08-08', // yyyy-MM-dd
-            'dateTime' => '2018-08-08 08:08:08', // yyyy-MM-dd HH:mm:ss
+            'date' => testDateTime.format( dateFormat ),
+            'dateTime' => testDateTime.format( dateTimeFormat ),
             'strings' => new String[] { 'apple', '1', null }
         };
 
@@ -114,8 +122,8 @@ private class BindingParamTest {
         System.assertEquals( null, response.decimalValue );
         System.assertEquals( inputs.get('date'), response.stringValue );
         System.assertEquals( false, response.booleanValue );
-        System.assertEquals( Date.newInstance( 2018, 8, 8 ), response.dateValue );
-        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ).date(), response.dateTimeValue );
+        System.assertEquals( testDateTime.date(), response.dateValue );
+        System.assertEquals( testDateTime.dateGMT(), response.dateTimeValue ); // hours will be zero'ed out
 
         // dateTime
 
@@ -128,8 +136,121 @@ private class BindingParamTest {
         System.assertEquals( null, response.decimalValue );
         System.assertEquals( inputs.get('dateTime'), response.stringValue );
         System.assertEquals( false, response.booleanValue );
+        System.assertEquals( testDateTime.date(), response.dateValue );
+        System.assertEquals( testDateTime, response.dateTimeValue );
+
+        // strings
+
+        request = new BindingParam.Request();
+        request.paramName = 'strings';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 3, response.stringValues.size() );
+        System.assertEquals( response.stringValue, response.stringValues[0] );
+
+        Test.stopTest();
+
+    }
+
+    @IsTest
+    private static void givenDecimalsWhenGetParameterThenGetValues() {
+
+        Map<String, Object> inputs = new Map<String, Object>{
+            'number' => 42,
+            'truthy' => 1,
+            'falsey' => 0,
+            'date' => DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ).getTime(),
+            'dateTime' => DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ).getTime(),
+            'decimals' => new Long[] { 0, 1, 2 }
+        };
+
+        BindingParam.Request request;
+        BindingParam.Response response;
+
+        Test.startTest();
+
+        BindingParam.parameters = inputs;
+
+        // number
+
+        request = new BindingParam.Request();
+        request.paramName = 'number';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 42, response.longValue );
+        System.assertEquals( 42.0, response.decimalValue );
+        System.assertEquals( '42', response.stringValue );
+        System.assertEquals( true, response.booleanValue );
+        System.assertEquals( DateTime.newInstance(42).date(), response.dateValue );
+        System.assertEquals( DateTime.newInstance(42), response.dateTimeValue );
+
+        // truthy
+
+        request = new BindingParam.Request();
+        request.paramName = 'truthy';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 1, response.longValue );
+        System.assertEquals( 1.0, response.decimalValue );
+        System.assertEquals( '1', response.stringValue );
+        System.assertEquals( true, response.booleanValue );
+        System.assertEquals( DateTime.newInstance(1).date(), response.dateValue );
+        System.assertEquals( DateTime.newInstance(1), response.dateTimeValue );
+
+        // falsey
+
+        request = new BindingParam.Request();
+        request.paramName = 'falsey';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 0, response.longValue );
+        System.assertEquals( 0, response.decimalValue );
+        System.assertEquals( '0', response.stringValue );
+        System.assertEquals( false, response.booleanValue );
+        System.assertEquals( DateTime.newInstance(0).date(), response.dateValue );
+        System.assertEquals( DateTime.newInstance(0), response.dateTimeValue );
+
+        // date
+
+        request = new BindingParam.Request();
+        request.paramName = 'date';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 1533711600000L, response.longValue );
+        System.assertEquals( 1533711600000.0, response.decimalValue );
+        System.assertEquals( '1533711600000', response.stringValue );
+        System.assertEquals( true, response.booleanValue );
+        System.assertEquals( Date.newInstance( 2018, 8, 8 ), response.dateValue );
+        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ), response.dateTimeValue );
+
+        // dateTime
+
+        request = new BindingParam.Request();
+        request.paramName = 'dateTime';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 1533740888000L, response.longValue );
+        System.assertEquals( 1533740888000.0, response.decimalValue );
+        System.assertEquals( '1533740888000', response.stringValue );
+        System.assertEquals( true, response.booleanValue );
         System.assertEquals( DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ).date(), response.dateValue );
         System.assertEquals( DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ), response.dateTimeValue );
+
+        // decimals
+
+        request = new BindingParam.Request();
+        request.paramName = 'decimals';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 3, response.decimalValues.size() );
+        System.assertEquals( response.decimalValue, response.decimalValues[0] );
 
         Test.stopTest();
 

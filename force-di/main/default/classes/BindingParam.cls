@@ -225,10 +225,6 @@ public with sharing class BindingParam {
     // toDecimalValue
     // -----------------------------------------------------------
 
-    private static Decimal toDecimalValue( Long value ) {
-        return ( value == null ? null : value );
-    }
-
     private static Decimal toDecimalValue( String value ) {
         return ( ( value == null || !value.isNumeric() ) ? null : Decimal.valueOf( value ) );
     }
@@ -328,7 +324,7 @@ public with sharing class BindingParam {
     }
 
     private static DateTime toDateTimeValue( Date value ) {
-        return ( value == null ? null : DateTime.newInstance( value.year(), value.month(), value.day(), 0, 0, 0 ) );
+        return ( value == null ? null : DateTime.newInstanceGMT( value.year(), value.month(), value.day(), 0, 0, 0 ) );
     }
 
     // -----------------------------------------------------------
