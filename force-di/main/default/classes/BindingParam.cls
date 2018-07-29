@@ -246,16 +246,24 @@ public with sharing class BindingParam {
     // toStringValue
     // -----------------------------------------------------------
 
+    // Because of oddity that Date, when cast to Object,
+    // will output the date and time, then providing a method
+    // to ensure dates are handled as we'd actually expect them to be.
+    // https://twitter.com/DouglasCAyers/status/1023410001103269890
+    private static String toStringValue( Date value ) {
+        return ( value == null ? null : String.valueOf( value ) );
+    }
+
+    private static String toStringValue( DateTime value ) {
+        return ( value == null ? null : String.valueOf( value ) );
+    }
+
     private static String toStringValue( Object value ) {
         return ( value == null ? null : String.valueOf( value ) );
     }
 
     // toBooleanValue
     // -----------------------------------------------------------
-
-    private static Boolean toBooleanValue( Long value ) {
-        return ( value == null ? false : ( value > 0 ) );
-    }
 
     private static Boolean toBooleanValue( Decimal value ) {
         return ( value == null ? false : ( value > 0 ) );
@@ -276,12 +284,8 @@ public with sharing class BindingParam {
     // toDateValue
     // -----------------------------------------------------------
 
-    private static Date toDateValue( Long value ) {
-        return ( value == null ? null : DateTime.newInstance( value ).date() );
-    }
-
     private static Date toDateValue( Decimal value ) {
-        return toDateValue( toLongValue( value ) );
+        return ( value == null ? null : DateTime.newInstance( value.longValue() ).date() );
     }
 
     private static Date toDateValue( String value ) {
@@ -303,19 +307,15 @@ public with sharing class BindingParam {
     // toDateTimeValue
     // -----------------------------------------------------------
 
-    private static DateTime toDateTimeValue( Long value ) {
-        return ( value == null ? null : DateTime.newInstance( value ) );
-    }
-
     private static DateTime toDateTimeValue( Decimal value ) {
-        return toDateTimeValue( toLongValue( value ) );
+        return ( value == null ? null : DateTime.newInstance( value.longValue() ) );
     }
 
     private static DateTime toDateTimeValue( String value ) {
         try {
             return ( value == null ? null : DateTime.valueOf( value ) ); // yyyy-MM-dd HH:mm:ss
         } catch ( Exception e ) {
-            return toDateValue( value ); // maybe string is only yyyy-MM-dd
+            return toDateValue( value ); // retry, maybe string is only yyyy-MM-dd
         }
     }
 
@@ -324,7 +324,7 @@ public with sharing class BindingParam {
     }
 
     private static DateTime toDateTimeValue( Date value ) {
-        return ( value == null ? null : DateTime.newInstanceGMT( value.year(), value.month(), value.day(), 0, 0, 0 ) );
+        return ( value == null ? null : DateTime.newInstance( value.year(), value.month(), value.day(), 0, 0, 0 ) );
     }
 
     // -----------------------------------------------------------

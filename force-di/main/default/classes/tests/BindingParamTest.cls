@@ -28,6 +28,76 @@
 private class BindingParamTest {
 
     @IsTest
+    private static void givenNullInputWhenGetParameterThenGetNullValue() {
+
+        Map<String, Object> inputs = null;
+
+        BindingParam.Request request;
+        BindingParam.Response response;
+
+        Test.startTest();
+
+        BindingParam.parameters = inputs;
+
+        request = new BindingParam.Request();
+        request.paramName = 'foo';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( null, response.longValue );
+        System.assertEquals( null, response.decimalValue );
+        System.assertEquals( null, response.stringValue );
+        System.assertEquals( null, response.booleanValue );
+        System.assertEquals( null, response.dateValue );
+        System.assertEquals( null, response.dateTimeValue );
+
+        System.assertEquals( 0, response.longValues.size() );
+        System.assertEquals( 0, response.decimalValues.size() );
+        System.assertEquals( 0, response.stringValues.size() );
+        System.assertEquals( 0, response.booleanValues.size() );
+        System.assertEquals( 0, response.dateValues.size() );
+        System.assertEquals( 0, response.dateTimeValues.size() );
+
+        Test.stopTest();
+
+    }
+
+    @IsTest
+    private static void givenUnknownKeyWhenGetParameterThenGetNullValue() {
+
+        Map<String, Object> inputs = new Map<String, Object>();
+
+        BindingParam.Request request;
+        BindingParam.Response response;
+
+        Test.startTest();
+
+        BindingParam.parameters = inputs;
+
+        request = new BindingParam.Request();
+        request.paramName = 'foo';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( null, response.longValue );
+        System.assertEquals( null, response.decimalValue );
+        System.assertEquals( null, response.stringValue );
+        System.assertEquals( null, response.booleanValue );
+        System.assertEquals( null, response.dateValue );
+        System.assertEquals( null, response.dateTimeValue );
+
+        System.assertEquals( 0, response.longValues.size() );
+        System.assertEquals( 0, response.decimalValues.size() );
+        System.assertEquals( 0, response.stringValues.size() );
+        System.assertEquals( 0, response.booleanValues.size() );
+        System.assertEquals( 0, response.dateValues.size() );
+        System.assertEquals( 0, response.dateTimeValues.size() );
+
+        Test.stopTest();
+
+    }
+
+    @IsTest
     private static void givenDecimalsWhenGetParameterThenGetValues() {
 
         Map<String, Object> inputs = new Map<String, Object>{
@@ -36,7 +106,7 @@ private class BindingParamTest {
             'falsey' => 0,
             'date' => DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ).getTime(),
             'dateTime' => DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ).getTime(),
-            'decimals' => new Long[] { 0, 1, 2 }
+            'decimals' => new Decimal[] { 0, 1, 2 }
         };
 
         BindingParam.Request request;
@@ -251,6 +321,156 @@ private class BindingParamTest {
 
         System.assertEquals( 3, response.stringValues.size() );
         System.assertEquals( response.stringValue, response.stringValues[0] );
+
+        Test.stopTest();
+
+    }
+
+    @IsTest
+    private static void givenBooleansWhenGetParameterThenGetValues() {
+
+        Map<String, Object> inputs = new Map<String, Object>{
+            'truthy' => true,
+            'falsey' => false,
+            'booleans' => new Boolean[] { true, false }
+        };
+
+        BindingParam.Request request;
+        BindingParam.Response response;
+
+        Test.startTest();
+
+        BindingParam.parameters = inputs;
+
+        // truthy
+
+        request = new BindingParam.Request();
+        request.paramName = 'truthy';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 1, response.longValue );
+        System.assertEquals( 1.0, response.decimalValue );
+        System.assertEquals( 'true', response.stringValue );
+        System.assertEquals( true, response.booleanValue );
+        System.assertEquals( null, response.dateValue );
+        System.assertEquals( null, response.dateTimeValue );
+
+        // falsey
+
+        request = new BindingParam.Request();
+        request.paramName = 'falsey';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 0, response.longValue );
+        System.assertEquals( 0, response.decimalValue );
+        System.assertEquals( 'false', response.stringValue );
+        System.assertEquals( false, response.booleanValue );
+        System.assertEquals( null, response.dateValue );
+        System.assertEquals( null, response.dateTimeValue );
+
+        // booleans
+
+        request = new BindingParam.Request();
+        request.paramName = 'booleans';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 2, response.booleanValues.size() );
+        System.assertEquals( response.booleanValue, response.booleanValues[0] );
+
+        Test.stopTest();
+
+    }
+
+    @IsTest
+    private static void givenDatesWhenGetParameterThenGetValues() {
+
+        Date testDate = Date.today();
+        DateTime testDateTime = DateTime.newInstance( testDate.year(), testDate.month(), testDate.day(), 0, 0, 0 );
+
+        Map<String, Object> inputs = new Map<String, Object>{
+            'date' => testDate,
+            'dates' => new Date[] { testDate, testDate.addDays(1) }
+        };
+
+        BindingParam.Request request;
+        BindingParam.Response response;
+
+        Test.startTest();
+
+        BindingParam.parameters = inputs;
+
+        // date
+
+        request = new BindingParam.Request();
+        request.paramName = 'date';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( testDateTime.getTime(), response.longValue );
+        System.assertEquals( testDateTime.getTime(), response.decimalValue );
+        System.assertEquals( String.valueOf( testDate ), response.stringValue );
+        System.assertEquals( true, response.booleanValue );
+        System.assertEquals( testDate, response.dateValue );
+        System.assertEquals( testDateTime, response.dateTimeValue );
+
+        // dates
+
+        request = new BindingParam.Request();
+        request.paramName = 'dates';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 2, response.dateValues.size() );
+        System.assertEquals( response.dateValue, response.dateValues[0] );
+
+        Test.stopTest();
+
+    }
+
+    @IsTest
+    private static void givenDateTimesWhenGetParameterThenGetValues() {
+
+        Date testDate = Date.today();
+        DateTime testDateTime = DateTime.newInstance( testDate.year(), testDate.month(), testDate.day(), 0, 0, 0 );
+
+        Map<String, Object> inputs = new Map<String, Object>{
+            'dateTime' => testDateTime,
+            'dateTimes' => new DateTime[] { testDateTime, testDateTime.addDays(1) }
+        };
+
+        BindingParam.Request request;
+        BindingParam.Response response;
+
+        Test.startTest();
+
+        BindingParam.parameters = inputs;
+
+        // date
+
+        request = new BindingParam.Request();
+        request.paramName = 'dateTime';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( testDateTime.getTime(), response.longValue );
+        System.assertEquals( testDateTime.getTime(), response.decimalValue );
+        System.assertEquals( String.valueOf( testDateTime ), response.stringValue );
+        System.assertEquals( true, response.booleanValue );
+        System.assertEquals( testDateTime.date(), response.dateValue );
+        System.assertEquals( testDateTime, response.dateTimeValue );
+
+        // dates
+
+        request = new BindingParam.Request();
+        request.paramName = 'dateTimes';
+
+        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+
+        System.assertEquals( 2, response.dateTimeValues.size() );
+        System.assertEquals( response.dateTimeValue, response.dateTimeValues[0] );
 
         Test.stopTest();
 
