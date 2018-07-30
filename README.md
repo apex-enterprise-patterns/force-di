@@ -1,6 +1,14 @@
 # Force DI
 
-Generic [DI](https://en.wikipedia.org/wiki/Dependency_injection) library with support for injecting Apex, Visualforce and Lightning code at runtime. [See blog for further details](https://andyinthecloud.com/2018/07/15/managing-dependency-injection-within-salesforce/).
+Generic [DI](https://en.wikipedia.org/wiki/Dependency_injection) library with support for injecting Apex, Visualforce and Lightning code at runtime. 
+
+Documentaiton
+-------------
+- [General overview of library, configuration and use of Injectors](https://andyinthecloud.com/2018/07/15/managing-dependency-injection-within-salesforce/)
+- [Using the library to aid with Test Driven Development in Apex](https://andyinthecloud.com/2018/07/29/test-driven-development-mocking-and-force-di/)
+
+Project Folders
+---------------
 
 ![Force DI Example](https://andrewfawcett.files.wordpress.com/2018/07/forcedi2.png)
 
