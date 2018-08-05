@@ -4,9 +4,9 @@
     <aura:attribute name="flowName" type="String" required="true"/>
 
     <!--
-        Design is for <c:injector> to pass all of its <c:injectorAttribute> tags
+        Design is for injector component to pass all of its injector attribute child tags
         as-is to this attribute, and then this component will parse the attributes.
-        This minimizes how much the <c:injector> component must know to invoke this one.
+        This minimizes how much the injector component must know to invoke this one.
      -->
     <aura:attribute name="injectorAttributes" type="Aura.Component[]"/>
 
@@ -17,7 +17,7 @@
         as injector attributes to bind to the lightning:flow's onstatuschange callback,
         instead we proxy the callback into a component event for upstream components to handle.
      -->
-    <aura:registerEvent name="injectorFlowProxyStatusChanged" type="c:injectorFlowProxyStatusChanged"/>
+    <aura:registerEvent name="injectorFlowProxyStatusChanged" type="c:di_injectorFlowProxyStatusChanged"/>
 
     <span aura:id="flowContainer">
         <!--

@@ -8,23 +8,23 @@ public class TriggerInjector {
      * Looks for multiple "trigger handler" bindings for a given SObjectType
      **/
     public static void handle(SObjectType triggerType, TriggerHandlerContext ctx) {
-        // Discover bindings made against the given sobject type 
+        // Discover bindings made against the given sobject type
         //   (bindings are always returned in sequence if specified)
-        List<Binding> bindings = Injector.Org.Bindings.bySObject(triggerType).get();
+        List<DI_Binding> bindings = DI_Injector.Org.Bindings.bySObject(triggerType).get();
         // Construct the handlers
-        List<TriggerHandler> handlers = new List<TriggerHandler>();        
-        for(Binding binding : bindings) {
+        List<TriggerHandler> handlers = new List<TriggerHandler>();
+        for(DI_Binding binding : bindings) {
             Object data = binding.Data; // e.g. access to Binding__mdt if additional fields have been added
             Object handler = binding.getInstance();
             if(handler instanceof TriggerHandler) {
                 handlers.add((TriggerHandler) handler);
             } else {
-                throw new TriggerInjectorException('Binding for ' + binding.DeveloperName + ' must extend Injector.TriggerHandler');                    
+                throw new TriggerInjectorException('Binding for ' + binding.DeveloperName + ' must extend Injector.TriggerHandler');
             }
         }
         // Trigger contexts allow for the client to perform optimizations and aggregations
         if(ctx!=null) {
-            for(TriggerHandler handler : handlers) {                
+            for(TriggerHandler handler : handlers) {
                 handler.pre(ctx);
             }
             ctx.handle(triggerType);
@@ -51,7 +51,7 @@ public class TriggerInjector {
 
     /**
      * Intended to be subclassed and passed to the triggerHandlers method
-     **/ 
+     **/
     public abstract class TriggerHandlerContext {
         /**
          * Called by the framework after the TriggerHandler.pre methods have all been called
@@ -74,7 +74,7 @@ public class TriggerInjector {
                 fieldSets.put(relatedField, fieldSet);
             }
             fieldSet.addAll(fields);
-        }        
+        }
 
         public override void handle(SObjectType parentType) {
             Map<SObjectField, Schema.ChildRelationship> childRelationships = new Map<SObjectField, Schema.ChildRelationship>();
@@ -94,12 +94,12 @@ public class TriggerInjector {
                     for(SObjectField field : fields) {
                         fieldNames.add(field.getDescribe().getName());
                     }
-                    List<SObject> childRecords = 
+                    List<SObject> childRecords =
                         Database.query(
-                            String.format('select {0} from {1} where {2} in :parentIds', 
-                                new List<String> { 
-                                    String.join(fieldNames, ','), 
-                                    childRelationship.getChildSObject().getDescribe().getName(), 
+                            String.format('select {0} from {1} where {2} in :parentIds',
+                                new List<String> {
+                                    String.join(fieldNames, ','),
+                                    childRelationship.getChildSObject().getDescribe().getName(),
                                     relatedField.getDescribe().getName() }));
                     relatedRecordSet.put(relatedField, childRecords);
                 }

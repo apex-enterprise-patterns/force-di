@@ -2,22 +2,22 @@
  * Copyright (c) 2018, Andrew Fawcett
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, 
+ * Redistribution and use in source and binary forms, with or without modification,
  *   are permitted provided that the following conditions are met:
  *
- * - Redistributions of source code must retain the above copyright notice, 
+ * - Redistributions of source code must retain the above copyright notice,
  *      this list of conditions and the following disclaimer.
- * - Redistributions in binary form must reproduce the above copyright notice, 
- *      this list of conditions and the following disclaimer in the documentation 
+ * - Redistributions in binary form must reproduce the above copyright notice,
+ *      this list of conditions and the following disclaimer in the documentation
  *      and/or other materials provided with the distribution.
- * - Neither the name of the Andrew Fawcett, nor the names of its contributors 
- *      may be used to endorse or promote products derived from this software without 
+ * - Neither the name of the Andrew Fawcett, nor the names of its contributors
+ *      may be used to endorse or promote products derived from this software without
  *      specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
- *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
- *  THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ *  THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
  *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
@@ -30,10 +30,10 @@
   *    See https://github.com/google/guice/wiki/GettingStarted
   *    See https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree
  **/
-public virtual class Module {
+public virtual class DI_Module {
 
-    private List<Binding> bindings = new List<Binding>();
-    private Binding.BindingType bindingType;
+    private List<DI_Binding> bindings = new List<DI_Binding>();
+    private DI_Binding.BindingType bindingType;
     private String developerName;
     private SObjectType bindingObject;
     private Integer bindingSequence;
@@ -43,21 +43,21 @@ public virtual class Module {
     /**
      * Module class can be extended and/or used directly
      **/
-    public Module() {
+    public DI_Module() {
         init();
     }
 
-    /** 
+    /**
      * Called by the framework when its ready to receive the binding config
      **/
     public virtual void configure() { }
 
-    /** 
+    /**
      * Type of binding, see also alias methods apex(), lightningComponent(), visualforceComponent()
      **/
-    public Module type(String value) {
-        List<Binding.BindingType> bindEnumValues = Binding.BindingType.values();
-        for(Binding.BindingType bindEnumValue : bindEnumValues) {
+    public DI_Module type(String value) {
+        List<DI_Binding.BindingType> bindEnumValues = DI_Binding.BindingType.values();
+        for(DI_Binding.BindingType bindEnumValue : bindEnumValues) {
             if(bindEnumValue.name().equals(value)) {
                 bindingType = bindEnumValue;
                 return this;
@@ -69,7 +69,7 @@ public virtual class Module {
     /**
      * Type of binding
      **/
-    public Module type(Binding.BindingType value) {
+    public DI_Module type(DI_Binding.BindingType value) {
         bindingType = value;
         return this;
     }
@@ -77,47 +77,47 @@ public virtual class Module {
     /**
      * Sets the binding type to Apex
      **/
-    public Module apex() {
-        bindingType = Binding.BindingType.Apex;
+    public DI_Module apex() {
+        bindingType = DI_Binding.BindingType.Apex;
         return this;
     }
 
     /**
      * Sets the binding type to Lightning Component
      **/
-    public Module lightningComponent() {
-        bindingType = Binding.BindingType.LightningComponent;
+    public DI_Module lightningComponent() {
+        bindingType = DI_Binding.BindingType.LightningComponent;
         return this;
     }
 
     /**
      * Sets the binding type to Visualforce Component
      **/
-    public Module visualforceComponent() {
-        bindingType = Binding.BindingType.VisualforceComponent;
+    public DI_Module visualforceComponent() {
+        bindingType = DI_Binding.BindingType.VisualforceComponent;
         return this;
     }
 
-    /** 
+    /**
      * Sets the binding type to Flow
      **/
-    public Module flow() {
-        bindingType = Binding.BindingType.Flow;
+    public DI_Module flow() {
+        bindingType = DI_Binding.BindingType.Flow;
         return this;
     }
 
     /**
      * Sets the binding type to Module (Apex class binding must extend Module class)
      **/
-    public Module module() {
-        bindingType = Binding.BindingType.Module;
+    public DI_Module module() {
+        bindingType = DI_Binding.BindingType.Module;
         return this;
     }
 
     /**
      * Binding is related to a given Apex class
      **/
-    public Module bind(Type bindingType) {
+    public DI_Module bind(Type bindingType) {
         developerName = bindingType.getName();
         return this;
     }
@@ -125,7 +125,7 @@ public virtual class Module {
     /**
      * Binding is related to a given SObject
      **/
-    public Module bind(SObjectType sObjectType) {
+    public DI_Module bind(SObjectType sObjectType) {
         bindingObject = sObjectType;
         return this;
     }
@@ -133,7 +133,7 @@ public virtual class Module {
     /**
      * Binding is related to a given developer name
      **/
-    public Module bind(String bindingName) {
+    public DI_Module bind(String bindingName) {
         developerName = bindingName;
         return this;
     }
@@ -141,7 +141,7 @@ public virtual class Module {
     /**
      * When multiple bindings of the same SObjectType exist sequences them
      **/
-    public Module sequence(Integer sequence) {
+    public DI_Module sequence(Integer sequence) {
         bindingSequence = sequence;
         return this;
     }
@@ -149,7 +149,7 @@ public virtual class Module {
     /**
      * Data associated with the binding by the binding configuration
      **/
-    public Module data(Object data) {
+    public DI_Module data(Object data) {
         bindingData = data;
         return this;
     }
@@ -157,25 +157,25 @@ public virtual class Module {
     /**
      * Binding implementation
      **/
-    public Module to(String bindingTo) {
+    public DI_Module to(String bindingTo) {
         return toObject(bindingTo);
     }
 
     /**
      * Binding implementation
      **/
-    public Module to(Type bindingTo) {
+    public DI_Module to(Type bindingTo) {
         return toObject(bindingTo.getName());
     }
 
     /**
      * Binding to an actual instance of the implementation (as apposed to class name)
      **/
-    public Module toObject(Object to) {
+    public DI_Module toObject(Object to) {
         // This can be a string (typically late binding) or an object (instance binding)
         this.to = to;
         // Attempt to auto infer type of binding
-        if(to instanceof Flow) {
+        if(to instanceof DI_Flow) {
             return flow().addBinding();
         }
         return addBinding();
@@ -185,13 +185,13 @@ public virtual class Module {
      * Returns all the bindings this module has been configured with
      * Any module bindings will be expanded and removed
      **/
-    public List<Binding> getBindings() {
+    public List<DI_Binding> getBindings() {
         // Return this modules configured bindings
-        List<Binding> moduleBindings = new List<Binding>();
-        for(Binding bind : bindings) {
+        List<DI_Binding> moduleBindings = new List<DI_Binding>();
+        for(DI_Binding bind : bindings) {
             // Module bindings are expanded into the returned listed and removed
-            if(bind.BindingType == Binding.BindingType.Module) {
-                Module module = (Module) bind.getInstance();
+            if(bind.BindingType == DI_Binding.BindingType.Module) {
+                DI_Module module = (DI_Module) bind.getInstance();
                 module.configure();
                 moduleBindings.addAll(module.getBindings());
             } else {
@@ -201,9 +201,9 @@ public virtual class Module {
         return moduleBindings;
     }
 
-    private Module addBinding() {
+    private DI_Module addBinding() {
         // Construct binding and configure it
-        Binding newBinding = Binding.newInstance(
+        DI_Binding newBinding = DI_Binding.newInstance(
             bindingType,
             developerName,
             bindingObject,
@@ -212,16 +212,16 @@ public virtual class Module {
             bindingData);
         bindings.add(newBinding);
         init();
-        return this;       
+        return this;
     }
 
     private void init() {
         // Reset state
-        bindingType = Binding.BindingType.Apex;
+        bindingType = DI_Binding.BindingType.Apex;
         developerName = null;
         bindingObject = null;
         bindingSequence = null;
-        to = null; 
+        to = null;
     }
 
     public class ModuleException extends Exception {}

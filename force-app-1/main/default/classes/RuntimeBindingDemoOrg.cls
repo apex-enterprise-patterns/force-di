@@ -13,8 +13,8 @@ public class RuntimeBindingDemoOrg {
     public class WelcomeApp {
 
         // Inject dependences via org level injector
-        private Message message = (Message) Injector.Org.getInstance(Message.class);        
-        private Display display = (Display) Injector.Org.getInstance(Display.class);
+        private Message message = (Message) DI_Injector.Org.getInstance(Message.class);
+        private Display display = (Display) DI_Injector.Org.getInstance(Display.class);
 
         public String greetings() {
             return display.startup() + ':' + message.saySomething();
@@ -34,12 +34,12 @@ public class RuntimeBindingDemoOrg {
     /**
      * This class to configure the bindings is injected into the Injector.Org instance via Binding__mdt
      **/
-    public class WelcomeAppBindings extends Module {
+    public class WelcomeAppBindings extends DI_Module {
 
         /**
-         * Org level bindings are also visible to the c:injector Visualforce and Lightning components
+         * Org level bindings are also visible to the injector Visualforce and Lightning components
          **/
-        public override void configure() {            
+        public override void configure() {
             // Vary Message and Display implementations depending on the users out of office
             if (UserAvailability__c.getInstance().OutOfOffice__c) {
                 bind(Message.class).to(Weekday.class);
@@ -50,7 +50,7 @@ public class RuntimeBindingDemoOrg {
             }
         }
     }
-    
+
     /**
      * The WelcomeApp class is unware of the specific implementations
      **/
@@ -68,7 +68,7 @@ public class RuntimeBindingDemoOrg {
         public String startup() {
             return 'Go be awesome!';
         }
-    }    
+    }
     public class Fun implements Display {
         public String startup() {
             return 'Party time!';

@@ -1,6 +1,6 @@
 ({
     /**
-     * Given a the data type from an <c:injectorAttribute>,
+     * Given a the data type from an injector attribute component,
      * infers the corresponding Flow data type.
      *
      * https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/components_config_for_flow_tips_map.htm

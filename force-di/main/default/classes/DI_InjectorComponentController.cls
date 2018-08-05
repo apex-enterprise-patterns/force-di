@@ -24,17 +24,38 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-/**
- * This class shows how the Apex Injector supports AutoLaunch flows
- *   The Flow class is an additional helper around Interview.Flow and helps with mocking
- *   See AutoLaunchFlowDemoTest for an example of how the Flow dependency is mocked
- **/
-public with sharing class AutoLaunchFlowDemo {
+public with sharing class DI_InjectorComponentController {
 
-    public static String reverseFlowString() {
-        // Use the Injector and Flow classes to obtain and interact with a Flow instance
-        DI_Flow someFlow = (DI_Flow) DI_Injector.Org.getInstance('flow_GetString');
-        String stringFromFlow = (String) someFlow.returning('flowString');
-        return stringFromFlow.reverse();
+    public String BindingNameValue {set;get;}
+
+    public Object ParametersValue {set;get;}
+
+    public ApexPages.Component getInject() {
+        ApexPages.Component cmp = null;
+        DI_Binding bindingInfo = getBinding(BindingNameValue);
+        switch on bindingInfo.BindingType {
+            when Flow {
+                cmp = (ApexPages.Component) getInjectorFlowProxyInstance((String) bindingInfo.To, ParametersValue);
+            }
+            when else {
+                cmp = (ApexPages.Component) DI_Injector.Org.getInstance(BindingNameValue, ParametersValue);
+            }
+        }
+        return cmp;
     }
+
+    public static DI_Binding getBinding(String bindingName) {
+        return DI_Injector.Org.Bindings.byName(bindingName).get()[0];
+    }
+
+    // To avoid "Operation cast is not allowed on type" error, then
+    // masking the component behind a generic Object return type.
+    // For some odd reason, this compiles and works.
+    private Object getInjectorFlowProxyInstance(String flowName, Object params) {
+        return new Component.di_injectorFlowProxy(
+            flowName = flowName,
+            inputVariables = params
+        );
+    }
+
 }

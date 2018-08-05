@@ -25,7 +25,7 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 -->
-<apex:component controller="InjectorComponentFlowProxyController">
+<apex:component controller="DI_InjectorComponentFlowProxyController">
     <apex:attribute name="flowName" type="String" assignTo="{!FlowNameValue}" description="" required="true"/>
     <apex:attribute name="inputVariables" type="Object" assignTo="{!InputVariablesValue}" description=""/>
     <apex:dynamicComponent componentValue="{!inject}" invokeAfterAction="true"/>

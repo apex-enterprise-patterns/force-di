@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <description>Due to limitations in Visualforce, in order to pass input variables to a Flow via this dependency injection framework, then must use the Binding Param invocable apex action to retrieve the parameters one at a time and bind them to the actual Flow variables. 
+        <description>Due to limitations in Visualforce, in order to pass input variables to a Flow via this dependency injection framework, then must use the Binding Param invocable apex action to retrieve the parameters one at a time and bind them to the actual Flow variables.
 
 In the Inputs tab, specify the expected parameter name being passed to this Flow.
 
@@ -10,7 +10,7 @@ In the Outputs tab, select the expected data type in the &quot;Source&quot; fiel
         <label>Get Record Id</label>
         <locationX>93</locationX>
         <locationY>62</locationY>
-        <actionName>BindingParam</actionName>
+        <actionName>DI_BindingParam</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Account_Record_Flow</targetReference>

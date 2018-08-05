@@ -24,17 +24,6 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-/**
- * This class shows how the Apex Injector supports AutoLaunch flows
- *   The Flow class is an additional helper around Interview.Flow and helps with mocking
- *   See AutoLaunchFlowDemoTest for an example of how the Flow dependency is mocked
- **/
-public with sharing class AutoLaunchFlowDemo {
-
-    public static String reverseFlowString() {
-        // Use the Injector and Flow classes to obtain and interact with a Flow instance
-        DI_Flow someFlow = (DI_Flow) DI_Injector.Org.getInstance('flow_GetString');
-        String stringFromFlow = (String) someFlow.returning('flowString');
-        return stringFromFlow.reverse();
-    }
+@IsTest
+private class DI_InjectorTest {
 }

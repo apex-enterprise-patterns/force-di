@@ -29,9 +29,9 @@ private class AutoLaunchFlowDemoTest {
     @IsTest
     private static void givenFlowReturnsStringWhenRunFlowThenInvertedString() {
         // Given
-        Injector.Org.Bindings.set(new Module()
+        DI_Injector.Org.Bindings.set(new DI_Module()
             .bind('flow_GetString').toObject(
-                Test.createStub(Flow.class, new FlowMock('Mock Flow string!'))));
+                Test.createStub(DI_Flow.class, new FlowMock('Mock Flow string!'))));
         // When
         String reversedString = AutoLaunchFlowDemo.reverseFlowString();
         // Then
@@ -47,11 +47,11 @@ private class AutoLaunchFlowDemoTest {
             this.mockOutput = mockOutput;
         }
         public Object handleMethodCall(
-            Object stubbedObject, 
-            String stubbedMethodName, 
-            Type returnType, 
-            List<Type> listOfParamTypes, 
-            List<String> listOfParamNames, 
+            Object stubbedObject,
+            String stubbedMethodName,
+            Type returnType,
+            List<Type> listOfParamTypes,
+            List<String> listOfParamNames,
             List<Object> listOfArgs) {
             // Mock the only method the test code path depends on
             if(stubbedMethodName == 'returning') {
