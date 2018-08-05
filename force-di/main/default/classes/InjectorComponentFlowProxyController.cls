@@ -35,12 +35,26 @@ public with sharing class InjectorComponentFlowProxyController {
         Component.Flow.Interview interview = new Component.Flow.Interview();
         interview.name = FlowNameValue;
 
+        // For a flow embedded in a Visualforce page with <flow:interview> tag,
+        // there is no way to dynamically specify the input variable names at runtime.
+        //
+        // The <apex:param> tags are not supported in Apex to dynamically create and
+        // and inject into the <flow:interview>, nor does Visualforce support bindings like
+        // <apex:param name="{!v.dynamicName}"/>.
+        //
+        // Therefore, as a workaround, we store the input variables as a map in
+        // a request-scoped static variable (a.k.a. thread locals in Java)
+        // as BindingParam.parameters and then our injected flow will retrieve
+        // the variable values by calling the BindingParam class' invocable method.
+
         if ( InputVariablesValue instanceof Map<Object, Object> ) {
+            // convert map to have string keys else invoking flow will fail
             Map<Object, Object> oldMap = (Map<Object, Object>) InputVariablesValue;
             Map<String, Object> newMap = new Map<String, Object>();
             for ( Object key : oldMap.keySet() ) {
                 newMap.put( String.valueOf( key ), oldMap.get( key ) );
             }
+            BindingParam.parameters = newMap;
         } else if ( InputVariablesValue instanceof Map<String, Object> ) {
             BindingParam.parameters = (Map<String, Object>) InputVariablesValue;
         }

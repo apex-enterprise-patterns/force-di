@@ -13,8 +13,7 @@
             var flowInputVar = {
                 'name': injectAttr.get( 'v.name' ),
                 'value': injectAttr.get( 'v.value' ),
-                'type': 'String' // TODO: convert javascript data types to flow data types
-                                 // https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/components_config_for_flow_tips_map.htm
+                'type': helper.getFlowDataTypeForApexDataType( injectAttr.get( 'v.dataType' ) )
             };
 
             // lightning:flow will throw error if we send more

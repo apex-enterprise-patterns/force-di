@@ -1,49 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <assignments>
-        <name>Assignment</name>
-        <label>Assignment</label>
-        <locationX>287</locationX>
-        <locationY>55</locationY>
-        <assignmentItems>
-            <assignToReference>varText</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>varAccount.Name</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>varBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>varCurrency</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <numberValue>2.5</numberValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>varDate</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>varAccount.CreatedDate</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>varNumber</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <numberValue>42.0</numberValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Screen</targetReference>
-        </connector>
-    </assignments>
     <description>Given &#39;recordId&#39; then displays account name.</description>
     <interviewLabel>Account Record Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Account Record Flow</label>
@@ -51,11 +7,11 @@
     <recordLookups>
         <name>Get_Account</name>
         <label>Get Account</label>
-        <locationX>118</locationX>
+        <locationX>119</locationX>
         <locationY>56</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assignment</targetReference>
+            <targetReference>Screen</targetReference>
         </connector>
         <filters>
             <field>Id</field>
@@ -67,12 +23,11 @@
         <object>Account</object>
         <outputReference>varAccount</outputReference>
         <queriedFields>Name</queriedFields>
-        <queriedFields>CreatedDate</queriedFields>
     </recordLookups>
     <screens>
         <name>Screen</name>
         <label>Screen</label>
-        <locationX>456</locationX>
+        <locationX>288</locationX>
         <locationY>57</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -80,16 +35,12 @@
         <fields>
             <name>DispayText</name>
             <fieldText>Record ID: {!recordId}
-varBoolean: {!varBoolean}
-varCurrency: {!varCurrency}
-varDate: {!varDate}
-varDateTime: {!varDateTime}
+varAccount: {!varAccount.Name}
 varNumber: {!varNumber}
-varPicklist: {!varPicklist}
-varPicklistMulti: {!varPicklistMulti}
 varText: {!varText}
-varTextColl: {!varTextColl}
-varAccount: {!varAccount.Name}</fieldText>
+varBoolean: {!varBoolean}
+varDate: {!varDate}
+varDateTime: {!varDateTime}</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -119,14 +70,6 @@ varAccount: {!varAccount.Name}</fieldText>
         <isOutput>true</isOutput>
     </variables>
     <variables>
-        <name>varCurrency</name>
-        <dataType>Currency</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-        <scale>2</scale>
-    </variables>
-    <variables>
         <name>varDate</name>
         <dataType>Date</dataType>
         <isCollection>false</isCollection>
@@ -149,30 +92,9 @@ varAccount: {!varAccount.Name}</fieldText>
         <scale>2</scale>
     </variables>
     <variables>
-        <name>varPicklist</name>
-        <dataType>Picklist</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>varPicklistMulti</name>
-        <dataType>Multipicklist</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
         <name>varText</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>varTextColl</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
         <isInput>true</isInput>
         <isOutput>true</isOutput>
     </variables>
