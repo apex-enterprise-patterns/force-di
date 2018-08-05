@@ -14,6 +14,11 @@
         <!-- Injector attributes become input variables passed to the Flow. -->
         <c:injector bindingName="flow_AccountRecord">
             <c:injectorAttribute name="recordId" value="{!v.recordId}"/>
+            <c:injectorAttribute name="varText" value="Hello World" dataType="String"/>
+            <c:injectorAttribute name="varBoolean" value="true" dataType="Boolean"/>
+            <c:injectorAttribute name="varNumber" value="42.123" dataType="Number"/>
+            <c:injectorAttribute name="varDate" value="2018-08-04" dataType="Date"/>
+            <c:injectorAttribute name="varDateTime" value="2018-08-04T10:00:00Z" dataType="DateTime"/>
         </c:injector>
 
     </lightning:card>
