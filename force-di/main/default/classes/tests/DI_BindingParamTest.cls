@@ -25,24 +25,24 @@
 **/
 
 @IsTest
-private class BindingParamTest {
+private class DI_BindingParamTest {
 
     @IsTest
     private static void givenNullInputWhenGetParameterThenGetNullValue() {
 
         Map<String, Object> inputs = null;
 
-        BindingParam.Request request;
-        BindingParam.Response response;
+        DI_BindingParam.Request request;
+        DI_BindingParam.Response response;
 
         Test.startTest();
 
-        BindingParam.parameters = inputs;
+        DI_BindingParam.parameters = inputs;
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'foo';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( null, response.longValue );
         System.assertEquals( null, response.decimalValue );
@@ -67,17 +67,17 @@ private class BindingParamTest {
 
         Map<String, Object> inputs = new Map<String, Object>();
 
-        BindingParam.Request request;
-        BindingParam.Response response;
+        DI_BindingParam.Request request;
+        DI_BindingParam.Response response;
 
         Test.startTest();
 
-        BindingParam.parameters = inputs;
+        DI_BindingParam.parameters = inputs;
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'foo';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( null, response.longValue );
         System.assertEquals( null, response.decimalValue );
@@ -109,19 +109,19 @@ private class BindingParamTest {
             'decimals' => new Decimal[] { 0, 1, 2 }
         };
 
-        BindingParam.Request request;
-        BindingParam.Response response;
+        DI_BindingParam.Request request;
+        DI_BindingParam.Response response;
 
         Test.startTest();
 
-        BindingParam.parameters = inputs;
+        DI_BindingParam.parameters = inputs;
 
         // number
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'number';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 42, response.longValue );
         System.assertEquals( 42.0, response.decimalValue );
@@ -132,10 +132,10 @@ private class BindingParamTest {
 
         // truthy
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'truthy';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 1, response.longValue );
         System.assertEquals( 1.0, response.decimalValue );
@@ -146,10 +146,10 @@ private class BindingParamTest {
 
         // falsey
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'falsey';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 0, response.longValue );
         System.assertEquals( 0, response.decimalValue );
@@ -160,10 +160,10 @@ private class BindingParamTest {
 
         // date
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'date';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 1533711600000L, response.longValue );
         System.assertEquals( 1533711600000.0, response.decimalValue );
@@ -174,10 +174,10 @@ private class BindingParamTest {
 
         // dateTime
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'dateTime';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 1533740888000L, response.longValue );
         System.assertEquals( 1533740888000.0, response.decimalValue );
@@ -188,10 +188,10 @@ private class BindingParamTest {
 
         // decimals
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'decimals';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 3, response.decimalValues.size() );
         System.assertEquals( response.decimalValue, response.decimalValues[0] );
@@ -221,19 +221,19 @@ private class BindingParamTest {
             'strings' => new String[] { 'apple', '1', null }
         };
 
-        BindingParam.Request request;
-        BindingParam.Response response;
+        DI_BindingParam.Request request;
+        DI_BindingParam.Response response;
 
         Test.startTest();
 
-        BindingParam.parameters = inputs;
+        DI_BindingParam.parameters = inputs;
 
         // text
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'text';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( null, response.longValue );
         System.assertEquals( null, response.decimalValue );
@@ -244,10 +244,10 @@ private class BindingParamTest {
 
         // number
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'number';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 42, response.longValue );
         System.assertEquals( 42.0, response.decimalValue );
@@ -258,10 +258,10 @@ private class BindingParamTest {
 
         // truthy
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'truthy';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( null, response.longValue );
         System.assertEquals( null, response.decimalValue );
@@ -272,10 +272,10 @@ private class BindingParamTest {
 
         // falsey
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'falsey';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( null, response.longValue );
         System.assertEquals( null, response.decimalValue );
@@ -286,10 +286,10 @@ private class BindingParamTest {
 
         // date
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'date';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( null, response.longValue );
         System.assertEquals( null, response.decimalValue );
@@ -300,10 +300,10 @@ private class BindingParamTest {
 
         // dateTime
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'dateTime';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( null, response.longValue );
         System.assertEquals( null, response.decimalValue );
@@ -314,10 +314,10 @@ private class BindingParamTest {
 
         // strings
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'strings';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 3, response.stringValues.size() );
         System.assertEquals( response.stringValue, response.stringValues[0] );
@@ -335,19 +335,19 @@ private class BindingParamTest {
             'booleans' => new Boolean[] { true, false }
         };
 
-        BindingParam.Request request;
-        BindingParam.Response response;
+        DI_BindingParam.Request request;
+        DI_BindingParam.Response response;
 
         Test.startTest();
 
-        BindingParam.parameters = inputs;
+        DI_BindingParam.parameters = inputs;
 
         // truthy
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'truthy';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 1, response.longValue );
         System.assertEquals( 1.0, response.decimalValue );
@@ -358,10 +358,10 @@ private class BindingParamTest {
 
         // falsey
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'falsey';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 0, response.longValue );
         System.assertEquals( 0, response.decimalValue );
@@ -372,10 +372,10 @@ private class BindingParamTest {
 
         // booleans
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'booleans';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 2, response.booleanValues.size() );
         System.assertEquals( response.booleanValue, response.booleanValues[0] );
@@ -395,19 +395,19 @@ private class BindingParamTest {
             'dates' => new Date[] { testDate, testDate.addDays(1) }
         };
 
-        BindingParam.Request request;
-        BindingParam.Response response;
+        DI_BindingParam.Request request;
+        DI_BindingParam.Response response;
 
         Test.startTest();
 
-        BindingParam.parameters = inputs;
+        DI_BindingParam.parameters = inputs;
 
         // date
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'date';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( testDateTime.getTime(), response.longValue );
         System.assertEquals( testDateTime.getTime(), response.decimalValue );
@@ -418,10 +418,10 @@ private class BindingParamTest {
 
         // dates
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'dates';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 2, response.dateValues.size() );
         System.assertEquals( response.dateValue, response.dateValues[0] );
@@ -441,19 +441,19 @@ private class BindingParamTest {
             'dateTimes' => new DateTime[] { testDateTime, testDateTime.addDays(1) }
         };
 
-        BindingParam.Request request;
-        BindingParam.Response response;
+        DI_BindingParam.Request request;
+        DI_BindingParam.Response response;
 
         Test.startTest();
 
-        BindingParam.parameters = inputs;
+        DI_BindingParam.parameters = inputs;
 
         // date
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'dateTime';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( testDateTime.getTime(), response.longValue );
         System.assertEquals( testDateTime.getTime(), response.decimalValue );
@@ -464,10 +464,10 @@ private class BindingParamTest {
 
         // dates
 
-        request = new BindingParam.Request();
+        request = new DI_BindingParam.Request();
         request.paramName = 'dateTimes';
 
-        response = BindingParam.invoke( new BindingParam.Request[] { request } )[0];
+        response = DI_BindingParam.invoke( new DI_BindingParam.Request[] { request } )[0];
 
         System.assertEquals( 2, response.dateTimeValues.size() );
         System.assertEquals( response.dateTimeValue, response.dateTimeValues[0] );

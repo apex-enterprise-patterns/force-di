@@ -40,7 +40,7 @@
                 var componentName = null;
                 var componentAttrs = {};
                 if(bindingInfo.BindingTypeAsString == 'Flow') {
-                    componentName = 'c:injectorFlowProxy';
+                    componentName = 'c:di_injectorFlowProxy';
                     componentAttrs['flowName'] = bindingInfo.To;
                     componentAttrs['injectorAttributes'] = injectAttrs;
                 } else if(bindingInfo.BindingTypeAsString == 'LightningComponent') {

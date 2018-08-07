@@ -28,7 +28,7 @@
  * Wrap a binding config to subclass it and aid in resolving target binding
  *   (also leverages the Provider interface to allow for more advanced instantiation)
  **/
-public abstract class Binding implements Comparable {
+public abstract class DI_Binding implements Comparable {
 
     public BindingType BindingType {get; private set;}
 
@@ -85,7 +85,7 @@ public abstract class Binding implements Comparable {
      *   See toString()
      **/
     public Integer compareTo(Object compareTo) {
-        Binding binding = (Binding) compareTo;
+        DI_Binding binding = (DI_Binding) compareTo;
         return this.toString().compareTo(binding.toString());
     }
 
@@ -120,21 +120,21 @@ public abstract class Binding implements Comparable {
         private String developerName;
         private SObjectType bindingObject;
         // Modules used by the Resolver to discover bindings
-        private List<Module> modules = null;        
+        private List<DI_Module> modules = null;
         // Discovered bindings via the modules supplied to this resolver
-        private List<Binding> bindings = null;
+        private List<DI_Binding> bindings = null;
 
         /**
          * Resolver will call .configure() followed by getBindings() on each Modue
          **/
-        public Resolver(List<Module> modules) {
+        public Resolver(List<DI_Module> modules) {
             this.modules = modules;
         }
 
         /**
          * Clear any modules known to this resolver and add the one given
          **/
-        public Resolver set(Module module) {
+        public Resolver set(DI_Module module) {
             modules.clear();
             modules.add(module);
             bindings = null; // Force reload of bindings
@@ -144,7 +144,7 @@ public abstract class Binding implements Comparable {
         /**
          * Add the module to those already known to this resolver
          **/
-        public Resolver add(Module module) {
+        public Resolver add(DI_Module module) {
             modules.add(module);
             bindings = null; // Force reload of bindings
             return this;
@@ -170,20 +170,20 @@ public abstract class Binding implements Comparable {
          * Returns a filtered and sorted list of known bindings
          * Priority is given to filtering by DeveloperName if specified
          **/
-        public List<Binding> get() {
+        public List<DI_Binding> get() {
             // Late resolve bindings to allow runtime module injection via set and add methods
             if(bindings==null) {
                 // Ask each module to configure and aggregate the resulting bindings
-                bindings = new List<Binding>();
-                for(Module module : modules) {
+                bindings = new List<DI_Binding>();
+                for(DI_Module module : modules) {
                     module.configure();
                     bindings.addAll(module.getBindings());
                 }
             }
             // Filter bindings returned by preconfigured criteria
-            List<Binding> matchedBindings = new List<Binding>();
-            for(Binding bind : bindings) {
-                if(developerName!=null && bind.DeveloperName!=null && bind.DeveloperName.equals(developerName)) {
+            List<DI_Binding> matchedBindings = new List<DI_Binding>();
+            for(DI_Binding bind : bindings) {
+                if(developerName!=null && bind.DeveloperName!=null && bind.DeveloperName.equalsIgnoreCase(developerName)) {
                     matchedBindings.add(bind);
                 } else if (bindingObject!=null && bind.BindingObject == bindingObject) {
                     matchedBindings.add(bind);
@@ -206,7 +206,7 @@ public abstract class Binding implements Comparable {
     /**
      * Returns the applicable Binding impl to resolve the type of binding provided
      **/
-    public static Binding newInstance(
+    public static DI_Binding newInstance(
             BindingType bindType,
             String developerName,
             SObjectType bindingObject,
@@ -216,7 +216,7 @@ public abstract class Binding implements Comparable {
         // Return an applicable Binding subclass for the given binding type
         Type implType = bindingImplsByType.get(bindType);
         if(implType!=null) {
-            Binding binding = (Binding) implType.newInstance();
+            DI_Binding binding = (DI_Binding) implType.newInstance();
             binding.BindingType = bindType;
             binding.DeveloperName = developerName;
             binding.BindingObject = bindingObject;
@@ -241,7 +241,7 @@ public abstract class Binding implements Comparable {
     /**
      * Bindings to Apex classes (optionally via Provider interface)
      **/
-    private class ApexBinding extends Binding {
+    private class ApexBinding extends DI_Binding {
         public override Object newInstance(Object params) {
             // Type binding?
             if(To instanceof String) {
@@ -270,7 +270,7 @@ public abstract class Binding implements Comparable {
     /**
      * Bindings to VF Components via Provider interface (required)
      **/
-    private class VisualForceComponentBinding extends Binding {
+    private class VisualForceComponentBinding extends DI_Binding {
         public  override Object newInstance(Object params) {
             // Type binding?
             if(To instanceof String) {
@@ -296,7 +296,7 @@ public abstract class Binding implements Comparable {
     /**
      * Bindings to Lightning Components (Provider interface not currently supported)
      **/
-    private class LightningComponentBinding extends Binding {
+    private class LightningComponentBinding extends DI_Binding {
         public override Object newInstance(Object params) {
             // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
             return To;
@@ -306,15 +306,15 @@ public abstract class Binding implements Comparable {
     /**
      * Bindings to Flows (Provider interface not currently supported)
      **/
-    private class FlowBinding extends Binding {
+    private class FlowBinding extends DI_Binding {
         public  override Object newInstance(Object params) {
             // Flow name binding?
             if(To instanceof String) {
                 String flowName = (String) To;
                 if(params instanceof Map<String, Object>) {
-                    return new Flow(Flow.Interview.createInterview(flowName, (Map<String, Object>) params));
+                    return new DI_Flow(Flow.Interview.createInterview(flowName, (Map<String, Object>) params));
                 }
-                return new Flow(Flow.Interview.createInterview(flowName, new Map<String, Object>()));
+                return new DI_Flow(Flow.Interview.createInterview(flowName, new Map<String, Object>()));
             }
             // Instance binding
             return To;

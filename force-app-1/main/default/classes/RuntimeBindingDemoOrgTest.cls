@@ -30,7 +30,7 @@ public class RuntimeBindingDemoOrgTest {
     @IsTest
     private static void givenDisplayAndMessageWhenRunAppThenMessageReturned() {
         // Given
-        Injector.Org.Bindings.set(new Module()
+        DI_Injector.Org.Bindings.set(new DI_Module()
             .bind(Message.class).toObject(Test.createStub(Message.class, new MockMessage('Say Something Message')))
             .bind(Display.class).toObject(Test.createStub(Display.class, new MockDisplay('Startup Message'))));
         // When
@@ -49,11 +49,11 @@ public class RuntimeBindingDemoOrgTest {
             this.mockOutput = mockOutput;
         }
         public Object handleMethodCall(
-            Object stubbedObject, 
-            String stubbedMethodName, 
-            Type returnType, 
-            List<Type> listOfParamTypes, 
-            List<String> listOfParamNames, 
+            Object stubbedObject,
+            String stubbedMethodName,
+            Type returnType,
+            List<Type> listOfParamTypes,
+            List<String> listOfParamNames,
             List<Object> listOfArgs) {
             if(stubbedMethodName == 'saySomething') {
                 return mockOutput;
@@ -71,11 +71,11 @@ public class RuntimeBindingDemoOrgTest {
             this.mockOutput = mockOutput;
         }
         public Object handleMethodCall(
-            Object stubbedObject, 
-            String stubbedMethodName, 
-            Type returnType, 
-            List<Type> listOfParamTypes, 
-            List<String> listOfParamNames, 
+            Object stubbedObject,
+            String stubbedMethodName,
+            Type returnType,
+            List<Type> listOfParamTypes,
+            List<String> listOfParamNames,
             List<Object> listOfArgs) {
             if(stubbedMethodName == 'startup') {
                 return mockOutput;

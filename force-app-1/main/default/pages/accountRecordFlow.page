@@ -1,3 +1,3 @@
 <apex:page standardController="Account" extensions="AccountRecordFlowController">
-    <c:injector bindingName="flow_AccountRecord_VF" parameters="{!flowInputVariables}"/>
+    <c:di_injector bindingName="flow_AccountRecord_VF" parameters="{!flowInputVariables}"/>
 </apex:page>

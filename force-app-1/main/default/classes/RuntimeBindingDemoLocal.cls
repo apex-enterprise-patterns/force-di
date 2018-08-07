@@ -12,10 +12,10 @@ public class RuntimeBindingDemoLocal {
      **/
     public class WelcomeApp {
 
-        private Message message;        
+        private Message message;
         private Display display;
 
-        public WelcomeApp(Injector injector) {
+        public WelcomeApp(DI_Injector injector) {
 
             // Inject dependences based on the given injector
             message = (Message) injector.getInstance(Message.class);
@@ -33,7 +33,7 @@ public class RuntimeBindingDemoLocal {
     public static void run() {
 
         // Configure the apps dependencies
-        Injector injector = configureBindings();
+        DI_Injector injector = configureBindings();
 
         // Run the app!
         WelcomeApp welcomeApp = new WelcomeApp(injector);
@@ -43,20 +43,20 @@ public class RuntimeBindingDemoLocal {
     /**
      * The applications dependencies are configured dynamically via the above Injector
      **/
-    public static Injector configureBindings() {
+    public static DI_Injector configureBindings() {
 
         // Vary Message and Display implementations depending on the users out of office
         return
-            new Injector(
+            new DI_Injector(
                 UserAvailability__c.getInstance().OutOfOffice__c ?
-                    new Module()
+                    new DI_Module()
                         .bind(Message.class).to(Weekday.class)
                         .bind(Display.class).to(BeAwesome.class) :
-                    new Module()
+                    new DI_Module()
                         .bind(Message.class).to(Weekend.class)
                         .bind(Display.class).to(Fun.class));
     }
-    
+
     /**
      * The WelcomeApp class is unware of the specific implementations
      **/
@@ -74,7 +74,7 @@ public class RuntimeBindingDemoLocal {
         public String startup() {
             return 'Go be awesome!';
         }
-    }    
+    }
     public class Fun implements Display {
         public String startup() {
             return 'Party time!';

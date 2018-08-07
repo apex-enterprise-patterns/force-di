@@ -24,16 +24,16 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-/** 
+/**
  * Fluent wrapper around Flow.Interview, to improve API and mocking
  **/
-public class Flow {
+public class DI_Flow {
 
     private Flow.Interview flow = null;
     private Set<String> outputVarsNames;
     private Set<String> outputVarsNamesRequired;
 
-    public Flow(Flow.Interview flow) {
+    public DI_Flow(Flow.Interview flow) {
         this.flow = flow;
         init();
     }
@@ -41,7 +41,7 @@ public class Flow {
     /**
     * Include the following parameter in the output map
     **/
-    public Flow output(String variableName) {
+    public DI_Flow output(String variableName) {
         outputVarsNames.add(variableName);
         return this;
     }
@@ -49,7 +49,7 @@ public class Flow {
     /**
     * Ensure the following parameter is returned and if not throw an exception
     **/
-    public Flow required(String variableName) {
+    public DI_Flow required(String variableName) {
         output(variableName);
         outputVarsNamesRequired.add(variableName);
         return this;
@@ -68,7 +68,7 @@ public class Flow {
                     outputVars.put(outputVar, outputVarValue);
                 } else if(outputVarsNamesRequired.contains(outputVar)) {
                     throw new FlowException('Output variable ' + outputVar + ' expected but not returned from Flow');
-                }                                
+                }
             }
             return outputVars;
         }

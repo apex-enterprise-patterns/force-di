@@ -3,8 +3,8 @@
  *   Roughly based on the Java API. This class can be given to an Injector instance
  *     or registered via Binding__mdt and thus available to the global scope Injector
  **/
-public class ForceApp3Module extends Module {
-    
+public class ForceApp3Module extends DI_Module {
+
     public override void configure() {
 
         // Example SObject binding (can be used by trigger frameworks, see force-di-demo-trigger)
