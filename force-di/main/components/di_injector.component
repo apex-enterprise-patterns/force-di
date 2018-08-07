@@ -25,7 +25,7 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 -->
-<apex:component controller="DI_InjectorComponentController">
+<apex:component controller="di_InjectorComponentController">
     <apex:attribute name="bindingName" type="String" assignTo="{!BindingNameValue}" description="" required="true"/>
     <apex:attribute name="parameters" type="Object" assignTo="{!ParametersValue}" description=""/>
     <apex:dynamicComponent componentValue="{!inject}" invokeAfterAction="true"/>

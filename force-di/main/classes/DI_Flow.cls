@@ -27,13 +27,13 @@
 /**
  * Fluent wrapper around Flow.Interview, to improve API and mocking
  **/
-public class DI_Flow {
+public class di_Flow {
 
     private Flow.Interview flow = null;
     private Set<String> outputVarsNames;
     private Set<String> outputVarsNamesRequired;
 
-    public DI_Flow(Flow.Interview flow) {
+    public di_Flow(Flow.Interview flow) {
         this.flow = flow;
         init();
     }
@@ -41,7 +41,7 @@ public class DI_Flow {
     /**
     * Include the following parameter in the output map
     **/
-    public DI_Flow output(String variableName) {
+    public di_Flow output(String variableName) {
         outputVarsNames.add(variableName);
         return this;
     }
@@ -49,7 +49,7 @@ public class DI_Flow {
     /**
     * Ensure the following parameter is returned and if not throw an exception
     **/
-    public DI_Flow required(String variableName) {
+    public di_Flow required(String variableName) {
         output(variableName);
         outputVarsNamesRequired.add(variableName);
         return this;

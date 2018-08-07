@@ -13,8 +13,8 @@ public class RuntimeBindingDemoOrg {
     public class WelcomeApp {
 
         // Inject dependences via org level injector
-        private Message message = (Message) DI_Injector.Org.getInstance(Message.class);
-        private Display display = (Display) DI_Injector.Org.getInstance(Display.class);
+        private Message message = (Message) di_Injector.Org.getInstance(Message.class);
+        private Display display = (Display) di_Injector.Org.getInstance(Display.class);
 
         public String greetings() {
             return display.startup() + ':' + message.saySomething();
@@ -34,7 +34,7 @@ public class RuntimeBindingDemoOrg {
     /**
      * This class to configure the bindings is injected into the Injector.Org instance via Binding__mdt
      **/
-    public class WelcomeAppBindings extends DI_Module {
+    public class WelcomeAppBindings extends di_Module {
 
         /**
          * Org level bindings are also visible to the injector Visualforce and Lightning components
