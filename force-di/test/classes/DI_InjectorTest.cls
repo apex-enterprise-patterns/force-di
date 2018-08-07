@@ -25,5 +25,5 @@
 **/
 
 @IsTest
-private class DI_InjectorTest {
+private class di_InjectorTest {
 }

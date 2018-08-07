@@ -24,33 +24,33 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-public class DI_Injector {
+public class di_Injector {
 
     /**
      * Default Injector instance configured via Custom Metadata bindings
      **/
-    public static final DI_Injector Org =
-        new DI_Injector(
-            new List<DI_Module> {
+    public static final di_Injector Org =
+        new di_Injector(
+            new List<di_Module> {
                 new CustomMetadataModule()});
 
     /**
      * Bindings visible to this Injector
      **/
-    public DI_Binding.Resolver Bindings {get; private set;}
+    public di_Binding.Resolver Bindings {get; private set;}
 
     /**
      * Configures the Injector with the bindings configured by the given Module
      **/
-    public DI_Injector(DI_Module module) {
-        this(new List<DI_Module> { module });
+    public di_Injector(di_Module module) {
+        this(new List<di_Module> { module });
     }
 
     /**
      * Configures the Injector with the bindings configured by the given Modules
      **/
-    public DI_Injector(List<DI_Module> modules) {
-        Bindings = new DI_Binding.Resolver(modules);
+    public di_Injector(List<di_Module> modules) {
+        Bindings = new di_Binding.Resolver(modules);
     }
 
     /**
@@ -84,7 +84,7 @@ public class DI_Injector {
             throw new InjectorException('Request for Binding cannot take "developerName" parameter of null');
         }
 
-        List<DI_Binding> bindings = Bindings.byName( developerName.toLowerCase().trim() ).get();
+        List<di_Binding> bindings = Bindings.byName( developerName.toLowerCase().trim() ).get();
         if ( bindings == null || bindings.isEmpty() ) {
             throw new InjectorException('Binding for "' + developerName + '" not found');
         }
@@ -94,14 +94,14 @@ public class DI_Injector {
     /**
      * A Module that loads bindings configured via the Binding__mdt object
      **/
-    private class CustomMetadataModule extends DI_Module {
+    private class CustomMetadataModule extends di_Module {
 
         public override void configure() {
             // TODO: Support Namespace
-            for(DI_Binding__mdt bindingConfig :
+            for(di_Binding__mdt bindingConfig :
                 [select QualifiedAPIName, DeveloperName, NamespacePrefix,
                         Type__c, To__c, BindingObject__c, BindingSequence__c
-                    from DI_Binding__mdt]) {
+                    from di_Binding__mdt]) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type__c);
                 if(String.isNotBlank(bindingConfig.BindingObject__c)) {

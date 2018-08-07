@@ -24,7 +24,7 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-public with sharing class DI_InjectorComponentFlowProxyController {
+public with sharing class di_InjectorComponentFlowProxyController {
 
     public String FlowNameValue { get; set; }
 
@@ -54,9 +54,9 @@ public with sharing class DI_InjectorComponentFlowProxyController {
             for ( Object key : oldMap.keySet() ) {
                 newMap.put( String.valueOf( key ), oldMap.get( key ) );
             }
-            DI_BindingParam.parameters = newMap;
+            di_BindingParam.parameters = newMap;
         } else if ( InputVariablesValue instanceof Map<String, Object> ) {
-            DI_BindingParam.parameters = (Map<String, Object>) InputVariablesValue;
+            di_BindingParam.parameters = (Map<String, Object>) InputVariablesValue;
         }
 
         return interview;

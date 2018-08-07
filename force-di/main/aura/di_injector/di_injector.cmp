@@ -26,7 +26,7 @@
 **/
 -->
 
-<aura:component controller="DI_InjectorController">
+<aura:component controller="di_InjectorController">
     <aura:attribute name="bindingName" type="String" required="true"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     {!v.body}

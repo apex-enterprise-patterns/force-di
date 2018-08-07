@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <applicationVisibilities>
-        <application>DI_Demo</application>
+        <application>di_Demo</application>
         <visible>true</visible>
     </applicationVisibilities>
     <hasActivationRequired>false</hasActivationRequired>
@@ -24,7 +24,7 @@
         <enabled>true</enabled>
     </pageAccesses>
     <tabSettings>
-        <tab>DI_Demo</tab>
+        <tab>di_Demo</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>

@@ -10,7 +10,7 @@ In the Outputs tab, select the expected data type in the &quot;Source&quot; fiel
         <label>Get Record Id</label>
         <locationX>93</locationX>
         <locationY>62</locationY>
-        <actionName>DI_BindingParam</actionName>
+        <actionName>di_BindingParam</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Account_Record_Flow</targetReference>

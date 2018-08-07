@@ -10,10 +10,10 @@ public class TriggerInjector {
     public static void handle(SObjectType triggerType, TriggerHandlerContext ctx) {
         // Discover bindings made against the given sobject type
         //   (bindings are always returned in sequence if specified)
-        List<DI_Binding> bindings = DI_Injector.Org.Bindings.bySObject(triggerType).get();
+        List<di_Binding> bindings = di_Injector.Org.Bindings.bySObject(triggerType).get();
         // Construct the handlers
         List<TriggerHandler> handlers = new List<TriggerHandler>();
-        for(DI_Binding binding : bindings) {
+        for(di_Binding binding : bindings) {
             Object data = binding.Data; // e.g. access to Binding__mdt if additional fields have been added
             Object handler = binding.getInstance();
             if(handler instanceof TriggerHandler) {

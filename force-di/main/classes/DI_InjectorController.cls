@@ -24,20 +24,20 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-public with sharing class DI_InjectorController {
+public with sharing class di_InjectorController {
 
     public ApexPages.StandardController StandardController {get;set;}
 
-    public DI_InjectorController(ApexPages.StandardController StandardController) {
+    public di_InjectorController(ApexPages.StandardController StandardController) {
         this.StandardController = StandardController;
     }
 
-    public DI_InjectorController getThis() {
+    public di_InjectorController getThis() {
         return this;
     }
 
     @AuraEnabled
-    public static DI_Binding getBinding(String bindingName) {
-        return DI_Injector.Org.Bindings.byName(bindingName).get()[0];
+    public static di_Binding getBinding(String bindingName) {
+        return di_Injector.Org.Bindings.byName(bindingName).get()[0];
     }
 }

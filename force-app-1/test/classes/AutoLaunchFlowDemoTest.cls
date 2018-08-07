@@ -29,9 +29,9 @@ private class AutoLaunchFlowDemoTest {
     @IsTest
     private static void givenFlowReturnsStringWhenRunFlowThenInvertedString() {
         // Given
-        DI_Injector.Org.Bindings.set(new DI_Module()
+        di_Injector.Org.Bindings.set(new di_Module()
             .bind('flow_GetString').toObject(
-                Test.createStub(DI_Flow.class, new FlowMock('Mock Flow string!'))));
+                Test.createStub(di_Flow.class, new FlowMock('Mock Flow string!'))));
         // When
         String reversedString = AutoLaunchFlowDemo.reverseFlowString();
         // Then

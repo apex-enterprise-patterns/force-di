@@ -30,7 +30,7 @@ public class RuntimeBindingDemoOrgTest {
     @IsTest
     private static void givenDisplayAndMessageWhenRunAppThenMessageReturned() {
         // Given
-        DI_Injector.Org.Bindings.set(new DI_Module()
+        di_Injector.Org.Bindings.set(new di_Module()
             .bind(Message.class).toObject(Test.createStub(Message.class, new MockMessage('Say Something Message')))
             .bind(Display.class).toObject(Test.createStub(Display.class, new MockDisplay('Startup Message'))));
         // When

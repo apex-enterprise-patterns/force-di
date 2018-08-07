@@ -33,7 +33,7 @@ public with sharing class AutoLaunchFlowDemo {
 
     public static String reverseFlowString() {
         // Use the Injector and Flow classes to obtain and interact with a Flow instance
-        DI_Flow someFlow = (DI_Flow) DI_Injector.Org.getInstance('flow_GetString');
+        di_Flow someFlow = (di_Flow) di_Injector.Org.getInstance('flow_GetString');
         String stringFromFlow = (String) someFlow.returning('flowString');
         return stringFromFlow.reverse();
     }

@@ -25,5 +25,5 @@
 **/
 
 @IsTest
-private class DI_ModuleTest {
+private class di_ModuleTest {
 }

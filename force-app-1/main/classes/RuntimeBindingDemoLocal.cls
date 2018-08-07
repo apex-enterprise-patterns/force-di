@@ -15,7 +15,7 @@ public class RuntimeBindingDemoLocal {
         private Message message;
         private Display display;
 
-        public WelcomeApp(DI_Injector injector) {
+        public WelcomeApp(di_Injector injector) {
 
             // Inject dependences based on the given injector
             message = (Message) injector.getInstance(Message.class);
@@ -33,7 +33,7 @@ public class RuntimeBindingDemoLocal {
     public static void run() {
 
         // Configure the apps dependencies
-        DI_Injector injector = configureBindings();
+        di_Injector injector = configureBindings();
 
         // Run the app!
         WelcomeApp welcomeApp = new WelcomeApp(injector);
@@ -43,16 +43,16 @@ public class RuntimeBindingDemoLocal {
     /**
      * The applications dependencies are configured dynamically via the above Injector
      **/
-    public static DI_Injector configureBindings() {
+    public static di_Injector configureBindings() {
 
         // Vary Message and Display implementations depending on the users out of office
         return
-            new DI_Injector(
+            new di_Injector(
                 UserAvailability__c.getInstance().OutOfOffice__c ?
-                    new DI_Module()
+                    new di_Module()
                         .bind(Message.class).to(Weekday.class)
                         .bind(Display.class).to(BeAwesome.class) :
-                    new DI_Module()
+                    new di_Module()
                         .bind(Message.class).to(Weekend.class)
                         .bind(Display.class).to(Fun.class));
     }

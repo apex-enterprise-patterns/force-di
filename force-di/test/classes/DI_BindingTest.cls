@@ -25,13 +25,13 @@
 **/
 
 @IsTest
-private class DI_BindingTest {
+private class di_BindingTest {
 
     @IsTest
     private static void givenApexBindingWhenGetInstanceThenInstance() {
         // Given
-        DI_Binding binding = DI_Binding.newInstance(
-            DI_Binding.BIndingType.Apex,
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BIndingType.Apex,
             Bob.class.getName(), null, null, Bob.class.getName(), null);
         // When
         Object boundInstance1 = binding.getInstance();
@@ -44,8 +44,8 @@ private class DI_BindingTest {
     @IsTest
     private static void givenApexBindingWhenGetInstanceWithParamThenInstanceWithParam() {
         // Given
-        DI_Binding binding = DI_Binding.newInstance(
-            DI_Binding.BIndingType.Apex,
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BIndingType.Apex,
             Bob.class.getName(), null, null, ProviderImpl.class.getName(), null);
         // When
         Object boundInstance1 = binding.getInstance('Some value 1');
@@ -63,7 +63,7 @@ private class DI_BindingTest {
         public Bob(String name) { this.Name = name; }
     }
 
-    public class ProviderImpl implements DI_Binding.Provider {
+    public class ProviderImpl implements di_Binding.Provider {
         public Object newInstance(Object params) {
             return new Bob((String) params);
         }

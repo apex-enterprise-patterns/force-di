@@ -3,7 +3,7 @@
  *   Roughly based on the Java API. This class can be given to an Injector instance
  *     or registered via Binding__mdt and thus available to the global scope Injector
  **/
-public class ForceApp3Module extends DI_Module {
+public class ForceApp3Module extends di_Module {
 
     public override void configure() {
 

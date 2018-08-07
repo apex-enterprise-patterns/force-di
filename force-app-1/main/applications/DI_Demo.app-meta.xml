@@ -18,9 +18,9 @@
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <label>DI Demo</label>
     <navType>Standard</navType>
-    <tabs>DI_Demo</tabs>
+    <tabs>di_Demo</tabs>
     <tabs>Widget__c</tabs>
     <tabs>standard-Account</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar>DI_Demo_UtilityBar</utilityBar>
+    <utilityBar>di_Demo_UtilityBar</utilityBar>
 </CustomApplication>

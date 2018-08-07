@@ -24,7 +24,7 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-public with sharing class DI_InjectorComponentController {
+public with sharing class di_InjectorComponentController {
 
     public String BindingNameValue {set;get;}
 
@@ -32,20 +32,20 @@ public with sharing class DI_InjectorComponentController {
 
     public ApexPages.Component getInject() {
         ApexPages.Component cmp = null;
-        DI_Binding bindingInfo = getBinding(BindingNameValue);
+        di_Binding bindingInfo = getBinding(BindingNameValue);
         switch on bindingInfo.BindingType {
             when Flow {
                 cmp = (ApexPages.Component) getInjectorFlowProxyInstance((String) bindingInfo.To, ParametersValue);
             }
             when else {
-                cmp = (ApexPages.Component) DI_Injector.Org.getInstance(BindingNameValue, ParametersValue);
+                cmp = (ApexPages.Component) di_Injector.Org.getInstance(BindingNameValue, ParametersValue);
             }
         }
         return cmp;
     }
 
-    public static DI_Binding getBinding(String bindingName) {
-        return DI_Injector.Org.Bindings.byName(bindingName).get()[0];
+    public static di_Binding getBinding(String bindingName) {
+        return di_Injector.Org.Bindings.byName(bindingName).get()[0];
     }
 
     // To avoid "Operation cast is not allowed on type" error, then
