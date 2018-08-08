@@ -1,0 +1,19 @@
+<aura:component>
+
+    <aura:attribute name="name"
+                    type="String"
+                    description="Name of the injected attribute."
+                    required="true"/>
+
+    <aura:attribute name="value"
+                    type="Object"
+                    description="Value of the injected attribute."
+                    required="true"/>
+
+    <aura:attribute name="dataType"
+                    type="String"
+                    default="String"
+                    description="Specific data type the value represents. Helps when mapping values to things like input variables of flows."
+                    required="false"/>
+
+</aura:component>

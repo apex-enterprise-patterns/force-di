@@ -1,0 +1,4 @@
+<apex:component controller="WidgetInfoController">
+    <apex:attribute name="standardController" type="ApexPages.StandardController" assignTo="{!StandardControllerValue}" description=""/>
+    <h1>Success I have been injected! {!standardController.Id}</h1>
+</apex:component>

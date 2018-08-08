@@ -1,0 +1,6 @@
+<aura:component>
+    <aura:attribute name="sObjectName" type="String"/>        
+    <lightning:card title="Widget">
+        <p class="slds-p-horizontal_small">Custom UI to Create a Widget ({!v.sObjectName})</p>
+    </lightning:card>        
+</aura:component>

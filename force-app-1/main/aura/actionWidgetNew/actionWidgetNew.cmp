@@ -1,0 +1,5 @@
+<aura:component implements="lightning:actionOverride,force:hasSObjectName">
+    <c:di_injector bindingName="lc_actionWidgetNew">
+        <c:di_injectorAttribute name="sObjectName" value="{!v.sObjectName}"/>
+    </c:di_injector>
+</aura:component>

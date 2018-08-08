@@ -1,0 +1,7 @@
+<aura:component>
+    <aura:attribute name="message" type="String"/>
+    <lightning:badge label="Component B"/>    
+    <aura:if isTrue="{!v.message}">
+        <lightning:badge label="{!v.message}"/>    
+    </aura:if>
+</aura:component>	

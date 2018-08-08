@@ -1,0 +1,6 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,force:hasSObjectName" >
+    <c:di_injector bindingName="lc_actionWidgetManage">
+        <c:di_injectorAttribute name="sObjectName" value="{!v.sObjectName}"/>
+        <c:di_injectorAttribute name="recordId" value="{!v.recordId}"/>
+    </c:di_injector>
+</aura:component>

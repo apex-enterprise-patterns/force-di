@@ -1,0 +1,10 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <lightning:card>
+        <p class="slds-p-horizontal_small">
+            <lightning:badge label="Component A"/>
+            <c:di_injector bindingName="lc_ComponentAtoB">
+                <c:di_injectorAttribute name="message" value="A message from Component A"/>
+            </c:di_injector>
+        </p>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,26 @@
+<!--
+    Example of dependency injecting a flow into a lightning component.
+ -->
+ <aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId">
+
+    <!--
+        Receive events when flow status changes, like STARTED and FINISHED,
+        and get access to the flow's output variables.
+     -->
+    <aura:handler name="injectorFlowProxyStatusChanged" event="c:di_injectorFlowProxyStatusChanged" action="{!c.handleFlowProxyStatusChanged}"/>
+
+    <lightning:card title="Flow Proxy Demo">
+
+        <!-- Injector attributes become input variables passed to the Flow. -->
+        <c:di_injector bindingName="flow_AccountRecord">
+            <c:di_injectorAttribute name="recordId" value="{!v.recordId}"/>
+            <c:di_injectorAttribute name="varText" value="Hello World" dataType="String"/>
+            <c:di_injectorAttribute name="varBoolean" value="true" dataType="Boolean"/>
+            <c:di_injectorAttribute name="varNumber" value="42.123" dataType="Number"/>
+            <c:di_injectorAttribute name="varDate" value="2018-08-04" dataType="Date"/>
+            <c:di_injectorAttribute name="varDateTime" value="2018-08-04T10:00:00Z" dataType="DateTime"/>
+        </c:di_injector>
+
+    </lightning:card>
+
+</aura:component>
