@@ -100,12 +100,15 @@ private class di_BindingParamTest {
     @IsTest
     private static void givenDecimalsWhenGetParameterThenGetValues() {
 
+        Long expectedDateMillisGMT = DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ).getTime();
+        Long expectedDateTimeMillisGMT = DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ).getTime();
+
         Map<String, Object> inputs = new Map<String, Object>{
             'number' => 42,
             'truthy' => 1,
             'falsey' => 0,
-            'date' => DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ).getTime(),
-            'dateTime' => DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ).getTime(),
+            'date' => expectedDateMillisGMT,
+            'dateTime' => expectedDateTimeMillisGMT,
             'decimals' => new Decimal[] { 0, 1, 2 }
         };
 
@@ -165,12 +168,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 1533711600000L, response.longValue );
-        System.assertEquals( 1533711600000.0, response.decimalValue );
-        System.assertEquals( '1533711600000', response.stringValue );
+        System.assertEquals( expectedDateMillisGMT, response.longValue );
+        System.assertEquals( expectedDateMillisGMT, response.decimalValue );
+        System.assertEquals( String.valueOf( expectedDateMillisGMT ), response.stringValue );
         System.assertEquals( true, response.booleanValue );
-        System.assertEquals( Date.newInstance( 2018, 8, 8 ), response.dateValue );
-        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 0, 0, 0 ), response.dateTimeValue );
+        System.assert( DateTime.newInstance( expectedDateMillisGMT ).date().isSameDay( response.dateValue ) );
+        System.assertEquals( DateTime.newInstance( expectedDateMillisGMT ), response.dateTimeValue );
 
         // dateTime
 
@@ -179,12 +182,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 1533740888000L, response.longValue );
-        System.assertEquals( 1533740888000.0, response.decimalValue );
-        System.assertEquals( '1533740888000', response.stringValue );
+        System.assertEquals( expectedDateTimeMillisGMT, response.longValue );
+        System.assertEquals( expectedDateTimeMillisGMT, response.decimalValue );
+        System.assertEquals( String.valueOf( expectedDateTimeMillisGMT ), response.stringValue );
         System.assertEquals( true, response.booleanValue );
-        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ).date(), response.dateValue );
-        System.assertEquals( DateTime.newInstance( 2018, 8, 8, 8, 8, 8 ), response.dateTimeValue );
+        System.assert( DateTime.newInstance( expectedDateTimeMillisGMT ).date().isSameDay( response.dateValue ) );
+        System.assertEquals( DateTime.newInstance( expectedDateTimeMillisGMT ), response.dateTimeValue );
 
         // decimals
 
