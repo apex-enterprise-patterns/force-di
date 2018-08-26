@@ -21,8 +21,10 @@ Project Folders
 | **force-app-3** | Sample package providing impls for various bindings above |
 | **force-di-trigger-demo** | Sample basic trigger framework leveraging the API |
 
-Install via a Salesforce DX Package
------------------------------------
+Install latest version via a Salesforce DX Package
+--------------------------------------------------
+
+You have two options you can install via your web browser [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1N000000Cr1fQAC) or you can install via the Salesforce DX CLI as shown below.
 
 ~~~~
 sfdx plugins:install shane-sfdx-plugins
