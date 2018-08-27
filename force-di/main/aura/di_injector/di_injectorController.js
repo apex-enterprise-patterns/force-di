@@ -29,7 +29,6 @@
 
         // Resolve the given binding
         var action = cmp.get("c.getBinding");
-        action.setStorable(true); // TODO: Investigate a means to have a more global client side cache for all vc bindings on the client
         action.setParams({ bindingName : cmp.get("v.bindingName") });
         action.setCallback(this, function(response) {
             var state = response.getState();

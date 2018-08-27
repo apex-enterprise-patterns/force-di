@@ -24,7 +24,7 @@ Project Folders
 Install latest version via a Salesforce DX Package
 --------------------------------------------------
 
-You have two options you can install via your web browser [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1N000000Cr1zQAC) or you can install via the Salesforce DX CLI as shown below.
+You have two options you can install via your web browser [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1N000000Cr2dQAC) or you can install via the Salesforce DX CLI as shown below.
 
 ~~~~
 sfdx plugins:install shane-sfdx-plugins
