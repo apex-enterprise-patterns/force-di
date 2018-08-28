@@ -119,8 +119,7 @@ public class di_Injector {
             throw new InjectorException('Request for Binding cannot take "bindingSObjectType" parameter of null');
         }
 
-        List<di_Binding> bindings = Bindings.resolveUsingAllFilteringParams()
-                                            .bySObject( bindingSObjectType )
+        List<di_Binding> bindings = Bindings.bySObject( bindingSObjectType )
                                             .byName( developerName.toLowerCase().trim() )
                                             .get();
 

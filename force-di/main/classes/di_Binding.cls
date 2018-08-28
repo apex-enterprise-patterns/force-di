@@ -120,9 +120,6 @@ public abstract class di_Binding implements Comparable {
         private String developerName;
         private SObjectType bindingObject;
         
-        // Determine if all filtering params are required to resolve bindings
-        private Boolean isResolvingByAllFilteringParams = false;
- 
         // Modules used by the Resolver to discover bindings
         private List<di_Module> modules = null;
         // Discovered bindings via the modules supplied to this resolver
@@ -151,14 +148,6 @@ public abstract class di_Binding implements Comparable {
         public Resolver add(di_Module module) {
             modules.add(module);
             bindings = null; // Force reload of bindings
-            return this;
-        }
-
-        /**
-         * Must resolve using filtering params 
-         */
-        public Resolver resolveUsingAllFilteringParams() {
-            this.isResolvingByAllFilteringParams = true;
             return this;
         }
 
@@ -195,16 +184,18 @@ public abstract class di_Binding implements Comparable {
             // Filter bindings returned by preconfigured criteria
             List<di_Binding> matchedBindings = new List<di_Binding>();
             for (di_Binding bind : bindings) {
-                if ( this.isResolvingByAllFilteringParams ) 
+                // if both filtering parameters were specified
+                if ( String.isNotBlank(this.developerName) && this.bindingObject != null ) 
                 {
-                    if ( String.isNotBlank(this.developerName) && String.isNotBlank(bind.DeveloperName)
-                        && bind.DeveloperName.equalsIgnoreCase(developerName)
-                        && bindingObject != null && bind.BindingObject == bindingObject )
+                    // then require both match for the binding to be included.
+                    if ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                        && this.bindingObject == bind.BindingObject )
                     {
                         matchedBindings.add(bind);
                     }
                 }
                 else {
+                    // else match on any of the available filtering parameters
                     if (String.isNotBlank(this.developerName) && String.isNotBlank(bind.DeveloperName)
                             && bind.DeveloperName.equalsIgnoreCase(developerName)) 
                     {
