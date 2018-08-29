@@ -92,6 +92,45 @@ public class di_Injector {
     }
 
     /**
+     * Creates an instance of the object configured for the named binding and the binding SObjectType
+     **/
+    public Object getInstance(Type developerNameByType, Schema.SObjectType bindingSObjectType) {
+        return getInstance(developerNameByType, bindingSObjectType, null);
+    }
+
+    /**
+     * Creates an instance of the object configured for the named binding and the binding SObjectType
+     *   (if params is specified, implicitly uses the Provider interface)
+     **/
+    public Object getInstance(Type developerNameByType, Schema.SObjectType bindingSObjectType, Object params) {
+        return getInstance(developerNameByType == null ? null : developerNameByType.getName().toLowerCase(), bindingSObjectType, params);
+    }
+
+    /**
+     * Creates an instance of the object configured for the named binding and the binding SObjectType
+     *   (if params is specified, implicitly uses the Provider interface)
+     **/
+    public Object getInstance(String developerName, Schema.SObjectType bindingSObjectType, Object params) {
+        if ( String.isBlank(developerName) ) {
+            throw new InjectorException('Request for Binding cannot take "developerName" parameter of null');
+        }
+
+        if ( bindingSObjectType == null ) {
+            throw new InjectorException('Request for Binding cannot take "bindingSObjectType" parameter of null');
+        }
+
+        List<di_Binding> bindings = Bindings.bySObject( bindingSObjectType )
+                                            .byName( developerName.toLowerCase().trim() )
+                                            .get();
+
+        if ( bindings == null || bindings.isEmpty() ) {
+            throw new InjectorException('Binding for "' + developerName + '" and SObjectType "' + bindingSObjectType + '" not found');
+        }
+        return bindings[0].getInstance(params);
+
+    }
+
+    /**
      * A Module that loads bindings configured via the Binding__mdt object
      **/
     private class CustomMetadataModule extends di_Module {
