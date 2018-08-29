@@ -173,10 +173,10 @@ public abstract class di_Binding implements Comparable {
          **/
         public List<di_Binding> get() {
             // Late resolve bindings to allow runtime module injection via set and add methods
-            if(bindings==null) {
+            if (bindings==null) {
                 // Ask each module to configure and aggregate the resulting bindings
                 bindings = new List<di_Binding>();
-                for(di_Module module : modules) {
+                for (di_Module module : modules) {
                     module.configure();
                     bindings.addAll(module.getBindings());
                 }
@@ -196,12 +196,12 @@ public abstract class di_Binding implements Comparable {
                 }
                 else {
                     // else match on any of the available filtering parameters
-                    if (String.isNotBlank(this.developerName) && String.isNotBlank(bind.DeveloperName)
-                            && bind.DeveloperName.equalsIgnoreCase(developerName)) 
+                    if ( String.isNotBlank(bind.DeveloperName)
+                        && bind.DeveloperName.equalsIgnoreCase(this.developerName)) 
                     {
                         matchedBindings.add(bind);
                     } 
-                    else if (bindingObject != null && bind.BindingObject == bindingObject) 
+                    else if (this.bindingObject != null && bind.BindingObject == this.bindingObject) 
                     {
                         matchedBindings.add(bind);
                     }
