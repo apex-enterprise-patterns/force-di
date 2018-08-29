@@ -31,3 +31,20 @@ You have two options you can install via your web browser [here](https://login.s
 sfdx plugins:install shane-sfdx-plugins
 sfdx shane:github:package:install -g afawcett -r force-di
 ~~~~
+
+Other Resources on Dependency Injection Design Pattern
+------------------------------------------------------
+
+Some of these blogs and videos are not necessarily Salesforce-specific but give good insights on use cases and purpose behind this design pattern.
+
+### Videos
+
+- [Dependency Injection Overview](https://www.youtube.com/watch?v=IKD2-MAkXyQ&t=0s&index=3&list=PL-oxrNbxQl3-wPOf0t3PT-0JYXiOBwReG) by Anthony Ferrara
+- [Advanced Apex Design Patterns](https://www.youtube.com/watch?v=IKD2-MAkXyQ) by Andy Fawcett
+- [Writing True Unit Tests Using Dependency Injection and Mocking](https://www.youtube.com/watch?v=hj4538vR6Mg&list=PL-oxrNbxQl3-wPOf0t3PT-0JYXiOBwReG&index=4) by Alex Tennant
+
+### Blogs
+
+- [Injection Design Pattern](https://martinfowler.com/articles/injection.html) by Martin Fowler
+- [Dependency Injection is not the same as Dependency Inversion](https://lostechies.com/derickbailey/2011/09/22/dependency-injection-is-not-the-same-as-the-dependency-inversion-principle/) by Derick Bailey
+- [Dependency Injection](https://stackify.com/dependency-injection) by Thorben Janssen
