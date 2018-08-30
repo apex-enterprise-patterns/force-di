@@ -167,13 +167,83 @@ public abstract class di_Binding implements Comparable {
             return this;
         }
 
+        /*
+         * Replace an existing binding for test mocking purposes
+         */
+        public Resolver replaceBindingWith( Object mockType )
+        {
+            // system.debug('replaceBindingWith method called');
+            
+            // find existing binding's position in the list.
+            Boolean isMatchFound = false;
+            Integer currentBindingsIndex = -1;
+
+            while ( currentBindingsIndex < this.bindings.size() 
+                    && !isMatchFound ) 
+            {
+                isMatchFound = isBindingMatchByFilteringCriteria( this.bindings[++currentBindingsIndex] );
+            }
+
+            if (isMatchFound)
+            {
+                // system.debug('replaceBindingWith method -- replacing existing binding');
+                this.bindings[currentBindingsIndex] = di_Binding.newInstance(di_Binding.BindingType.Apex, this.developerName, this.bindingObject, null, mockType, null);
+            }
+            
+            // system.debug('replaceBindingWith method finished');
+
+            return this;
+        }
+
+        /*
+         *  Method used to determind if the di_Binding record supplied matches
+         *  the available filtering parameters.
+         *
+         *  @param The current di_Binding from the Resolver's list of bindings to examine
+         *  @return True if the current di_Binding is a match to the filtering critera.
+         */
+        private Boolean isBindingMatchByFilteringCriteria( di_Binding bind )
+        {
+            Boolean isMatch = false;
+            // system.debug('bind == ' + bind);
+            // system.debug('this.developerName == ' + this.developerName);
+            // system.debug('this.bindingObject == ' + this.bindingObject); 
+
+            // if both filtering parameters were specified
+            if ( String.isNotBlank(this.developerName) && this.bindingObject != null ) 
+            {
+                // then require both match for the binding to be included.
+                if ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                    && this.bindingObject == bind.BindingObject )
+                {
+                    isMatch = true;
+                }
+            }
+            else {
+                // else match on any of the available filtering parameters
+                if ( String.isNotBlank(bind.DeveloperName)
+                    && bind.DeveloperName.equalsIgnoreCase(this.developerName)) 
+                {
+                    isMatch = true;
+                } 
+                else if (this.bindingObject != null && bind.BindingObject == this.bindingObject) 
+                {
+                    isMatch = true;
+                }
+            }
+            
+            // system.debug('isMatch == ' + isMatch); 
+
+            return isMatch;
+        }
+
         /**
          * Returns a filtered and sorted list of known bindings
          * Priority is given to filtering by DeveloperName if specified
          **/
         public List<di_Binding> get() {
             // Late resolve bindings to allow runtime module injection via set and add methods
-            if (bindings==null) {
+            if (bindings == null) {
                 // Ask each module to configure and aggregate the resulting bindings
                 bindings = new List<di_Binding>();
                 for (di_Module module : modules) {
@@ -184,27 +254,9 @@ public abstract class di_Binding implements Comparable {
             // Filter bindings returned by preconfigured criteria
             List<di_Binding> matchedBindings = new List<di_Binding>();
             for (di_Binding bind : bindings) {
-                // if both filtering parameters were specified
-                if ( String.isNotBlank(this.developerName) && this.bindingObject != null ) 
+                if ( isBindingMatchByFilteringCriteria(bind) )
                 {
-                    // then require both match for the binding to be included.
-                    if ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
-                        && this.bindingObject == bind.BindingObject )
-                    {
-                        matchedBindings.add(bind);
-                    }
-                }
-                else {
-                    // else match on any of the available filtering parameters
-                    if ( String.isNotBlank(bind.DeveloperName)
-                        && bind.DeveloperName.equalsIgnoreCase(this.developerName)) 
-                    {
-                        matchedBindings.add(bind);
-                    } 
-                    else if (this.bindingObject != null && bind.BindingObject == this.bindingObject) 
-                    {
-                        matchedBindings.add(bind);
-                    }
+                    matchedBindings.add(bind);
                 }
             }
             this.developerName = null;
