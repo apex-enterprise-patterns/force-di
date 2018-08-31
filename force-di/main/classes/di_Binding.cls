@@ -153,6 +153,9 @@ public abstract class di_Binding implements Comparable {
 
         /**
          * Resolve by name
+         *
+         *  @param the developerName of the Binding to be used as a filter in the resolving process.
+         *  @return the current di_Binding.Resolver instance
          **/
         public Resolver byName(String developerName) {
             this.developerName = developerName;
@@ -161,19 +164,26 @@ public abstract class di_Binding implements Comparable {
 
         /**
          * Resolve by object type
+         *
+         *  @param the bindingObject to be used as a filter in the resolving process.
+         *  @return the current di_Binding.Resolver instance
          **/
         public Resolver bySObject(SObjectType bindingObject) {
             this.bindingObject = bindingObject;
             return this;
         }
 
-        /*
-         * Replace an existing binding for test mocking purposes
+        /**
+         * Replaces an existing binding for test mocking purposes.  This method is used in conjunction with the filtering
+         * param methods of the di_Binding.Resolver class like "byName(String)" and "bySObject(SObjectType)". 
+         *
+         *  @param mockType - this is the Apex class that replaces the binding that is currently in default list of bindings
+         *  @return the current di_Binding.Resolver instance
          */
         public Resolver replaceBindingWith( Object mockType )
         {
             // system.debug('replaceBindingWith method called');
-            
+
             // find existing binding's position in the list.
             Boolean isMatchFound = false;
             Integer currentBindingsIndex = -1;
@@ -196,7 +206,7 @@ public abstract class di_Binding implements Comparable {
         }
 
         /*
-         *  Method used to determind if the di_Binding record supplied matches
+         *  Method used to determine if the di_Binding record supplied matches
          *  the available filtering parameters.
          *
          *  @param The current di_Binding from the Resolver's list of bindings to examine
