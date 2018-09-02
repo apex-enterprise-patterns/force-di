@@ -26,7 +26,7 @@
 
 /**
  * Wrap a binding config to subclass it and aid in resolving target binding
- *   (also leverages the Provider interface to allow for more advanced instantiation)
+ *   (also leverages the IProvider interface to allow for more advanced instantiation)
  **/
 public abstract class di_Binding implements Comparable {
 
@@ -107,7 +107,7 @@ public abstract class di_Binding implements Comparable {
     /**
     * Allows bindings to resolve dynamically (e.g. custom constructors) based passing in params if needed
     **/
-    public interface Provider {
+    public interface IProvider {
         Object newInstance(Object params);
     }
 
@@ -257,7 +257,7 @@ public abstract class di_Binding implements Comparable {
         };
 
     /**
-     * Bindings to Apex classes (optionally via Provider interface)
+     * Bindings to Apex classes (optionally via IProvider interface)
      **/
     private class ApexBinding extends di_Binding {
         public override Object newInstance(Object params) {
@@ -270,13 +270,13 @@ public abstract class di_Binding implements Comparable {
                     throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not exist');
                 }
                 Object toObject = toType.newInstance();
-                // Is this Apex binding resolved via a Provider?
-                IsProvider = toObject instanceof Provider;
+                // Is this Apex binding resolved via a IProvider?
+                IsProvider = toObject instanceof IProvider;
                 if(IsProvider) {
-                    return ((Provider) toObject).newInstance(params);
+                    return ((IProvider) toObject).newInstance(params);
                 } else if(params!=null) {
-                    // Params supplied but the binding does not reference a Provider?
-                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + className + ' does not implement the Provider interaface.');
+                    // Params supplied but the binding does not reference a IProvider?
+                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + className + ' does not implement the IProvider interaface.');
                 }
                 return toObject;
             }
@@ -286,25 +286,25 @@ public abstract class di_Binding implements Comparable {
     }
 
     /**
-     * Bindings to VF Components via Provider interface (required)
+     * Bindings to VF Components via IProvider interface (required)
      **/
     private class VisualForceComponentBinding extends di_Binding {
         public  override Object newInstance(Object params) {
             // Type binding?
             if(To instanceof String) {
-                // Visualforce Components references must be made via an Apex class implementing the Provider interface
+                // Visualforce Components references must be made via an Apex class implementing the IProvider interface
                 String className = (String) To;
                 Type toType = NamespacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
                 if(toType==null) {
                     throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + className + ' does not exist.');
                 }
-                // Visualforce Components have to be resolved via a Provider
+                // Visualforce Components have to be resolved via a IProvider
                 Object toObject = toType.newInstance();
-                IsProvider = toObject instanceof Provider;
+                IsProvider = toObject instanceof IProvider;
                 if(IsProvider) {
-                    return ((Provider) toObject).newInstance(params);
+                    return ((IProvider) toObject).newInstance(params);
                 }
-                throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the Provider interface.');
+                throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the IProvider interface.');
             }
             // Instance binding
             return To;
@@ -312,7 +312,7 @@ public abstract class di_Binding implements Comparable {
     }
 
     /**
-     * Bindings to Lightning Components (Provider interface not currently supported)
+     * Bindings to Lightning Components (IProvider interface not currently supported)
      **/
     private class LightningComponentBinding extends di_Binding {
         public override Object newInstance(Object params) {
@@ -322,7 +322,7 @@ public abstract class di_Binding implements Comparable {
     }
 
     /**
-     * Bindings to Flows (Provider interface not currently supported)
+     * Bindings to Flows (IProvider interface not currently supported)
      **/
     private class FlowBinding extends di_Binding {
         public  override Object newInstance(Object params) {
