@@ -84,11 +84,11 @@ public class di_Injector {
             throw new InjectorException('Request for Binding cannot take "developerName" parameter of null');
         }
 
-        List<di_Binding> bindings = Bindings.byName( developerName.toLowerCase().trim() ).get();
-        if ( bindings == null || bindings.isEmpty() ) {
+        List<di_Binding> bindingsFound = this.Bindings.byName( developerName.toLowerCase().trim() ).get();
+        if ( bindingsFound == null || bindingsFound.isEmpty() ) {
             throw new InjectorException('Binding for "' + developerName + '" not found');
         }
-        return bindings[0].getInstance(params);
+        return bindingsFound[0].getInstance(params);
     }
 
     /**
@@ -119,14 +119,14 @@ public class di_Injector {
             throw new InjectorException('Request for Binding cannot take "bindingSObjectType" parameter of null');
         }
 
-        List<di_Binding> bindings = Bindings.bySObject( bindingSObjectType )
+        List<di_Binding> bindingsFound = this.Bindings.bySObject( bindingSObjectType )
                                             .byName( developerName.toLowerCase().trim() )
                                             .get();
 
-        if ( bindings == null || bindings.isEmpty() ) {
+        if ( bindingsFound == null || bindingsFound.isEmpty() ) {
             throw new InjectorException('Binding for "' + developerName + '" and SObjectType "' + bindingSObjectType + '" not found');
         }
-        return bindings[0].getInstance(params);
+        return bindingsFound[0].getInstance(params);
 
     }
 
