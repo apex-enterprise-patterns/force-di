@@ -62,7 +62,7 @@ public class di_Injector {
 
     /**
      * Creates an instance of the object configured for the class name binding
-     *   (if params is specified, implicitly uses the Provider interface)
+     *   (if params is specified, implicitly uses the di_Binding.IProvider interface)
      **/
     public Object getInstance(Type developerNameByType, Object params) {
         return getInstance(developerNameByType == null ? null : developerNameByType.getName().toLowerCase(), params);
@@ -77,7 +77,7 @@ public class di_Injector {
 
     /**
      * Creates an instance of the object configured for the named binding
-     *   (if params is specified, implicitly uses the Provider interface)
+     *   (if params is specified, implicitly uses the di_Binding.IProvider interface)
      **/
     public Object getInstance(String developerName, Object params) {
         if ( String.isBlank(developerName) ) {
@@ -100,7 +100,7 @@ public class di_Injector {
 
     /**
      * Creates an instance of the object configured for the named binding and the binding SObjectType
-     *   (if params is specified, implicitly uses the Provider interface)
+     *   (if params is specified, implicitly uses the di_Binding.IProvider interface)
      **/
     public Object getInstance(Type developerNameByType, Schema.SObjectType bindingSObjectType, Object params) {
         return getInstance(developerNameByType == null ? null : developerNameByType.getName().toLowerCase(), bindingSObjectType, params);
@@ -108,7 +108,7 @@ public class di_Injector {
 
     /**
      * Creates an instance of the object configured for the named binding and the binding SObjectType
-     *   (if params is specified, implicitly uses the Provider interface)
+     *   (if params is specified, implicitly uses the di_Binding.IProvider interface)
      **/
     public Object getInstance(String developerName, Schema.SObjectType bindingSObjectType, Object params) {
         if ( String.isBlank(developerName) ) {

@@ -63,7 +63,7 @@ private class di_BindingTest {
         public Bob(String name) { this.Name = name; }
     }
 
-    public class ProviderImpl implements di_Binding.Provider {
+    public class ProviderImpl implements di_Binding.IProvider {
         public Object newInstance(Object params) {
             return new Bob((String) params);
         }

@@ -13,7 +13,7 @@ public class ForceApp3Module extends di_Module {
         // Example named binding to a Lightning component
         bind('lc_actionWidgetManage').lightningComponent().to('c:widgetManager');
 
-        // Example named binding to a Visualforce component (via Provider)
-        bind('vf_layoutWidgetInfo').visualforceComponent().to(WidgetInfoController.Provider.class);
+        // Example named binding to a Visualforce component (via di_Binding.IProvider)
+        bind('vf_layoutWidgetInfo').visualforceComponent().to(WidgetInfoController.IProvider.class);
     }
 }
