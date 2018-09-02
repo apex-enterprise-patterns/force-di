@@ -184,6 +184,9 @@ public abstract class di_Binding implements Comparable {
         {
             // system.debug('replaceBindingWith method called');
 
+            // Late resolve bindings to allow runtime module injection via set and add methods
+            loadBindings();
+
             // find existing binding's position in the list.
             Boolean isMatchFound = false;
             Integer currentBindingsIndex = -1;
@@ -199,7 +202,10 @@ public abstract class di_Binding implements Comparable {
                 // system.debug('replaceBindingWith method -- replacing existing binding');
                 this.bindings[currentBindingsIndex] = di_Binding.newInstance(di_Binding.BindingType.Apex, this.developerName, this.bindingObject, null, mockType, null);
             }
-            
+
+            this.developerName = null;
+            this.bindingObject = null;
+
             // system.debug('replaceBindingWith method finished');
 
             return this;
@@ -214,6 +220,7 @@ public abstract class di_Binding implements Comparable {
          */
         private Boolean isBindingMatchByFilteringCriteria( di_Binding bind )
         {
+            // System.debug('isBindingMatchByFilteringCriteria method called');
             Boolean isMatch = false;
             // system.debug('bind == ' + bind);
             // system.debug('this.developerName == ' + this.developerName);
@@ -247,20 +254,28 @@ public abstract class di_Binding implements Comparable {
             return isMatch;
         }
 
+        private void loadBindings()
+        {
+            if (this.bindings == null) {
+                System.debug('loading bindings');
+                // Ask each module to configure and aggregate the resulting bindings
+                this.bindings = new List<di_Binding>();
+                for (di_Module module : modules) 
+                {
+                    module.configure();
+                    this.bindings.addAll(module.getBindings());
+                }
+            }
+        }
+
         /**
          * Returns a filtered and sorted list of known bindings
          * Priority is given to filtering by DeveloperName if specified
          **/
         public List<di_Binding> get() {
             // Late resolve bindings to allow runtime module injection via set and add methods
-            if (bindings == null) {
-                // Ask each module to configure and aggregate the resulting bindings
-                bindings = new List<di_Binding>();
-                for (di_Module module : modules) {
-                    module.configure();
-                    bindings.addAll(module.getBindings());
-                }
-            }
+            loadBindings();
+
             // Filter bindings returned by preconfigured criteria
             List<di_Binding> matchedBindings = new List<di_Binding>();
             for (di_Binding bind : bindings) {
