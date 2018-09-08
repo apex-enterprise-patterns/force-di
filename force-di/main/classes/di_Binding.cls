@@ -189,12 +189,13 @@ public abstract class di_Binding implements Comparable {
 
             // find existing binding's position in the list.
             Boolean isMatchFound = false;
-            Integer currentBindingsIndex = -1;
+            Integer currentBindingsIndex = 0;
 
             while ( currentBindingsIndex < this.bindings.size() 
                     && !isMatchFound ) 
             {
-                isMatchFound = isBindingMatchByFilteringCriteria( this.bindings[++currentBindingsIndex] );
+                isMatchFound = isBindingMatchByFilteringCriteria( this.bindings[currentBindingsIndex] );
+                ++currentBindingsIndex;
             }
 
             if (isMatchFound)
