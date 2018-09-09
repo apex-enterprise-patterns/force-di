@@ -188,20 +188,13 @@ public abstract class di_Binding implements Comparable {
             loadBindings();
 
             // find existing binding's position in the list.
-            Boolean isMatchFound = false;
-            Integer currentBindingsIndex = 0;
-
-            while ( currentBindingsIndex < this.bindings.size() 
-                    && !isMatchFound ) 
+            for (Integer currentBindingsIndex = 0; currentBindingsIndex < this.bindings.size(); currentBindingsIndex++) 
             {
-                isMatchFound = isBindingMatchByFilteringCriteria( this.bindings[currentBindingsIndex] );
-                ++currentBindingsIndex;
-            }
-
-            if (isMatchFound)
-            {
-                // system.debug('replaceBindingWith method -- replacing existing binding');
-                this.bindings[currentBindingsIndex] = di_Binding.newInstance(di_Binding.BindingType.Apex, this.developerName, this.bindingObject, null, mockType, null);
+                if ( isBindingMatchByFilteringCriteria( this.bindings[currentBindingsIndex] ) )
+                {
+                    this.bindings[currentBindingsIndex] = di_Binding.newInstance(di_Binding.BindingType.Apex, this.developerName, this.bindingObject, null, mockType, null);
+                    break;
+                }
             }
 
             this.developerName = null;
