@@ -257,7 +257,15 @@ public abstract class di_Binding implements Comparable {
                 for (di_Module module : modules) 
                 {
                     module.configure();
-                    this.bindings.addAll(module.getBindings());
+                    for(di_Binding bind : module.getBindings()) {
+                        if(bind.BindingType == di_Binding.BindingType.Module) {
+                            di_Module embeddedModule = (di_Module) bind.getInstance();
+                            embeddedModule.configure();
+                            this.bindings.addAll(embeddedModule.getBindings());
+                        } else {
+                            this.bindings.add(bind);
+                        }
+                    }
                 }
             }
         }
