@@ -187,18 +187,7 @@ public virtual class di_Module {
      **/
     public List<di_Binding> getBindings() {
         // Return this modules configured bindings
-        List<di_Binding> moduleBindings = new List<di_Binding>();
-        for(di_Binding bind : bindings) {
-            // Module bindings are expanded into the returned listed and removed
-            if(bind.BindingType == di_Binding.BindingType.Module) {
-                di_Module module = (di_Module) bind.getInstance();
-                module.configure();
-                moduleBindings.addAll(module.getBindings());
-            } else {
-                moduleBindings.add(bind);
-            }
-        }
-        return moduleBindings;
+        return this.bindings;
     }
 
     private di_Module addBinding() {
