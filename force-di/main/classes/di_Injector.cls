@@ -139,14 +139,14 @@ public class di_Injector {
             // TODO: Support Namespace
             for(di_Binding__mdt bindingConfig :
                 [select QualifiedAPIName, DeveloperName, NamespacePrefix,
-                        Type__c, To__c, BindingObject__c, BindingSequence__c
+                        Type__c, To__c, BindingObject__c, BindingObject__r.QualifiedApiName, BindingSequence__c
                     from di_Binding__mdt]) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type__c);
                 if(String.isNotBlank(bindingConfig.BindingObject__c)) {
-                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingConfig.BindingObject__c.toLowerCase().trim() });
+                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingConfig.BindingObject__r.QualifiedApiName.toLowerCase().trim() });
                     if(results.size() != 1) {
-                        throw new InjectorException('Failed to find SObject ' + bindingConfig.BindingObject__c + ' referened by binding ' + bindingConfig.DeveloperName );
+                        throw new InjectorException('Failed to find SObject ' + bindingConfig.BindingObject__r.QualifiedApiName + ' referened by binding ' + bindingConfig.DeveloperName );
                     }
                     bind(results[0].getSObjectType());
                 }
