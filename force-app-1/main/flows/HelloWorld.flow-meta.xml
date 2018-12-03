@@ -17,6 +17,7 @@
     <label>Hello World</label>
     <processType>AutoLaunchedFlow</processType>
     <startElementReference>Hello_World</startElementReference>
+    <status>Active</status>
     <variables>
         <name>flowString</name>
         <dataType>String</dataType>

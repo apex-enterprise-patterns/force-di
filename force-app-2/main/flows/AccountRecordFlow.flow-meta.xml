@@ -47,6 +47,7 @@ varDateTime: {!varDateTime}</fieldText>
         <showHeader>true</showHeader>
     </screens>
     <startElementReference>Get_Account</startElementReference>
+    <status>Active</status>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>
