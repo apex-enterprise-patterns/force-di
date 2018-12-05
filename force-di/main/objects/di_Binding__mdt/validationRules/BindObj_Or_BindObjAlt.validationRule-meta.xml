@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BindObj_Or_BindObjAlt</fullName>
+    <active>true</active>
+    <description>This validation rule ensures that only the &quot;Binding Object&quot; or the &quot;Binding Object Alternate&quot; field is specified and not both.</description>
+    <errorConditionFormula>NOT( ISBLANK( BindingObject__c ) ) &amp;&amp; NOT( ISBLANK( BindingObjectAlternate__c ) )</errorConditionFormula>
+    <errorMessage>Only specify the &quot;Binding Object&quot; field or the &quot;Binding Object Alternate&quot; field; not both.</errorMessage>
+</ValidationRule>
