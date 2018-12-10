@@ -3,6 +3,18 @@
     <label>Widget Wizard</label>
     <protected>false</protected>
     <values>
+        <field>BindingObjectAlternate__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>BindingObject__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>BindingSequence__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
         <field>To__c</field>
         <value xsi:type="xsd:string">c:widgetWizard</value>
     </values>
