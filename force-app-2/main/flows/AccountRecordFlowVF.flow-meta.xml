@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Due to limitations in Visualforce, in order to pass input variables to a Flow via this dependency injection framework, then must use the Binding Param invocable apex action to retrieve the parameters one at a time and bind them to the actual Flow variables.
+
+In the Inputs tab, specify the expected parameter name being passed to this Flow.
+
+In the Outputs tab, select the expected data type in the &quot;Source&quot; field and the Flow variable to bind to in the &quot;Target&quot; field.</description>
+        <name>Get_Record_Id</name>
+        <label>Get Record Id</label>
+        <locationX>93</locationX>
+        <locationY>62</locationY>
+        <actionName>di_BindingParam</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Account_Record_Flow</targetReference>
+        </connector>
+        <inputParameters>
+            <name>paramName</name>
+            <value>
+                <stringValue>recordId</stringValue>
+            </value>
+        </inputParameters>
+        <outputParameters>
+            <assignToReference>recordId</assignToReference>
+            <name>stringValue</name>
+        </outputParameters>
+    </actionCalls>
+    <description>For DI the Account Record Flow in Visualforce. Due to limitations of invoking a flow and passing it input variables, this flow uses an invocable apex class to retrieve request-scoped map and pass the inputs to the actual Account Record Flow.</description>
+    <interviewLabel>Account Record Flow VF {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account Record Flow VF</label>
+    <processType>Flow</processType>
+    <startElementReference>Get_Record_Id</startElementReference>
+    <status>Active</status>
+    <subflows>
+        <description>Passing flow variables to an existing flow for reuse and to separate concerns of needing to use Binding Param invocable apex action to retrieve flow parameters in Visualforce context.</description>
+        <name>Account_Record_Flow</name>
+        <label>Account Record Flow</label>
+        <locationX>282</locationX>
+        <locationY>62</locationY>
+        <flowName>AccountRecordFlow</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

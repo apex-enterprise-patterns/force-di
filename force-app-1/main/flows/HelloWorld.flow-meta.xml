@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <name>Hello_World</name>
+        <label>Hello World</label>
+        <locationX>181</locationX>
+        <locationY>132</locationY>
+        <assignmentItems>
+            <assignToReference>flowString</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Hello from Flow!</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <interviewLabel>Hello World {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Hello World</label>
+    <processType>AutoLaunchedFlow</processType>
+    <startElementReference>Hello_World</startElementReference>
+    <status>Active</status>
+    <variables>
+        <name>flowString</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>
