@@ -1,0 +1,7 @@
+{
+    "orgName": "Acme DF18 Enterprise Company",
+    "edition": "Enterprise",
+    "orgPreferences" : {
+        "enabled": ["S1DesktopEnabled"]
+    }
+}
