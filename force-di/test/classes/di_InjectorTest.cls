@@ -26,4 +26,16 @@
 
 @IsTest
 private class di_InjectorTest {
+    
+    //TODO
+    @IsTest
+    private static void test(){
+        di_module module = new di_module();
+        di_Injector injector = new di_Injector(module);
+        
+        di_Injector.Org.Bindings.byName( Message.class.getName() )
+                                    .bySObject( Account.sObjectType )
+                                    .replaceBindingWith( null );
+        
+    }
 }

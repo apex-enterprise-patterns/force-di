@@ -31,20 +31,21 @@ public class RuntimeBindingDemoOrgTest {
     private static void givenDisplayAndMessageWhenRunAppThenMessageReturned() {
         // Given
         di_Injector.Org.Bindings.set(new di_Module().type(String.valueOf('Apex')).apex()
-                                     .bind(Message.class).sequence(1).toObject(Test.createStub(Message.class, new MockMessage('Say Something Message')))
-                                     .bind(Display.class).sequence(2).toObject(Test.createStub(Display.class, new MockDisplay('Startup Message'))));
+                    .bind(Message.class).sequence(1).toObject(Test.createStub(Message.class, new MockMessage('Say Something Message')))
+                    .bind(Display.class).sequence(2).toObject(Test.createStub(Display.class, new MockDisplay('Startup Message'))));
         // When
         RuntimeBindingDemoOrg.WelcomeApp app = new RuntimeBindingDemoOrg.WelcomeApp();
         String message = app.greetings();
         // Then
         System.assertEquals('Startup Message:Say Something Message', message);
     }
+ 
     
-    @IsTest
+     @IsTest
     private static void givenOnlyMessageWhenRunAppThenThrowInjectorException() {
         // Given
-        di_Injector.Org.Bindings.set(new di_Module().type(di_Binding.BindingType.Apex)
-                                     .bind(String.valueOf('Message')).data(Test.createStub(Message.class, new MockMessage('Say Something Message'))).to(Message.class));
+        di_Injector.Org.Bindings.set(new di_Module().type(di_Binding.BindingType.VisualforceComponent)
+             .bind(String.valueOf('Message')).data(Test.createStub(Message.class, new MockMessage('Say Something Message'))).to(Message.class));
         
         // When
         try{
@@ -72,34 +73,24 @@ public class RuntimeBindingDemoOrgTest {
         }
     }
     
+    @IsTest
+    private static void givenIncorrectSobjectTypeForTheBindingTypeWhenInjectorGetInstanceThenThrowException(){
+        try{
+            Object result = di_Injector.Org.getInstance(Message.class, Account.sObjectType);
+            System.assert(false, 'Expected di_Injector.InjectorException' );
+        } catch(Exception ex){
+            System.assert(true, ex.getMessage().contains('di_Injector.InjectorException: Binding for "message" and SObjectType "Account" not found'));
+        }    
+    }
     
     @IsTest
-    private static void givenOnlyMessageWhenRunAppThenThrowInjectorException1() {
-        // Given
-        di_Injector.Org.Bindings.set(new di_Module().type(di_Binding.BindingType.Apex)
-                                     .bind(String.valueOf('Message')).data(Test.createStub(Message.class, new MockMessage('Say Something Message'))).to(Message.class));
-        
-        // When
+    private static void givenNullBindingsWhenInjectorInstantiatedThenThrowException(){
         try{
-            RuntimeBindingDemoOrg.WelcomeApp app = new RuntimeBindingDemoOrg.WelcomeApp();
-            String message = app.greetings();
-            System.assert(false, 'Expected di_Injector.InjectorException');
+            Object result = di_Injector.Org.getInstance(RuntimeBindingDemoOrg.MessageProvider.Class, new List<String>{'Test'});
+        	System.assert(false, 'Expected di_Injector.InjectorException');
         } catch(Exception ex){
-        //Then
-            System.assert(true, ex.getMessage().contains('di_Injector.InjectorException: Binding for "display" not found'));
+            System.assert(true, ex.getMessage().contains('di_Injector.InjectorException: Binding for "runtimebindingdemoorgtest.messageprovider" not found'));
         }
-    }   
-     
-    @IsTest
-    private static void givenIncorrectBindingTypeWhenInjectorBindingsSetThenThrowModuleException1() {
-        // Given
-         di_Injector injector = new di_Injector(new di_Module());
-        
-        // When
-        RuntimeBindingDemoOrg.WelcomeApp app = new RuntimeBindingDemoOrg.WelcomeApp();
-        String message = app.greetings();
-        // Then
-        //System.assertEquals('Startup Message:Say Something Message', message);
     }
     
     /**
