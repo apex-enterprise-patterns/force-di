@@ -74,4 +74,12 @@ public class RuntimeBindingDemoOrg {
             return 'Party time!';
         }
     }
+    
+    public class MessageProvider implements di_Binding.Provider{
+        public Object newInstance(Object parameters){
+            String result = 'Provider method called';
+            return result;
+            
+        }
+    }
 }

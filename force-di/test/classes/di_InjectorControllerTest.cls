@@ -26,4 +26,17 @@
 
 @IsTest
 private class di_InjectorControllerTest {
+    @isTest
+    private static void givenStandardControllerWhenObjectCreatedThenConstructorCalled(){
+        ApexPages.StandardController StandardController;
+        String bindingName = 'flow_AccountRecord_VF';
+        di_InjectorController newObj = new di_InjectorController(StandardController);
+        newObj.getThis();
+        try{
+            di_InjectorController.getBinding(bindingName);
+        }
+        catch(Exception e){
+            System.assertEquals(e.getMessage().contains('List index out of bounds'), true, 'Correct exception is not thrown');
+        }
+    }
 }

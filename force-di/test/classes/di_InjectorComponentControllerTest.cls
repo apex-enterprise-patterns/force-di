@@ -26,4 +26,26 @@
 
 @IsTest
 private class di_InjectorComponentControllerTest {
+
+    @isTest
+    static void givenWrongBindingNameValueWhenGetInjectThenThrowException(){
+        //given
+        di_InjectorComponentController newObj = new di_InjectorComponentController();
+        String BindingNameValue = 'flow_AccountRecord_VF';
+        Object ParametersValue = 'Account';
+        try {
+        //When
+        newObj.getInject();
+        } catch(Exception e){
+            //Then
+            System.assertEquals(e.getMessage().contains('List index out of bounds'), true, 'Correct exception is not thrown');
+        }
+    }
+
+    @isTest
+    static void givenFlowNameWhenGetInjectorFlowProxyInstanceThenMethodCall(){
+        di_InjectorComponentController newObj = new di_InjectorComponentController();
+        newObj.getInjectorFlowProxyInstance('HelloWorld', 'Account');
+    }
+
 }
