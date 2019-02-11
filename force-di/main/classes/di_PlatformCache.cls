@@ -52,24 +52,18 @@ public with sharing class di_PlatformCache
 
     public Map<String, Map<Schema.SObjectType, Set<String>>> getCacheKeyIndexMap()
     {
-system.debug(cacheKeyIndexMap);
         if ( cacheKeyIndexMap.isEmpty() )
         {
             cacheKeyIndexMap = (Map<String, Map<Schema.SObjectType, Set<String>>>) getPartition().get( getKeyIndexName() );
-system.debug(cacheKeyIndexMap);
+
             if ( cacheKeyIndexMap == null )
             {
                 cacheKeyIndexMap = new Map<String, Map<Schema.SObjectType, Set<String>>>();
             } 
         }
-system.debug(cacheKeyIndexMap);
+
         return cacheKeyIndexMap;
     }
-
-    // private void initializeCacheKeyIndexMap()
-    // {
-    //     cacheKeyIndexMap.clear();
-    // }
 
     private void pushCacheKeyIndexMapToCache()
     {
@@ -102,7 +96,7 @@ system.debug(cacheKeyIndexMap);
                 + developerName.toLowerCase().trim().replaceAll('_', 'D').replaceAll('\\.','DT').left(30);
         }
         else {
-            return developerName.toLowerCase().trim().replaceAll('_', 'D').replaceAll('\\.','DT');
+            return developerName.toLowerCase().trim().replaceAll('_', 'D').replaceAll('\\.','DT').left(50);
         }
     }
 
@@ -125,28 +119,12 @@ system.debug(cacheKeyIndexMap);
     {
         if ( isStoringBindingInPlatformCache() )
         {
-            // System.debug(binding);
-            System.debug(getKeyName(binding));
-            // Add to the 
+            // add the binding to the platform cache directly
             getPartition().put(getKeyName(binding), binding, getPartitionTTL(), Cache.Visibility.ALL, false);
+            // add the binding's cache key name to the bindingKeyIndex
             addBindingToKeyIndex(binding);
         }
     }
-
-    // public di_Binding retrieveBinding(String developerName)
-    // {
-    //     return retrieveBinding( developerName, null );
-    // }
-
-    // public di_Binding retrieveBinding(String developerName, Schema.SObjectType bindingSObjectType)
-    // {
-    //     if ( isStoringBindingInPlatformCache() )
-    //     {
-    //         return (di_Binding) getPartition().get(getKeyName( developerName, bindingSObjectType));
-    //     }
-           
-    //     return null;
-    // }
 
     public list<di_Binding> retrieveBindings(String developerName, Schema.SObjectType bindingSObjectType)
     {
@@ -172,9 +150,4 @@ system.debug(cacheKeyIndexMap);
            
         return bindings;
     }
-
-    // TODO: Figure out how you can call an init at this level and it still load all of the bindings that are configured
-    // public static void init() {
-        // getInstance().
-    // }
 }
