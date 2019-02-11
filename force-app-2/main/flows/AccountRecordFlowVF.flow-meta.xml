@@ -31,6 +31,7 @@ In the Outputs tab, select the expected data type in the &quot;Source&quot; fiel
     <label>Account Record Flow VF</label>
     <processType>Flow</processType>
     <startElementReference>Get_Record_Id</startElementReference>
+    <status>Active</status>
     <subflows>
         <description>Passing flow variables to an existing flow for reuse and to separate concerns of needing to use Binding Param invocable apex action to retrieve flow parameters in Visualforce context.</description>
         <name>Account_Record_Flow</name>
