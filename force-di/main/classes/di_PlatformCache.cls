@@ -14,13 +14,13 @@ public with sharing class di_PlatformCache
         return instance;
     }
 
-    private ForceDIConfigurations__c getConfig()
+    private di_Configurations__c getConfig()
     {
-        ForceDIConfigurations__c config = ForceDIConfigurations__c.getInstance();
+        di_Configurations__c config = di_Configurations__c.getInstance();
 
         if ( config == null )
         {
-            config = new ForceDIConfigurations__c();
+            config = new di_Configurations__c();
             config.SetupOwnerId = ConnectApi.Organization.getSettings().orgId;
             insert config;
         }
