@@ -84,20 +84,15 @@ public with sharing class di_PlatformCache
             getCacheKeyIndexMap().get(workingDeveloperName).put( binding.bindingObject, new Set<String>() );
         }
 
-        getCacheKeyIndexMap().get(workingDeveloperName).get( binding.bindingObject).add(getKeyName(binding));
+        getCacheKeyIndexMap().get(workingDeveloperName).get(binding.bindingObject).add(getKeyName(binding));
 
         pushCacheKeyIndexMapToCache();
     }
 
     private String constructKeyName( Schema.SObjectType bindingSObjectType, String developerName )
     {
-        if ( bindingSObjectType != null ) {
-            return bindingSObjectType.getDescribe().getName().toLowerCase().left(19) + 'P' 
-                + developerName.toLowerCase().trim().replaceAll('_', 'D').replaceAll('\\.','DT').left(30);
-        }
-        else {
-            return developerName.toLowerCase().trim().replaceAll('_', 'D').replaceAll('\\.','DT').left(50);
-        }
+        return ( ( bindingSObjectType != null ) ? bindingSObjectType.getDescribe().getName().toLowerCase() : '' )
+            + developerName.toLowerCase().trim().hashCode();
     }
 
     private String getKeyName( String developerName, Schema.SObjectType bindingSObjectType)
