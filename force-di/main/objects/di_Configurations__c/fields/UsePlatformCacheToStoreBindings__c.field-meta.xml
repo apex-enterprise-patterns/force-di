@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UsePlatformCacheToStoreBindings__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>If checked, and a Platform Cache partition is specified, then Force-DI will store all bindings in the Platform Cache system on Salesforce.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>If checked, and a Platform Cache partition is specified, then Force-DI will store all bindings in the Platform Cache system on Salesforce.</inlineHelpText>
+    <label>Use Platform Cache To Store Bindings</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

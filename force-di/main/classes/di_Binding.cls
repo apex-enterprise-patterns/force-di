@@ -123,6 +123,7 @@ public abstract class di_Binding implements Comparable {
         // Modules used by the Resolver to discover bindings
         private List<di_Module> modules = null;
         // Discovered bindings via the modules supplied to this resolver
+// TODO: Consider changing this from a list<di_Binding> to a map<developerName, map<BindingObject, List<di_Binding>> 
         private List<di_Binding> bindings = null;
 
         /**
@@ -138,6 +139,7 @@ public abstract class di_Binding implements Comparable {
         public Resolver set(di_Module module) {
             modules.clear();
             modules.add(module);
+// TODO: impact assessment on type change
             bindings = null; // Force reload of bindings
             return this;
         }
@@ -147,6 +149,7 @@ public abstract class di_Binding implements Comparable {
          **/
         public Resolver add(di_Module module) {
             modules.add(module);
+// TODO: impact assessment on type change
             bindings = null; // Force reload of bindings
             return this;
         }
@@ -275,17 +278,24 @@ public abstract class di_Binding implements Comparable {
          * Priority is given to filtering by DeveloperName if specified
          **/
         public List<di_Binding> get() {
-            // Late resolve bindings to allow runtime module injection via set and add methods
-            loadBindings();
+            
+            list<di_Binding> matchedBindings = di_PlatformCache.getInstance().retrieveBindings(this.developerName, this.bindingObject);
 
-            // Filter bindings returned by preconfigured criteria
-            List<di_Binding> matchedBindings = new List<di_Binding>();
-            for (di_Binding bind : bindings) {
-                if ( isBindingMatchByFilteringCriteria(bind) )
-                {
-                    matchedBindings.add(bind);
+            if ( matchedBindings.isEmpty() )
+            {
+                // Late resolve bindings to allow runtime module injection via set and add methods
+                loadBindings();
+
+                // Filter bindings returned by preconfigured criteria
+                // List<di_Binding> matchedBindings = new List<di_Binding>();
+                for (di_Binding bind : bindings) {
+                    if ( isBindingMatchByFilteringCriteria(bind) )
+                    {
+                        matchedBindings.add(bind);
+                    }
                 }
             }
+
             this.developerName = null;
             this.bindingObject = null;
             matchedBindings.sort();
