@@ -89,10 +89,16 @@ public with sharing class di_PlatformCache
         pushCacheKeyIndexMapToCache();
     }
 
-    private String constructKeyName( Schema.SObjectType bindingSObjectType, String developerName )
+    public String constructKeyName( Schema.SObjectType bindingSObjectType, String developerName )
     {
-        return ( ( bindingSObjectType != null ) ? bindingSObjectType.getDescribe().getName().toLowerCase() : '' )
-            + developerName.toLowerCase().trim().hashCode();
+        return String.valueOf( 
+                    Math.abs( 
+                        ( 
+                            ( ( bindingSObjectType != null ) ? bindingSObjectType.getDescribe().getName().toLowerCase().replaceAll('__','') : '' ) 
+                            + ( String.isBlank(developerName) ? '' : developerName.toLowerCase().trim() )
+                        ).hashcode() 
+                    ) 
+                );
     }
 
     private String getKeyName( String developerName, Schema.SObjectType bindingSObjectType)
