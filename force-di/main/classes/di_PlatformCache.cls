@@ -89,7 +89,7 @@ public with sharing class di_PlatformCache
         pushCacheKeyIndexMapToCache();
     }
 
-    public String constructKeyName( Schema.SObjectType bindingSObjectType, String developerName )
+    private String constructKeyName( Schema.SObjectType bindingSObjectType, String developerName )
     {
         return String.valueOf( 
                     Math.abs( 
