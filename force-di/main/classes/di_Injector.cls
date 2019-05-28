@@ -154,7 +154,7 @@ public class di_Injector {
                     if(results.size() != 1) {
                         throw new InjectorException('Failed to find SObject ' + bindingObjectApiName + ' referened by binding ' + bindingConfig.DeveloperName );
                     }
-                    bind(results[0].getSObjectType()); // if it is getting here, then it is finding a 
+                    bind(results[0].getSObjectType()); // if it is getting here, then it is finding a SObject to add to the binding
                 }
                 if(bindingConfig.BindingSequence__c != null) {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence__c));
