@@ -222,6 +222,8 @@ public abstract class di_Binding implements Comparable {
             // system.debug('bind == ' + bind);
             // system.debug('this.developerName == ' + this.developerName);
             // system.debug('this.bindingObject == ' + this.bindingObject); 
+            // System.debug('bind.BindingObject == ' + bind.BindingObject);
+            // System.debug('bind.DeveloperName == ' + bind.DeveloperName);
 
             // if both filtering parameters were specified
             if ( String.isNotBlank(this.developerName) && this.bindingObject != null ) 
