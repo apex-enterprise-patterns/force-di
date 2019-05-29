@@ -135,28 +135,26 @@ public class di_Injector {
      **/
     private class CustomMetadataModule extends di_Module {
 
+        private string bindingObjectApiName = null;
+
         public override void configure() {
 
             List<di_Binding__mdt> bindingConfigs = [select QualifiedAPIName, DeveloperName, NamespacePrefix, Type__c, To__c
-                                                         , BindingObject__c, BindingObject__r.QualifiedApiName, BindingSequence__c
+                                                         , BindingObject__c, BindingObject__r.QualifiedApiName, BindingObjectAlternate__c
+                                                         , BindingSequence__c
                                                       from di_Binding__mdt];
 
             // TODO: Support Namespace
             for(di_Binding__mdt bindingConfig : bindingConfigs) {
-                // System.debug('bindingConfig.DeveloperName == ' + bindingConfig.DeveloperName);
-                // System.debug('bindingConfig.To__c == ' + bindingConfig.To__c);
-                // System.debug('bindingConfig.BindingObject__c == ' + bindingConfig.BindingObject__c);
-                // if(String.isNotBlank(bindingConfig.BindingObject__c)) {
-                //     System.debug('bindingConfig.BindingObject__r.QualifiedApiName == ' + bindingConfig.BindingObject__r.QualifiedApiName);
-                // }
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type__c);
-                if(String.isNotBlank(bindingConfig.BindingObject__c)) {
-                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingConfig.BindingObject__r.QualifiedApiName.toLowerCase().trim() });
+                if(String.isNotBlank(bindingConfig.BindingObject__c) || String.isNotBlank(bindingConfig.BindingObjectAlternate__c)) {
+                    bindingObjectApiName = String.isNotBlank(bindingConfig.BindingObject__c) ? bindingConfig.BindingObject__r.QualifiedApiName.toLowerCase().trim() : bindingConfig.BindingObjectAlternate__c.toLowerCase().trim();
+                    Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingObjectApiName });
                     if(results.size() != 1) {
-                        throw new InjectorException('Failed to find SObject ' + bindingConfig.BindingObject__r.QualifiedApiName + ' referened by binding ' + bindingConfig.DeveloperName );
+                        throw new InjectorException('Failed to find SObject ' + bindingObjectApiName + ' referened by binding ' + bindingConfig.DeveloperName );
                     }
-                    bind(results[0].getSObjectType());
+                    bind(results[0].getSObjectType()); // if it is getting here, then it is finding a SObject to add to the binding
                 }
                 if(bindingConfig.BindingSequence__c != null) {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence__c));
