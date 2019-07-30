@@ -295,7 +295,9 @@ public abstract class di_Binding implements Comparable {
         {
             list<di_Binding> matchedBindings = di_PlatformCache.getInstance().retrieveBindings(this.developerName, this.bindingObject);
             
-            if ( bindingsAreRequired && matchedBindings.isEmpty() )
+            if ( ( bindingsAreRequired && matchedBindings.isEmpty() && di_PlatformCache.isStoringBindingInPlatformCache() ) 
+                || ! di_PlatformCache.isStoringBindingInPlatformCache()
+                )
             {
                 // Late resolve bindings to allow runtime module injection via set and add methods
                 loadBindings();
