@@ -28,7 +28,7 @@ public with sharing class di_PlatformCache
         return config;
     }
 
-    private Boolean isStoringBindingInPlatformCache()
+    public static Boolean isStoringBindingInPlatformCache()
     {
         return getConfig().UsePlatformCacheToStoreBindings__c == null ? false : getConfig().UsePlatformCacheToStoreBindings__c;
     }
