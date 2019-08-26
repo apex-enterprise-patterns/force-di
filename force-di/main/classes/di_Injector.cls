@@ -123,7 +123,7 @@ public class di_Injector {
                                             .byName( developerName.toLowerCase().trim() )
                                             .get();
 
-        if ( bindingsFound == null || bindingsFound.isEmpty() ) {
+        if ( bindingsFound == null || bindingsFound.isEmpty() || bindingsFound[0] == null) {
             throw new InjectorException('Binding for "' + developerName + '" and SObjectType "' + bindingSObjectType + '" not found');
         }
         return bindingsFound[0].getInstance(params);
