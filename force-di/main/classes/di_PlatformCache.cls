@@ -166,9 +166,14 @@ public with sharing class di_PlatformCache
                 Set<String> cacheKeys = keyIndexBySObjectTypeMap.get(bindingSObjectType);
                 if ( cacheKeys != null )
                 {
+                    Object cachedObject = null;
                     for ( String cacheKey : cacheKeys )
                     {
-                        bindings.add( (di_Binding) getPartition().get( cacheKey ) );
+                        cachedObject = getPartition().get( cacheKey );
+                        if ( cachedObject != null ) 
+                        {
+                            bindings.add( (di_Binding) getPartition().get( cacheKey ) );
+                        }
                     }
                 }
             }
