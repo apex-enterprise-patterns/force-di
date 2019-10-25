@@ -240,7 +240,10 @@ public abstract class di_Binding implements Comparable {
             if ( String.isNotBlank(this.developerName) && this.bindingObject != null ) 
             {
                 // then require both match for the binding to be included.
-                if ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                if ( ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                        // or same check for the reference without a namespace prefix
+                        || this.developerName.equalsIgnoreCase( di_NamespaceClass.CURRENTNAMESPACE + '.' + bind.DeveloperName )
+                        )
                     && this.bindingObject == bind.BindingObject )
                 {
                     isMatch = true;
@@ -248,8 +251,12 @@ public abstract class di_Binding implements Comparable {
             }
             else {
                 // else match on any of the available filtering parameters
-                if ( String.isNotBlank(bind.DeveloperName)
-                    && bind.DeveloperName.equalsIgnoreCase(this.developerName)) 
+                if ( String.isNotBlank(this.developerName)
+                    && ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                        // or same check for the reference without a namespace prefix
+                        || this.developerName.equalsIgnoreCase( di_NamespaceClass.CURRENTNAMESPACE + '.' + bind.DeveloperName )
+                        )
+                    ) 
                 {
                     isMatch = true;
                 } 
