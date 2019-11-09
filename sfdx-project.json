@@ -2,36 +2,10 @@
     "packageDirectories": [
         {
             "path": "force-di",
-            "default": true,
-            "package": "force-di",
-            "versionName": "ver 0.1",
-            "versionNumber": "0.1.0.NEXT"
-        },
-        {
-            "path": "force-di-trigger-demo",
-            "default": false
-        },
-        {
-            "path": "force-app-1",
-            "default": false
-        },
-        {
-            "path": "force-app-2",
-            "default": false
-        },
-        {
-            "path": "force-app-3",
-            "default": false
+            "default": true
         }
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "44.0",
-    "packageAliases": {
-        "force-di": "0Ho1N000000GmaTSAS",
-        "force-di@0.1.0-1": "04t1N000000Cr1fQAC",
-        "force-di@0.1.0-2": "04t1N000000Cr1zQAC",
-        "force-di@0.1.0-3": "04t1N000000Cr2dQAC",
-        "force-di@0.1.0-4": "04t1N000000Cr7oQAC"
-    }
+    "sourceApiVersion": "47.0"
 }

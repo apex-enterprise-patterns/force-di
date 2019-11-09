@@ -4,6 +4,9 @@
 .idea
 IlluminatedCloud
 /temp
+/target
 package-lock.json
 package.json
 /node_modules
+.history/
+/research

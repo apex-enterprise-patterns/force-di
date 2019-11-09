@@ -12,26 +12,24 @@ Documentation
 
 Project Folders
 ---------------
-
-![Force DI Example](https://andrewfawcett.files.wordpress.com/2018/07/forcedi2.png)
+The "core" framework is found in this project.  This includes the following:
 
 | Folder | Description |
 | ------ | ----------- |
 | **force-di** | Core library, contains **Injector** Apex API and **<c:di_injector>** VF and Lightning Components |
+
+The "samples" of how to use the framework can be found in the [Force-DI Samples](https://github.com/afawcett/force-di-samples) project.
+
+| Folder | Description |
+| ------ | ----------- |
 | **force-app-1** | Sample application using the API and Components to inject Apex, VF and Lightning at runtime |
 | **force-app-2** | Sample package providing impls for various bindings above |
 | **force-app-3** | Sample package providing impls for various bindings above |
 | **force-di-trigger-demo** | Sample basic trigger framework leveraging the API |
 
-Install latest version via a Salesforce DX Package
---------------------------------------------------
 
-You have two options you can install via your web browser [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1N000000Cr7oQAC) or you can install via the Salesforce DX CLI as shown below.
+![Force DI Example](https://andrewfawcett.files.wordpress.com/2018/07/forcedi2.png)
 
-~~~~
-sfdx plugins:install shane-sfdx-plugins
-sfdx shane:github:package:install -g afawcett -r force-di
-~~~~
 
 Other Resources on Dependency Injection Design Pattern
 ------------------------------------------------------

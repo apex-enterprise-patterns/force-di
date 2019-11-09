@@ -119,10 +119,12 @@ public abstract class di_Binding implements Comparable {
         // Filter params for resolving bindings
         private String developerName;
         private SObjectType bindingObject;
+        private boolean bindingsAreRequired = true;
         
         // Modules used by the Resolver to discover bindings
         private List<di_Module> modules = null;
         // Discovered bindings via the modules supplied to this resolver
+// TODO: Consider changing this from a list<di_Binding> to a map<developerName, map<BindingObject, List<di_Binding>> 
         private List<di_Binding> bindings = null;
 
         /**
@@ -138,6 +140,7 @@ public abstract class di_Binding implements Comparable {
         public Resolver set(di_Module module) {
             modules.clear();
             modules.add(module);
+// TODO: impact assessment on type change
             bindings = null; // Force reload of bindings
             return this;
         }
@@ -147,6 +150,7 @@ public abstract class di_Binding implements Comparable {
          **/
         public Resolver add(di_Module module) {
             modules.add(module);
+// TODO: impact assessment on type change
             bindings = null; // Force reload of bindings
             return this;
         }
@@ -170,6 +174,16 @@ public abstract class di_Binding implements Comparable {
          **/
         public Resolver bySObject(SObjectType bindingObject) {
             this.bindingObject = bindingObject;
+            return this;
+        }
+
+        /**
+         * Alter the functionality, when bindings are not found in Platform Cache, a reload of the bindings to platform cache is not requred.
+         *
+         *  @return the current di_Binding.Resolver instance
+         */
+        public Resolver emptyBindingsAllowed() {
+            bindingsAreRequired = false;
             return this;
         }
 
@@ -219,12 +233,17 @@ public abstract class di_Binding implements Comparable {
             // system.debug('bind == ' + bind);
             // system.debug('this.developerName == ' + this.developerName);
             // system.debug('this.bindingObject == ' + this.bindingObject); 
+            // System.debug('bind.BindingObject == ' + bind.BindingObject);
+            // System.debug('bind.DeveloperName == ' + bind.DeveloperName);
 
             // if both filtering parameters were specified
             if ( String.isNotBlank(this.developerName) && this.bindingObject != null ) 
             {
                 // then require both match for the binding to be included.
-                if ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                if ( ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                        // or same check for the reference without a namespace prefix
+                        || this.developerName.equalsIgnoreCase( di_NamespaceClass.CURRENTNAMESPACE + '.' + bind.DeveloperName )
+                        )
                     && this.bindingObject == bind.BindingObject )
                 {
                     isMatch = true;
@@ -232,8 +251,12 @@ public abstract class di_Binding implements Comparable {
             }
             else {
                 // else match on any of the available filtering parameters
-                if ( String.isNotBlank(bind.DeveloperName)
-                    && bind.DeveloperName.equalsIgnoreCase(this.developerName)) 
+                if ( String.isNotBlank(this.developerName)
+                    && ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
+                        // or same check for the reference without a namespace prefix
+                        || this.developerName.equalsIgnoreCase( di_NamespaceClass.CURRENTNAMESPACE + '.' + bind.DeveloperName )
+                        )
+                    ) 
                 {
                     isMatch = true;
                 } 
@@ -250,8 +273,9 @@ public abstract class di_Binding implements Comparable {
 
         private void loadBindings()
         {
-            if (this.bindings == null) {
-                System.debug('loading bindings');
+            if ( this.bindings == null ) 
+            {
+                System.debug('// di_Binding.Resolver :: Loading Bindings //');
                 // Ask each module to configure and aggregate the resulting bindings
                 this.bindings = new List<di_Binding>();
                 for (di_Module module : modules) 
@@ -274,21 +298,35 @@ public abstract class di_Binding implements Comparable {
          * Returns a filtered and sorted list of known bindings
          * Priority is given to filtering by DeveloperName if specified
          **/
-        public List<di_Binding> get() {
-            // Late resolve bindings to allow runtime module injection via set and add methods
-            loadBindings();
+        public List<di_Binding> get() 
+        {
+            list<di_Binding> matchedBindings = di_PlatformCache.getInstance().retrieveBindings(this.developerName, this.bindingObject);
+            
+            if ( ( bindingsAreRequired && matchedBindings.isEmpty() && di_PlatformCache.isStoringBindingInPlatformCache() ) 
+                || ! di_PlatformCache.isStoringBindingInPlatformCache()
+                )
+            {
+                // Late resolve bindings to allow runtime module injection via set and add methods
+                loadBindings();
 
-            // Filter bindings returned by preconfigured criteria
-            List<di_Binding> matchedBindings = new List<di_Binding>();
-            for (di_Binding bind : bindings) {
-                if ( isBindingMatchByFilteringCriteria(bind) )
+                // Filter bindings returned by preconfigured criteria
+                // List<di_Binding> matchedBindings = new List<di_Binding>();
+                for (di_Binding bind : bindings) 
                 {
-                    matchedBindings.add(bind);
+                    if ( isBindingMatchByFilteringCriteria(bind) )
+                    {
+                        matchedBindings.add(bind);
+                    }
                 }
             }
+
             this.developerName = null;
             this.bindingObject = null;
             matchedBindings.sort();
+            
+            // In case the default behavior was momentarily overridden, return the Resolver back to default behavior for next call.
+            this.bindingsAreRequired = true;
+            
             return matchedBindings;
         }
     }
@@ -309,10 +347,12 @@ public abstract class di_Binding implements Comparable {
             SObjectType bindingObject,
             Integer bindingSequence,
             Object to,
-            Object bindingData) {
+            Object bindingData) 
+    {
         // Return an applicable Binding subclass for the given binding type
-        Type implType = bindingImplsByType.get(bindType);
-        if(implType!=null) {
+        Type implType = BINDING_IMPLS_BY_TYPE.get(bindType);
+
+        if ( implType != null ) {
             di_Binding binding = (di_Binding) implType.newInstance();
             binding.BindingType = bindType;
             binding.DeveloperName = developerName;
@@ -322,11 +362,11 @@ public abstract class di_Binding implements Comparable {
             binding.Data = bindingData;
             return binding;
         }
-        throw new BindingException('Binding type ' + bindType + ' has not implementation.');
+        throw new BindingException('Binding type ' + bindType + ' has no implementation.');
     }
 
     // Maps binding type to the applicable impl
-    private static final Map<BindingType, Type> bindingImplsByType =
+    private static final Map<BindingType, Type> BINDING_IMPLS_BY_TYPE =
         new Map<BindingType, Type> {
             BindingType.Apex => ApexBinding.class,
             BindingType.LightningComponent => LightningComponentBinding.class,
@@ -338,24 +378,31 @@ public abstract class di_Binding implements Comparable {
     /**
      * Bindings to Apex classes (optionally via Provider interface)
      **/
-    private class ApexBinding extends di_Binding {
-        public override Object newInstance(Object params) {
+    private class ApexBinding extends di_Binding 
+    {
+        public override Object newInstance(Object params) 
+        {
             // Type binding?
-            if(To instanceof String) {
+            if ( To instanceof String ) 
+            {
                 // Leverage namespace if the Binding has one
                 String className = (String) To;
                 Type toType = NameSpacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
-                if(toType==null) {
+                if ( toType == null ) 
+                {
                     throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not exist');
                 }
                 Object toObject = toType.newInstance();
                 // Is this Apex binding resolved via a Provider?
                 IsProvider = toObject instanceof Provider;
-                if(IsProvider) {
+                if ( IsProvider )
+                {
                     return ((Provider) toObject).newInstance(params);
-                } else if(params!=null) {
+                } 
+                else if ( params != null ) 
+                {
                     // Params supplied but the binding does not reference a Provider?
-                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + className + ' does not implement the Provider interaface.');
+                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + className + ' does not implement the Provider interface.');
                 }
                 return toObject;
             }
@@ -367,20 +414,25 @@ public abstract class di_Binding implements Comparable {
     /**
      * Bindings to VF Components via Provider interface (required)
      **/
-    private class VisualForceComponentBinding extends di_Binding {
-        public  override Object newInstance(Object params) {
+    private class VisualForceComponentBinding extends di_Binding 
+    {
+        public  override Object newInstance(Object params) 
+        {
             // Type binding?
-            if(To instanceof String) {
+            if ( To instanceof String ) 
+            {
                 // Visualforce Components references must be made via an Apex class implementing the Provider interface
                 String className = (String) To;
                 Type toType = NamespacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
-                if(toType==null) {
+                if ( toType==null )
+                {
                     throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + className + ' does not exist.');
                 }
                 // Visualforce Components have to be resolved via a Provider
                 Object toObject = toType.newInstance();
                 IsProvider = toObject instanceof Provider;
-                if(IsProvider) {
+                if ( IsProvider )
+                {
                     return ((Provider) toObject).newInstance(params);
                 }
                 throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the Provider interface.');
@@ -393,8 +445,10 @@ public abstract class di_Binding implements Comparable {
     /**
      * Bindings to Lightning Components (Provider interface not currently supported)
      **/
-    private class LightningComponentBinding extends di_Binding {
-        public override Object newInstance(Object params) {
+    private class LightningComponentBinding extends di_Binding 
+    {
+        public override Object newInstance(Object params) 
+        {
             // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
             return To;
         }
@@ -403,12 +457,16 @@ public abstract class di_Binding implements Comparable {
     /**
      * Bindings to Flows (Provider interface not currently supported)
      **/
-    private class FlowBinding extends di_Binding {
-        public  override Object newInstance(Object params) {
+    private class FlowBinding extends di_Binding 
+    {
+        public  override Object newInstance(Object params) 
+        {
             // Flow name binding?
-            if(To instanceof String) {
+            if ( To instanceof String ) 
+            {
                 String flowName = (String) To;
-                if(params instanceof Map<String, Object>) {
+                if ( params instanceof Map<String, Object> )
+                {
                     return new di_Flow(Flow.Interview.createInterview(flowName, (Map<String, Object>) params));
                 }
                 return new di_Flow(Flow.Interview.createInterview(flowName, new Map<String, Object>()));
