@@ -36,6 +36,9 @@ private with sharing class di_FlowTest {
         System.assertEquals(1, diObj.outputVarsNamesRequired.size(), 'value not inserted in Set');
     }
 
+    /** 
+     * Removed until further mocking support added to di_Flow 
+     *  (see https://github.com/afawcett/flowextensions for ideas)
     @isTest
     public static void givenFlowNameWhenReturningThenExceptionThrown(){
         //Given
@@ -53,4 +56,5 @@ private with sharing class di_FlowTest {
             System.assertEquals(e.getMessage().contains('expected but not returned from Flow'), true, 'correct Exception in not thrown');
         }
     }
+    **/
 }
