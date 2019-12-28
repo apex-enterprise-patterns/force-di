@@ -299,7 +299,7 @@ private class di_BindingParamTest {
         System.assertEquals( inputs.get('date'), response.stringValue );
         System.assertEquals( false, response.booleanValue );
         System.assertEquals( testDateTime.date(), response.dateValue );
-        System.assertEquals( testDateTime.dateGMT(), response.dateTimeValue ); // hours will be zero'ed out
+        System.assertEquals( testDateTime.date(), response.dateTimeValue.dateGmt() ); // hours will be zero'ed out
 
         // dateTime
 
