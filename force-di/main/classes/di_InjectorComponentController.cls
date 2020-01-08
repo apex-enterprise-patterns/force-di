@@ -34,7 +34,7 @@ public with sharing class di_InjectorComponentController {
         ApexPages.Component cmp = null;
         di_Binding bindingInfo = getBinding(BindingNameValue);
         switch on bindingInfo.BindingType {
-            when Flow {
+            when 'Flow' {
                 cmp = (ApexPages.Component) getInjectorFlowProxyInstance((String) bindingInfo.To, ParametersValue);
             }
             when else {

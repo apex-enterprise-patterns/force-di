@@ -33,7 +33,7 @@
 public virtual class di_Module {
 
     private List<di_Binding> bindings = new List<di_Binding>();
-    private di_Binding.BindingType bindingType;
+    private String bindingType;
     private String developerName;
     private SObjectType bindingObject;
     private Integer bindingSequence;
@@ -55,30 +55,21 @@ public virtual class di_Module {
     /**
      * Type of binding, see also alias methods apex(), lightningComponent(), visualforceComponent()
      **/
-    public di_Module type(String value) {
-        List<di_Binding.BindingType> bindEnumValues = di_Binding.BindingType.values();
-        for(di_Binding.BindingType bindEnumValue : bindEnumValues) {
-            if(bindEnumValue.name().equals(value)) {
-                bindingType = bindEnumValue;
-                return this;
-            }
+    public di_Module type(String value)
+    {
+        if (di_BindingTypes.getInstance().isValid(value))
+        {
+            bindingType = value;
+            return this;
         }
         throw new ModuleException('Binding type ' + value + ' is not valid.');
     }
 
     /**
-     * Type of binding
+     * Sets the binding type
      **/
-    public di_Module type(di_Binding.BindingType value) {
-        bindingType = value;
-        return this;
-    }
-
-    /**
-     * Sets the binding type to Apex
-     **/
-    public di_Module apex() {
-        bindingType = di_Binding.BindingType.Apex;
+    public di_Module setBindingType(String bindingType) {
+        this.bindingType = bindingType;
         return this;
     }
 
@@ -86,7 +77,7 @@ public virtual class di_Module {
      * Sets the binding type to Lightning Component
      **/
     public di_Module lightningComponent() {
-        bindingType = di_Binding.BindingType.LightningComponent;
+        setBindingType('LightningComponent');
         return this;
     }
 
@@ -94,7 +85,7 @@ public virtual class di_Module {
      * Sets the binding type to Visualforce Component
      **/
     public di_Module visualforceComponent() {
-        bindingType = di_Binding.BindingType.VisualforceComponent;
+        setBindingType('VisualforceComponent');
         return this;
     }
 
@@ -102,7 +93,7 @@ public virtual class di_Module {
      * Sets the binding type to Flow
      **/
     public di_Module flow() {
-        bindingType = di_Binding.BindingType.Flow;
+        setBindingType('Flow');
         return this;
     }
 
@@ -110,7 +101,7 @@ public virtual class di_Module {
      * Sets the binding type to Module (Apex class binding must extend Module class)
      **/
     public di_Module module() {
-        bindingType = di_Binding.BindingType.Module;
+        setBindingType('Module');
         return this;
     }
 
@@ -176,7 +167,7 @@ public virtual class di_Module {
         this.to = to;
         // Attempt to auto infer type of binding
         if(to instanceof di_Flow) {
-            return flow().addBinding();
+            return setBindingType('flow').addBinding();
         }
         return addBinding();
     }
@@ -209,7 +200,7 @@ public virtual class di_Module {
 
     private void init() {
         // Reset state
-        bindingType = di_Binding.BindingType.Apex;
+        bindingType = 'Apex';
         developerName = null;
         bindingObject = null;
         bindingSequence = null;

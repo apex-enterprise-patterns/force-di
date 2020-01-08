@@ -30,10 +30,8 @@
  **/
 public abstract class di_Binding implements Comparable {
 
-    public BindingType BindingType {get; private set;}
-
     @AuraEnabled
-    public String BindingTypeAsString {get { return BindingType.name();} }
+    public String BindingType { get; private set; }
 
     @AuraEnabled
     public String NamespacePrefix {get;private set;}
@@ -53,7 +51,7 @@ public abstract class di_Binding implements Comparable {
     @AuraEnabled
     public Object Data {get;private set;}
 
-    private Boolean IsProvider = false;
+    protected Boolean IsProvider = false;
     private Object Injected = null;
 
     /**
@@ -119,7 +117,7 @@ public abstract class di_Binding implements Comparable {
         // Filter params for resolving bindings
         private String developerName;
         private SObjectType bindingObject;
-        private boolean bindingsAreRequired = true;
+        private Boolean bindingsAreRequired = true;
         
         // Modules used by the Resolver to discover bindings
         private List<di_Module> modules = null;
@@ -206,7 +204,7 @@ public abstract class di_Binding implements Comparable {
             {
                 if ( isBindingMatchByFilteringCriteria( this.bindings[currentBindingsIndex] ) )
                 {
-                    this.bindings[currentBindingsIndex] = di_Binding.newInstance(di_Binding.BindingType.Apex, this.developerName, this.bindingObject, null, mockType, null);
+                    this.bindings[currentBindingsIndex] = di_Binding.newInstance('Apex', this.developerName, this.bindingObject, null, mockType, null);
                     break;
                 }
             }
@@ -282,11 +280,14 @@ public abstract class di_Binding implements Comparable {
                 {
                     module.configure();
                     for(di_Binding bind : module.getBindings()) {
-                        if(bind.BindingType == di_Binding.BindingType.Module) {
+                        if (bind.BindingType.equalsIgnoreCase('Module'))
+                        {
                             di_Module embeddedModule = (di_Module) bind.getInstance();
                             embeddedModule.configure();
                             this.bindings.addAll(embeddedModule.getBindings());
-                        } else {
+                        }
+                        else
+                        {
                             this.bindings.add(bind);
                         }
                     }
@@ -300,7 +301,7 @@ public abstract class di_Binding implements Comparable {
          **/
         public List<di_Binding> get() 
         {
-            list<di_Binding> matchedBindings = di_PlatformCache.getInstance().retrieveBindings(this.developerName, this.bindingObject);
+            List<di_Binding> matchedBindings = di_PlatformCache.getInstance().retrieveBindings(this.developerName, this.bindingObject);
             
             if ( ( bindingsAreRequired && matchedBindings.isEmpty() && di_PlatformCache.isStoringBindingInPlatformCache() ) 
                 || ! di_PlatformCache.isStoringBindingInPlatformCache()
@@ -334,23 +335,18 @@ public abstract class di_Binding implements Comparable {
     public class BindingException extends Exception {}
 
     /**
-     * Types of Binding implementations supported by the framework
-     **/
-    public enum BindingType { Apex, VisualforceComponent, LightningComponent, Flow, Module }
-
-    /**
      * Returns the applicable Binding impl to resolve the type of binding provided
      **/
     public static di_Binding newInstance(
-            BindingType bindType,
+            String bindType,
             String developerName,
             SObjectType bindingObject,
             Integer bindingSequence,
             Object to,
-            Object bindingData) 
+            Object bindingData)
     {
         // Return an applicable Binding subclass for the given binding type
-        Type implType = BINDING_IMPLS_BY_TYPE.get(bindType);
+        Type implType = di_BindingTypes.getInstance().getType(bindType);
 
         if ( implType != null ) {
             di_Binding binding = (di_Binding) implType.newInstance();
@@ -363,116 +359,5 @@ public abstract class di_Binding implements Comparable {
             return binding;
         }
         throw new BindingException('Binding type ' + bindType + ' has no implementation.');
-    }
-
-    // Maps binding type to the applicable impl
-    private static final Map<BindingType, Type> BINDING_IMPLS_BY_TYPE =
-        new Map<BindingType, Type> {
-            BindingType.Apex => ApexBinding.class,
-            BindingType.LightningComponent => LightningComponentBinding.class,
-            BindingType.VisualforceComponent => VisualForceComponentBinding.class,
-            BindingType.Flow => FlowBinding.class,
-            BindingType.Module => ApexBinding.class
-        };
-
-    /**
-     * Bindings to Apex classes (optionally via Provider interface)
-     **/
-    private class ApexBinding extends di_Binding 
-    {
-        public override Object newInstance(Object params) 
-        {
-            // Type binding?
-            if ( To instanceof String ) 
-            {
-                // Leverage namespace if the Binding has one
-                String className = (String) To;
-                Type toType = NameSpacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
-                if ( toType == null ) 
-                {
-                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not exist');
-                }
-                Object toObject = toType.newInstance();
-                // Is this Apex binding resolved via a Provider?
-                IsProvider = toObject instanceof Provider;
-                if ( IsProvider )
-                {
-                    return ((Provider) toObject).newInstance(params);
-                } 
-                else if ( params != null ) 
-                {
-                    // Params supplied but the binding does not reference a Provider?
-                    throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + className + ' does not implement the Provider interface.');
-                }
-                return toObject;
-            }
-            // Instance binding
-            return To;
-        }
-    }
-
-    /**
-     * Bindings to VF Components via Provider interface (required)
-     **/
-    private class VisualForceComponentBinding extends di_Binding 
-    {
-        public  override Object newInstance(Object params) 
-        {
-            // Type binding?
-            if ( To instanceof String ) 
-            {
-                // Visualforce Components references must be made via an Apex class implementing the Provider interface
-                String className = (String) To;
-                Type toType = NamespacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
-                if ( toType==null )
-                {
-                    throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + className + ' does not exist.');
-                }
-                // Visualforce Components have to be resolved via a Provider
-                Object toObject = toType.newInstance();
-                IsProvider = toObject instanceof Provider;
-                if ( IsProvider )
-                {
-                    return ((Provider) toObject).newInstance(params);
-                }
-                throw new BindingException('Visualforce Component binding ' + DeveloperName + ' must point to a class implementing the Provider interface.');
-            }
-            // Instance binding
-            return To;
-        }
-    }
-
-    /**
-     * Bindings to Lightning Components (Provider interface not currently supported)
-     **/
-    private class LightningComponentBinding extends di_Binding 
-    {
-        public override Object newInstance(Object params) 
-        {
-            // Lightning Component bindings are resolve by the Lightning 'inject' Component included in this library
-            return To;
-        }
-    }
-
-    /**
-     * Bindings to Flows (Provider interface not currently supported)
-     **/
-    private class FlowBinding extends di_Binding 
-    {
-        public  override Object newInstance(Object params) 
-        {
-            // Flow name binding?
-            if ( To instanceof String ) 
-            {
-                String flowName = (String) To;
-                if ( params instanceof Map<String, Object> )
-                {
-                    return new di_Flow(Flow.Interview.createInterview(flowName, (Map<String, Object>) params));
-                }
-                return new di_Flow(Flow.Interview.createInterview(flowName, new Map<String, Object>()));
-            }
-            // Instance binding
-            return To;
-        }
     }
 }
