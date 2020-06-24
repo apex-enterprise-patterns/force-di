@@ -138,8 +138,6 @@ public class di_Injector {
     private class CustomMetadataModule extends di_Module {
 
         private string bindingObjectApiName = null;
-        @testVisible
-        private List<di_BindingConfigWrapper> bindingWrapperList = getDIBinding();
         // Method to convert a metadata into a wrapper class,
         // so that we can inject dependencies from test classes.
         @testVisible
@@ -154,7 +152,8 @@ public class di_Injector {
                                                         , BindingObject__r.QualifiedApiName
                                                         , BindingObjectAlternate__c
                                                         , BindingSequence__c
-                                                        FROM di_Binding__mdt];
+                                                        FROM di_Binding__mdt
+                                                  		WHERE Active__c = true];
             for(di_Binding__mdt records :bindingMDTRec){
                 recordList.add(new di_BindingConfigWrapper(records));
             }
