@@ -3,7 +3,7 @@
     <fullName>Active__c</fullName>
     <defaultValue>false</defaultValue>
     <externalId>false</externalId>
-    <fieldManageability>DeveloperControlled</fieldManageability>
+    <fieldManageability>SubscriberControlled</fieldManageability>
     <label>Active</label>
     <type>Checkbox</type>
 </CustomField>
