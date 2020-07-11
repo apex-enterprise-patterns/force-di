@@ -22,7 +22,7 @@
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**/
+ **/
 
 @IsTest
 private class di_InjectorComponentControllerTest {
@@ -34,9 +34,9 @@ private class di_InjectorComponentControllerTest {
         String BindingNameValue = 'flow_AccountRecord_VF';
         Object ParametersValue = 'Account';
         try {
-        //When
-        newObj.getInject();
-        } catch(Exception e){
+            //When
+            newObj.getInject();
+        } catch(Exception e) {
             //Then
             System.assertEquals(e.getMessage().contains('List index out of bounds'), true, 'Correct exception is not thrown');
         }
@@ -45,7 +45,30 @@ private class di_InjectorComponentControllerTest {
     @isTest
     static void givenFlowNameWhenGetInjectorFlowProxyInstanceThenMethodCall(){
         di_InjectorComponentController newObj = new di_InjectorComponentController();
-        newObj.getInjectorFlowProxyInstance('HelloWorld', 'Account');
+        Object result= newObj.getInjectorFlowProxyInstance('HelloWorld', 'Account');
+        //Then
+        System.assertEquals(true, result instanceOf Component.di_injectorFlowProxy );
+
+    }
+
+    @isTest
+    static void givenApexPageComponentGetInjectorIsValid() {
+        // Given
+        final String BINDING_NAME = 'myapexpage_cmp';
+        di_InjectorComponentController newObj = new di_InjectorComponentController();
+        newObj.BindingNameValue=BINDING_NAME;
+        Component.Apex.PageBlock pageBlk = new Component.Apex.PageBlock();
+        di_Injector.Org.Bindings.set(new di_Module()
+                                     .visualforceComponent()
+                                     .bind(BINDING_NAME)
+                                     .toObject(pageBlk));
+        //When
+
+        Object result= newObj.getInject();
+        //Then
+        System.assertNotEquals(null, result );
+        System.assertEquals(true,result instanceOf Component.apex.pageblock);
+
     }
 
 }

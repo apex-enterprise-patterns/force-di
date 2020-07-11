@@ -22,7 +22,7 @@
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**/
+ **/
 
 public with sharing class di_BindingParam {
 
@@ -32,7 +32,7 @@ public with sharing class di_BindingParam {
 
     @InvocableMethod(
         label = 'Get Value'
-    )
+        )
     public static List<Response> invoke( List<Request> requests ) {
 
         List<Response> responses = new List<Response>();
@@ -177,18 +177,18 @@ public with sharing class di_BindingParam {
 
                 } else {
 
-                    System.debug( LoggingLevel.WARN, 'BindingParam.parameters.get("' + req + '") is null' );
+                    // System.debug( LoggingLevel.WARN, 'BindingParam.parameters.get("' + req + '") is null' );
 
                 }
 
             } else {
 
-                System.debug( LoggingLevel.WARN, 'BindingParam.parameters is null' );
+                // System.debug( LoggingLevel.WARN, 'BindingParam.parameters is null' );
 
             }
 
-            System.debug( 'paramName=' + req );
-            System.debug( res );
+            // System.debug( 'paramName=' + req );
+            // System.debug( res );
 
             responses.add( res );
 
@@ -214,8 +214,8 @@ public with sharing class di_BindingParam {
 
     private static Long toLongValue( Date value ) {
         return ( value == null ? null : toLongValue(
-            DateTime.newInstance( value.year(), value.month(), value.day(), 0, 0, 0 )
-        ));
+                     DateTime.newInstance( value.year(), value.month(), value.day(), 0, 0, 0 )
+                     ));
     }
 
     private static Long toLongValue( DateTime value ) {
@@ -235,8 +235,8 @@ public with sharing class di_BindingParam {
 
     private static Decimal toDecimalValue( Date value ) {
         return ( value == null ? null : toDecimalValue(
-            DateTime.newInstance( value.year(), value.month(), value.day(), 0, 0, 0 )
-        ));
+                     DateTime.newInstance( value.year(), value.month(), value.day(), 0, 0, 0 )
+                     ));
     }
 
     private static Decimal toDecimalValue( DateTime value ) {
@@ -333,8 +333,8 @@ public with sharing class di_BindingParam {
 
         @InvocableVariable(
             label = 'Parameter Name'
-            required = true
-        )
+                    required = true
+            )
         public String paramName;
 
     }
@@ -343,72 +343,72 @@ public with sharing class di_BindingParam {
 
         @InvocableVariable(
             label = 'Number'
-            description = 'Whole number (no decimals)'
-        )
+                    description = 'Whole number (no decimals)'
+            )
         public Long longValue;
 
         @InvocableVariable(
             label = 'Decimal'
-            description = 'Number that may include decimal places'
-        )
+                    description = 'Number that may include decimal places'
+            )
         public Decimal decimalValue;
 
         @InvocableVariable(
             label = 'Text'
-            description = 'Text value'
-        )
+                    description = 'Text value'
+            )
         public String stringValue;
 
         @InvocableVariable(
             label = 'Boolean'
-            description = 'true/false'
-        )
+                    description = 'true/false'
+            )
         public Boolean booleanValue;
 
         @InvocableVariable(
             label = 'Date'
-        )
+            )
         public Date dateValue;
 
         @InvocableVariable(
             label = 'Date/Time'
-        )
+            )
         public DateTime dateTimeValue;
 
         @InvocableVariable(
             label = 'Number Collection'
-            description = 'Collection of whole numbers'
-        )
+                    description = 'Collection of whole numbers'
+            )
         public Long[] longValues = new Long[] {};
 
         @InvocableVariable(
             label = 'Decimal Collection'
-            description = 'Collection of numbers that may include decimal places'
-        )
+                    description = 'Collection of numbers that may include decimal places'
+            )
         public Decimal[] decimalValues = new Decimal[] {};
 
         @InvocableVariable(
             label = 'Text Collection'
-            description = 'Collection of text values'
-        )
+                    description = 'Collection of text values'
+            )
         public String[] stringValues = new String[] {};
 
         @InvocableVariable(
             label = 'Boolean Collection'
-            description = 'Collection of true/false values'
-        )
+                    description = 'Collection of true/false values'
+            )
         public Boolean[] booleanValues = new Boolean[] {};
 
         @InvocableVariable(
             label = 'Date Collection'
-            description = 'Collection of date values'
-        )
+                    description = 'Collection of date values'
+            )
         public Date[] dateValues = new Date[] {};
 
         @InvocableVariable(
             label = 'Date/Time Collection'
-            description = 'Collection of date/time values'
-        )
+                    description = 'Collection of date/time values'
+            )
         public DateTime[] dateTimeValues = new DateTime[] {};
 
     }

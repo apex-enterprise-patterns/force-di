@@ -25,6 +25,7 @@
 **/
 
 @IsTest
+@TestVisible
 private class di_BindingTest {
 
     @IsTest
