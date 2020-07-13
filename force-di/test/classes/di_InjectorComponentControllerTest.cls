@@ -23,7 +23,10 @@
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **/
-
+/**
+ * Modifications:
+ *  B Anderson - Updated Unit Tests ( needing >75% overall)
+ */ 
 @IsTest
 private class di_InjectorComponentControllerTest {
 
@@ -31,8 +34,7 @@ private class di_InjectorComponentControllerTest {
     static void givenWrongBindingNameValueWhenGetInjectThenThrowException(){
         //given
         di_InjectorComponentController newObj = new di_InjectorComponentController();
-        String BindingNameValue = 'flow_AccountRecord_VF';
-        Object ParametersValue = 'Account';
+   
         try {
             //When
             newObj.getInject();
@@ -57,6 +59,7 @@ private class di_InjectorComponentControllerTest {
         final String BINDING_NAME = 'myapexpage_cmp';
         di_InjectorComponentController newObj = new di_InjectorComponentController();
         newObj.BindingNameValue=BINDING_NAME;
+     
         Component.Apex.PageBlock pageBlk = new Component.Apex.PageBlock();
         di_Injector.Org.Bindings.set(new di_Module()
                                      .visualforceComponent()

@@ -86,7 +86,6 @@ public class di_Injector {
         if ( String.isBlank(developerName) ) {
             throw new InjectorException('Request for Binding cannot take "developerName" parameter of null');
         }
-
         List<di_Binding> bindingsFound = this.Bindings.byName( developerName.toLowerCase().trim() ).get();
         if ( bindingsFound == null || bindingsFound.isEmpty() ) {
             throw new InjectorException('Binding for "' + developerName + '" not found');
