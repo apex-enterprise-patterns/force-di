@@ -184,7 +184,11 @@ public with sharing class di_PlatformCache
         {
             config = new di_Configurations__c();
             config.SetupOwnerId = ConnectApi.Organization.getSettings().orgId;
-            insert config;
+            // make CheckMarx happy
+            if (di_Configurations__c.SObjectType.getDescribe().isCreateable() )
+            {
+                insert config;
+            } 
         }
 
         return config;

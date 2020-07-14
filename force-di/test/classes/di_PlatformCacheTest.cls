@@ -240,6 +240,39 @@ private with sharing class di_PlatformCacheTest {
         system.assertEquals(hash, key);
 
     }
+
+    @isTest
+    static void givenReadOnlyAccessThenGetInstance(){
+        // Given
+        User ruser = di_PlatformCacheTest.setROTestUser(false,false,false,false);
+        System.runAs(ruser) {
+            // Then
+            di_Configurations__c config = di_PlatformCache.getConfig();
+            system.assertEquals(true, config!=null);
+            system.assertEquals(false,  config.UsePlatformCacheToStoreBindings__c);
+            system.assertEquals(null, config.OrgCachePartitionName__c);
+        }
+    }
+
+    @isTest
+    static void givenANewConfigSettingThenGetThatInstance(){
+        // Given
+        User ruser = di_PlatformCacheTest.setROTestUser(false,false,false,false);
+        final String PARTITION = 'test';
+        di_Configurations__c usrConfig = new di_Configurations__c();
+        usrConfig.SetupOwnerId = ruser.Id;
+        usrConfig.UsePlatformCacheToStoreBindings__c = true;
+        usrConfig.OrgCachePartitionName__c = PARTITION;
+        insert usrConfig;
+       
+        System.runAs(ruser) {
+            // Then
+            di_Configurations__c config = di_PlatformCache.getConfig();
+            system.assertEquals(true, config!=null);
+            system.assertEquals(true,  config.UsePlatformCacheToStoreBindings__c);
+            system.assertEquals(PARTITION, config.OrgCachePartitionName__c);
+        }
+    }
     //
     ///////////////////////////////////////////////////////////////////////////////
     // Private Helper
@@ -257,4 +290,28 @@ private with sharing class di_PlatformCacheTest {
         setting.UsePlatformCacheToStoreBindings__c = isStoring;
         insert setting;
     }
+
+    /**
+     * readonly user
+     */
+    @TestVisible
+    private static User setROTestUser(Boolean read, Boolean create, Boolean edit, Boolean remove){
+        Profile prof = [SELECT Id FROM Profile WHERE Name='Read Only'];
+
+        User newUser = new User(Alias = 'readonly',
+                                Email='standarduser@mytest.com',
+                                EmailEncodingKey='UTF-8',
+                                LastName='TestingReadOnly',
+                                LanguageLocaleKey='en_US',
+                                LocaleSidKey='en_US',
+                                ProfileId = prof.Id,
+                                TimeZoneSidKey='America/Los_Angeles',
+                                UserName='readonly@mytest.com');
+
+        insert newUser;
+ 
+        return newUser;
+    }// end of setTestUser
+
+   
 }
