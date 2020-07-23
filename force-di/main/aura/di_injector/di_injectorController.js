@@ -30,19 +30,35 @@
         // Resolve the given binding
         var action = cmp.get("c.getBinding");
         action.setParams({ bindingName : cmp.get("v.bindingName") });
+        
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {
                 var bindingInfo = response.getReturnValue();
                 var injectAttrs = cmp.get("v.body");
+               
                 // Construct attributes to pass on to injected component
                 var componentName = null;
                 var componentAttrs = {};
+                
+                
                 if(bindingInfo.BindingTypeAsString == 'Flow') {
                     componentName = 'c:di_injectorFlowProxy';
                     componentAttrs['flowName'] = bindingInfo.To;
                     componentAttrs['injectorAttributes'] = injectAttrs;
                 } else if(bindingInfo.BindingTypeAsString == 'LightningComponent') {
+                    // BJA -- get container id, if any
+                    let bindingId = cmp.get("v.bindingId");
+                    // BJA -- inject the user defined id, if any. This will allow
+                    // the consumer to be able to reference into container 
+                    //    (i.e. mycomponent.find('my-name').find('di_container').call-my-method() )
+                    // 
+                    if (typeof bindingId !== 'undefined' && bindingId) {
+                        componentAttrs['aura:id'] = bindingId;
+                    } else {
+                        // bja -- default id
+                        componentAttrs['aura:id'] = 'di_container';
+                    }
                     componentName = bindingInfo.To;
                     for (var attrIdx in injectAttrs) {
                         var injectAttr = injectAttrs[attrIdx];
@@ -52,6 +68,7 @@
                     console.log("Binding type " + bindingInfo.BindingTypeAsString + ' not supported');
                     return;
                 }
+                
                 // Inject the component bound to the given binding
                 $A.createComponent(
                     componentName,

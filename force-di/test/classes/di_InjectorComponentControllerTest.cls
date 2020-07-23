@@ -74,4 +74,20 @@ private class di_InjectorComponentControllerTest {
 
     }
 
+    @isTest
+    static void givenLightningComponentGetBindingId() {
+        // Given
+        final String BINDING_NAME = 'myapexpage_cmp';
+        final String BINDING_ID = 'myapexpage_id';
+        // When
+        di_InjectorComponentController newObj = new di_InjectorComponentController();
+        newObj.BindingNameValue=BINDING_NAME;
+        newObj.BindingIdValue=BINDING_ID;
+   
+        //Then
+        System.assertEquals( BINDING_ID,newObj.BindingIdValue);
+        System.assertEquals( BINDING_NAME,newObj.BindingNameValue);
+
+    }
+
 }

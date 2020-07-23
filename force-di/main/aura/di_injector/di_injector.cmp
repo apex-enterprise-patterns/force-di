@@ -28,6 +28,8 @@
 
 <aura:component controller="di_InjectorController">
     <aura:attribute name="bindingName" type="String" required="true"/>
+    <!-- BJA for container id -->
+    <aura:attribute name="bindingId" type="String" required="false"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     {!v.body}
 </aura:component>

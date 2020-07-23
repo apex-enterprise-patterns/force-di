@@ -27,7 +27,8 @@
 public with sharing class di_InjectorComponentController {
 
     public String BindingNameValue {set; get;}
-
+    // BJA - container id for lightning-- allows consumers to reference into (optional)
+    public String BindingIdValue {set; get;}
     public Object ParametersValue {set; get;}
 
     public ApexPages.Component getInject() {
