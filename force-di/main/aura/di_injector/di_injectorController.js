@@ -47,18 +47,12 @@
                     componentAttrs['flowName'] = bindingInfo.To;
                     componentAttrs['injectorAttributes'] = injectAttrs;
                 } else if(bindingInfo.BindingTypeAsString == 'LightningComponent') {
-                    // BJA -- get container id, if any
-                    let bindingId = cmp.get("v.bindingId");
-                    // BJA -- inject the user defined id, if any. This will allow
-                    // the consumer to be able to reference into container 
-                    //    (i.e. mycomponent.find('my-name').find('di_container').call-my-method() )
-                    // 
-                    if (typeof bindingId !== 'undefined' && bindingId) {
-                        componentAttrs['aura:id'] = bindingId;
-                    } else {
-                        // bja -- default id
-                        componentAttrs['aura:id'] = 'di_container';
+                    // Added by Leon Kempers: set aura:id
+                    let bindingId =  cmp.get('v.bindingId');
+                    if (typeof bindingId === 'undefined') {
+                        cmp.set('v.bindingId', 'di_component');
                     }
+                    componentAttrs['aura:id'] = cmp.get('v.bindingId');
                     componentName = bindingInfo.To;
                     for (var attrIdx in injectAttrs) {
                         var injectAttr = injectAttrs[attrIdx];
@@ -105,5 +99,32 @@
             }
         });
         $A.enqueueAction(action);
+    },
+    
+    // Added by Leon Kempers: Listen to attribute value change
+    //
+    // added a handler to capture the di_injectorAttributeChangeEvent. When it comes in, 
+    // the handleChangeEvent() function looks at the bindingId variable stored in the component, 
+    // finds the component based on this ID, and changes the specified attribute to the 'newValue'.
+    //
+    // The only not-so-pretty thing here is that sometimes (e.g. in case of the spinner) the value 
+    // changed while $A.createComponent was still running (i.e. the Lightning Component hadn't 
+    // been put on the DOM yet). So in that case, we just wait 100ms and try again.
+    handleChangeEvent : function(component, event, helper) {
+
+        let bindingId = component.get('v.bindingId');
+        let auraCmp = component.find(bindingId);
+
+        // Sometimes value will change while the Aura Component hasn't
+        // been added to the DOM yet; wait 100ms and try again
+        if (typeof(auraCmp) === undefined) {
+            setTimeout(function() {
+                this.handleChangeEvent(component, event, helper);
+            }, 100);
+        } else {
+            let name  = event.getParam('name');
+            let newValue  = event.getParam('newValue');
+            auraCmp.set('v.' + name, newValue);
+        }
     }
 })

@@ -1,0 +1,8 @@
+<!--
+    Added Event - Leon Kempers
+    Component Event to indicate when an attribute value has changed
+-->
+<aura:event type="COMPONENT" description="Event for sending information to encapsulated component">
+    <aura:attribute name="name" type="String" />
+    <aura:attribute name="newValue" type="String" />
+</aura:event>
