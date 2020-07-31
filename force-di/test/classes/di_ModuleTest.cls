@@ -77,10 +77,13 @@ private class di_ModuleTest {
         .data('test')
         .sequence(1)
         .bind(di_BindingTest.Bob.class);
+        di_Module mod= module.to(di_BindingTest.Bob.class);
+ 
         List<di_Binding> bindings = module.getBindings();
+     
         // Then
         system.assertEquals('test',(String)bindings[0].Data);
         system.assertEquals('apex',(String)bindings[0].BindingTypeAsString.toLowerCase());
-        system.assertEquals('1',(String)bindings[0].BindingTypeAsString);
+        system.assertEquals(1,bindings[0].bindingSequence);
     }
 }
