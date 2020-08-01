@@ -100,7 +100,7 @@ public with sharing class di_PlatformCache
                 orgPartition.put(theKeyName, binding, getPartitionTTL(), Cache.Visibility.ALL, false);
                 // add the binding's cache key name to the bindingKeyIndex
                 addBindingToKeyIndex(binding);
-                //log('Adding binding for hash => ' + theKeyName + ' && developerName => ' + binding.developerName + ' && object => ' + binding.bindingObject);
+                log('Adding binding for hash => ' + theKeyName + ' && developerName => ' + binding.developerName + ' && object => ' + binding.bindingObject);
                 result = true;
             }
         }
@@ -115,7 +115,7 @@ public with sharing class di_PlatformCache
              && string.isNotBlank(developerName)
              && bindingSObjectType != null)
         {
-            //log('Retrieving from Cache Key => ' + developerName + ' && Cache Key Index => ' + bindingSObjectType);
+            log('Retrieving from Cache Key => ' + developerName + ' && Cache Key Index => ' + bindingSObjectType);
             // if there IS NO Partition created; let's not FAIL
             Cache.OrgPartition orgPartition = getPartition();
             Map<Schema.SObjectType, Set<String> > keyIndexBySObjectTypeMap = getCacheKeyIndexMap().get(developerName.toLowerCase().trim());
@@ -188,7 +188,7 @@ public with sharing class di_PlatformCache
             if (di_Configurations__c.SObjectType.getDescribe().isCreateable() )
             {
                 insert config;
-            } 
+            }
         }
 
         return config;
@@ -258,7 +258,7 @@ public with sharing class di_PlatformCache
         if (generatedKeyNames.containsKey(key)) { return generatedKeyNames.get(key); }
 
         String hash = String.valueOf( Math.abs( ( key ).hashcode() ) );
-        //log('Creating Hash For => ' + developerName + ' && ' + bindingSObjectType + ' := ' + hash);
+        log('Creating Hash For => ' + developerName + ' && ' + bindingSObjectType + ' := ' + hash);
         generatedKeyNames.put(key, hash);
         return hash;
     }
