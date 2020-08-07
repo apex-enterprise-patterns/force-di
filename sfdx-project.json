@@ -1,7 +1,7 @@
 {
     "packageDirectories": [
         {
-            "path": "salesforce-di",
+            "path": "force-di",
             "default": true,
             "package": "salesforce-di",
             "versionName": "ver 2.0",
