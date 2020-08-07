@@ -29,6 +29,7 @@
         }
     },
     "packageAliases": {
-        "salesforce-di": "0Ho1Y000000XZAMSA4"
+        "salesforce-di": "0Ho1Y000000XZAMSA4",
+        "salesforce-di@2.0.0-1": "04t1Y000000tG7PQAU"
     }
 }
