@@ -2,10 +2,33 @@
     "packageDirectories": [
         {
             "path": "force-di",
-            "default": true
+            "default": true,
+            "package": "salesforce-di",
+            "versionName": "ver 2.0",
+            "versionNumber": "2.0.0.NEXT"
         }
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "47.0"
+    "sourceApiVersion": "47.0",
+    "plugins": {
+        "appiriodx": {
+            "packages": [
+                {
+                    "alias": "salesforce-di",
+                    "name": "salesforce-di",
+                    "description": "Apex DI Package",
+                    "packageType": "Unlocked"
+                }
+            ],
+            "permissionSets": [],
+            "sampleData": {
+                "planFiles": [],
+                "sObjectFiles": []
+            }
+        }
+    },
+    "packageAliases": {
+        "salesforce-di": "0Ho1Y000000XZAMSA4"
+    }
 }

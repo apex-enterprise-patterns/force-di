@@ -1,0 +1,15 @@
+{
+  "cmc": {
+    "enabled": false,
+    "products": ["None"]
+  },
+  
+  "projectType": [
+    "sfdx"
+  ],
+  "rollbar": {
+    "enabled": true
+  },
+  "sourceBranchToClone": "master",
+  "sourceControlType": "git"
+}
