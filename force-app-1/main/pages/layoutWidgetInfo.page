@@ -1,3 +1,0 @@
-<apex:page standardController="Widget__c" extensions="di_InjectorController">
-    <c:di_injector bindingName="vf_layoutWidgetInfo" parameters="{!standardController}"/>
-</apex:page>

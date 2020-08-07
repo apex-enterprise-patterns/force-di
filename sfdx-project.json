@@ -3,25 +3,9 @@
         {
             "path": "force-di",
             "default": true
-        },
-        {
-            "path": "force-di-trigger-demo",
-            "default": false
-        },
-        {
-            "path": "force-app-1",
-            "default": false
-        },
-        {
-            "path": "force-app-2",
-            "default": false
-        },
-        {
-            "path": "force-app-3",
-            "default": false
         }
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "44.0"
+    "sourceApiVersion": "47.0"
 }

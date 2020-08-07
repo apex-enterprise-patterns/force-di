@@ -30,7 +30,9 @@
 public class di_Flow {
 
     private Flow.Interview flow = null;
+    @testVisible
     private Set<String> outputVarsNames;
+    @testVisible
     private Set<String> outputVarsNamesRequired;
 
     public di_Flow(Flow.Interview flow) {

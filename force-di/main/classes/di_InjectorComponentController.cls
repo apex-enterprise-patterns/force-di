@@ -51,6 +51,7 @@ public with sharing class di_InjectorComponentController {
     // To avoid "Operation cast is not allowed on type" error, then
     // masking the component behind a generic Object return type.
     // For some odd reason, this compiles and works.
+    @testVisible
     private Object getInjectorFlowProxyInstance(String flowName, Object params) {
         return new Component.di_injectorFlowProxy(
             flowName = flowName,
