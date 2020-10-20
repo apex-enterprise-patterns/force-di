@@ -164,6 +164,84 @@ private class di_BindingTest {
         System.assertEquals(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
     }
 
+    @IsTest
+    private static void givenFlowBindingWhenGetInstanceThenInstance()
+    {
+        // Given
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BindingType.Flow,
+            Bob.class.getName(), null, null, Bob.class.getName(), null);
+        
+        // When
+        try {
+            Object boundInstance1 = binding.getInstance();
+            System.assert(false, 'Based on current limitation of inability to setup a flow dynamically, we should not ever arive at this line.');
+        }
+        // Then
+        catch (System.Exception e){
+            System.assert(e instanceof System.TypeException, 'Since we cannot actually test with a live flow, we expect that the exception will be a System.TypeException.  Instead received ' + e);
+            System.assert('Invalid type: di_BindingTest.Bob'.equalsIgnoreCase( e.getMessage() ), 'Since we cannot actually test with a live flow, we expect that the exception will be a System.TypeException with a message "Invalid type: di_BindingTest.Bob".  Instead received ' + e.getMessage());
+        }
+    }
+
+    @IsTest
+    private static void givenLightningComponentBindingWhenGetInstanceThenInstance()
+    {
+        // Given
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BindingType.LightningComponent,
+            null, null, null, Bob.class.getName(), null);
+        
+        // When
+        Object boundInstance1 = binding.getInstance();
+
+        // // Then
+        System.assert(boundInstance1 instanceOf Bob);
+    }
+
+    @IsTest
+    private static void givenVisualForceComponentBindingWhenGetInstanceThenInstance()
+    {
+        // Given
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BindingType.VisualforceComponent,
+            Bob.class.getName(), null, null, ProviderImpl.class.getName(), null);
+        
+        // When
+        // try {
+            Object boundInstance1 = binding.getInstance();
+        //     System.assert(false, 'Based on current limitation of inability to setup a flow dynamically, we should not ever arive at this line.');
+        // }
+        // // Then
+        // catch (System.Exception e){
+        //     System.assert(e instanceof System.TypeException, 'Since we cannot actually test with a live flow, we expect that the exception will be a System.TypeException.  Instead received ' + e);
+        //     System.assert('Invalid type: di_BindingTest.Bob'.equalsIgnoreCase( e.getMessage() ), 'Since we cannot actually test with a live flow, we expect that the exception will be a System.TypeException with a message "Invalid type: di_BindingTest.Bob".  Instead received ' + e.getMessage());
+        // }
+    }
+    
+    @IsTest
+    private static void givenVisualForceComponentBindingDoesNotExistWhenGetInstanceThenBindingException()
+    {
+        // Given
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BindingType.VisualforceComponent,
+            Bob.class.getName(), null, null, 'FakeProviderClassName', null);
+        
+        // When
+        try {
+            Object boundInstance1 = binding.getInstance();
+        // Then
+            System.assert(false, 'Unexpected behavior.  Expected that BinderException to be thrown.');
+        }
+        catch (System.Exception e){
+            System.assert(e instanceof di_Binding.BindingException, 'Unexpected behavior.  Since the ProviderName was a fake, non-existent class, the di_Binding.BindingException should have been thrown.  Instead received ' + e);
+            System.debug(e.getMessage());
+            // System.assert('Invalid type: di_BindingTest.Bob'.equalsIgnoreCase( e.getMessage() ), 'Since we cannot actually test with a live flow, we expect that the exception will be a System.TypeException with a message "Invalid type: di_BindingTest.Bob".  Instead received ' + e.getMessage());
+        }
+    }
+    
+
+
     public class Bob {
         public String Name {get;private set;}
         public Bob() { }

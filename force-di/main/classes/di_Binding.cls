@@ -424,7 +424,7 @@ public abstract class di_Binding implements Comparable {
                 // Visualforce Components references must be made via an Apex class implementing the Provider interface
                 String className = (String) To;
                 Type toType = NamespacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
-                if ( toType==null )
+                if ( toType == null )
                 {
                     throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + className + ' does not exist.');
                 }
