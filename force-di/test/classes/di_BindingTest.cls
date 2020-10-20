@@ -235,8 +235,27 @@ private class di_BindingTest {
         }
         catch (System.Exception e){
             System.assert(e instanceof di_Binding.BindingException, 'Unexpected behavior.  Since the ProviderName was a fake, non-existent class, the di_Binding.BindingException should have been thrown.  Instead received ' + e);
-            System.debug(e.getMessage());
-            // System.assert('Invalid type: di_BindingTest.Bob'.equalsIgnoreCase( e.getMessage() ), 'Since we cannot actually test with a live flow, we expect that the exception will be a System.TypeException with a message "Invalid type: di_BindingTest.Bob".  Instead received ' + e.getMessage());
+            System.assert('Visualforce Component binding di_BindingTest.Bob implementation FakeProviderClassName does not exist'.equalsIgnoreCase( e.getMessage() ), 'Unexpected error message received.  Received ' + e.getMessage());
+        }
+    }
+    
+    @IsTest
+    private static void givenVisualForceComponentBindingNotProviderWhenGetInstanceThenBindingException()
+    {
+        // Given
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BindingType.VisualforceComponent,
+            Bob.class.getName(), null, null, Bob.class.getName(), null);
+        
+        // When
+        try {
+            Object boundInstance1 = binding.getInstance();
+        // Then
+            System.assert(false, 'Unexpected behavior.  Expected that BinderException to be thrown.');
+        }
+        catch (System.Exception e){
+            System.assert(e instanceof di_Binding.BindingException, 'Unexpected behavior.  Since the ProviderName was a fake, non-existent class, the di_Binding.BindingException should have been thrown.  Instead received ' + e);
+            System.assert('Visualforce Component binding di_BindingTest.Bob must point to a class implementing the Provider interface'.equalsIgnoreCase( e.getMessage() ), 'Unexpected error message received.  Received ' + e.getMessage());
         }
     }
     
