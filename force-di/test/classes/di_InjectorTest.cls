@@ -38,4 +38,73 @@ private class di_InjectorTest {
                                     .replaceBindingWith( null );
         
     }
+
+    @IsTest
+    private static void givenApexBindingWhenReplaceBindingWithNewInstanceThenNewInstance() {
+        // Given
+        di_Binding bindingBob = di_Binding.newInstance( di_Binding.BindingType.Apex, Bob.class.getName(), Account.sObjectType, null, Bob.class.getName(), null);
+
+        di_Binding bindingCharlie = di_Binding.newInstance( di_Binding.BindingType.Apex, Charlie.class.getName(), Account.sObjectType, null, Charlie.class.getName(), null);
+
+//         di_Binding bindingModule = di_Binding.newInstance( di_Binding.BindingType.Module, null, null, null, TestDIModule.class.getName(), null);
+
+        di_module module = new di_module();
+
+        // run through options
+        module.apex();
+        module.flow();
+        module.lightningComponent();
+        module.visualforceComponent();
+        module.module();
+        module.sequence(1);
+        module.type('Module');
+
+        // now set the values appropriately
+        module.type(di_Binding.BindingType.Module);
+        module.to(TestDIModule.class);
+
+        di_Injector injector = new di_Injector(module);
+        
+        // When
+        Object boundInstanceBob = bindingBob.getInstance();
+
+        List<di_Binding> bindings = injector.Bindings.byName( Bob.class.getName() ).bySObject( Account.sObjectType ).get();
+        System.debug(bindings);
+
+        Object boundInstanceCharlie = bindingCharlie.getInstance();
+
+        injector.Bindings.byName( Bob.class.getName() )
+                                .bySObject( Account.sObjectType )
+                                .replaceBindingWith( bindingCharlie );
+
+        // Then
+        System.assert(boundInstanceBob instanceof Bob);
+        System.assert(boundInstanceCharlie instanceof Charlie);
+        System.assert(boundInstanceBob !== boundInstanceCharlie);
+    }
+
+    public class Bob {
+        public String Name {get;private set;}
+        public Bob() { }
+        public Bob(String name) { this.Name = name; }
+    }
+    
+    public class Charlie {
+        public String Name {get;private set;}
+        public Charlie() { }
+        public Charlie(String name) { this.Name = name; }
+    }
+
+    public class TestDIModule
+        extends di_Module
+    {
+        public override void configure()
+        {
+            apex();
+            bind( Account.sObjectType );
+            bind( di_InjectorTest.Bob.class );
+            data('binding of Bob');
+            to(di_InjectorTest.Bob.class.getName());
+        }
+    }
 }

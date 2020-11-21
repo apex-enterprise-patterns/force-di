@@ -194,22 +194,22 @@ private class di_BindingTest {
         
         // When
         Object boundInstance1 = binding.getInstance();
-
-        // // Then
-        System.assert(boundInstance1 instanceOf Bob);
+        
+        // Then
+        System.assert(boundInstance1 instanceOf String);
     }
 
     @IsTest
     private static void givenVisualForceComponentBindingWhenGetInstanceThenInstance()
     {
         // Given
-        di_Binding binding = di_Binding.newInstance(
+        di_Binding bindingVF1 = di_Binding.newInstance(
             di_Binding.BindingType.VisualforceComponent,
             Bob.class.getName(), null, null, ProviderImpl.class.getName(), null);
         
         // When
         // try {
-            Object boundInstance1 = binding.getInstance();
+            Object boundInstance1 = bindingVF1.getInstance();
         //     System.assert(false, 'Based on current limitation of inability to setup a flow dynamically, we should not ever arive at this line.');
         // }
         // // Then
@@ -223,19 +223,19 @@ private class di_BindingTest {
     private static void givenVisualForceComponentBindingDoesNotExistWhenGetInstanceThenBindingException()
     {
         // Given
-        di_Binding binding = di_Binding.newInstance(
+        di_Binding bindingVF2 = di_Binding.newInstance(
             di_Binding.BindingType.VisualforceComponent,
             Bob.class.getName(), null, null, 'FakeProviderClassName', null);
         
         // When
         try {
-            Object boundInstance1 = binding.getInstance();
+            Object boundInstance1 = bindingVF2.getInstance();
         // Then
             System.assert(false, 'Unexpected behavior.  Expected that BinderException to be thrown.');
         }
         catch (System.Exception e){
             System.assert(e instanceof di_Binding.BindingException, 'Unexpected behavior.  Since the ProviderName was a fake, non-existent class, the di_Binding.BindingException should have been thrown.  Instead received ' + e);
-            System.assert('Visualforce Component binding di_BindingTest.Bob implementation FakeProviderClassName does not exist'.equalsIgnoreCase( e.getMessage() ), 'Unexpected error message received.  Received ' + e.getMessage());
+            System.assert('Visualforce Component binding di_BindingTest.Bob implementation FakeProviderClassName does not exist.'.equalsIgnoreCase( e.getMessage() ), 'Unexpected error message received.  Received ' + e.getMessage());
         }
     }
     
@@ -243,24 +243,22 @@ private class di_BindingTest {
     private static void givenVisualForceComponentBindingNotProviderWhenGetInstanceThenBindingException()
     {
         // Given
-        di_Binding binding = di_Binding.newInstance(
+        di_Binding bindingVF3 = di_Binding.newInstance(
             di_Binding.BindingType.VisualforceComponent,
             Bob.class.getName(), null, null, Bob.class.getName(), null);
         
         // When
         try {
-            Object boundInstance1 = binding.getInstance();
+            Object boundInstance1 = bindingVF3.getInstance();
         // Then
             System.assert(false, 'Unexpected behavior.  Expected that BinderException to be thrown.');
         }
         catch (System.Exception e){
             System.assert(e instanceof di_Binding.BindingException, 'Unexpected behavior.  Since the ProviderName was a fake, non-existent class, the di_Binding.BindingException should have been thrown.  Instead received ' + e);
-            System.assert('Visualforce Component binding di_BindingTest.Bob must point to a class implementing the Provider interface'.equalsIgnoreCase( e.getMessage() ), 'Unexpected error message received.  Received ' + e.getMessage());
+            System.assert('Visualforce Component binding di_BindingTest.Bob must point to a class implementing the Provider interface.'.equalsIgnoreCase( e.getMessage() ), 'Unexpected error message received.  Received ' + e.getMessage());
         }
     }
     
-
-
     public class Bob {
         public String Name {get;private set;}
         public Bob() { }
@@ -274,14 +272,24 @@ private class di_BindingTest {
     }
     
     public class Zoro {
-        /*public String Name {get;private set;}
-        public Zoro() { }
-        public Zoro(String name) { this.Name = name; }*/
+
+    }
+    
+    public class VFTestBinding {
+        public String Name {get;private set;}
+        public VFTestBinding() { }
+        public VFTestBinding(String name) { this.Name = name; }
     }
 
     public class ProviderImpl implements di_Binding.Provider {
         public Object newInstance(Object params) {
             return new Bob((String) params);
+        }
+    }
+    
+    public class VFProviderImpl implements di_Binding.Provider {
+        public Object newInstance(Object params) {
+            return new VFTestBinding((String) params);
         }
     }
 }
