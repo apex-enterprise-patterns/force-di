@@ -2,8 +2,8 @@
     "orgName": "Acme DF18 Enterprise Company",
     "edition": "Enterprise",
     "settings": {
-        "orgPreferenceSettings": {
-            "s1DesktopEnabled": true
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
         }
     }
 }
