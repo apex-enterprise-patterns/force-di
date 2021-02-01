@@ -154,7 +154,7 @@ public class di_Injector {
                                                         , BindingObjectAlternate__c
                                                         , BindingSequence__c
                                                      FROM di_Binding__mdt];
-            for(di_Binding__mdt records :bindingMDTRec) {
+            for(di_Binding__mdt records : bindingMDTRec) {
                 recordList.add(new di_BindingConfigWrapper(records));
             }
             // When we want to mock data from metadata for injecting dependencies.
@@ -165,7 +165,7 @@ public class di_Injector {
         }
         public override void configure() {
             // TODO: Support Namespace
-            for(di_BindingConfigWrapper bindingConfig :getDIBinding()) {
+            for(di_BindingConfigWrapper bindingConfig : getDIBinding()) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type);
                 if( String.isNotBlank(bindingConfig.BindingObject)

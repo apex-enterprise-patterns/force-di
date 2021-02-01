@@ -142,4 +142,108 @@ private class di_InjectorTest {
         system.assertEquals(true, hasException);
     }
 
+    @IsTest 
+    private static void givenDefaultConditionsWhenInjectorOrgBindingsCalled() {
+        // Given
+        di_Binding__mdt testBindingRecord1 = new di_Binding__mdt();
+        testBindingRecord1.Type__c = di_Binding.BindingType.Apex.name();
+        testBindingRecord1.To__c = Bob.class.getName();
+        testBindingRecord1.QualifiedAPIName = 'apex_Bob';
+        testBindingRecord1.DeveloperName = 'TestApexClassBob';
+        testBindingRecord1.BindingObject__c = Account.sObjectType.getDescribe().getName();
+        
+        di_BindingConfigWrapper wrapper1 = new di_BindingConfigWrapper(testBindingRecord1);
+        wrapper1.BindingObjectQualifiedApiName = 'Account';
+
+        di_Binding__mdt testBindingRecord2 = new di_Binding__mdt();
+        testBindingRecord2.Type__c = di_Binding.BindingType.Apex.name();
+        testBindingRecord2.To__c = Charlie.class.getName();
+        testBindingRecord2.QualifiedAPIName = 'apex_Charlie';
+        testBindingRecord2.DeveloperName = 'TestApexClassCharlie';
+        testBindingRecord2.BindingObjectAlternate__c = Contact.sObjectType.getDescribe().getName();
+        testBindingRecord2.BindingSequence__c = 20;
+        
+        di_BindingConfigWrapper wrapper2 = new di_BindingConfigWrapper(testBindingRecord2);
+        wrapper2.BindingObjectQualifiedApiName = 'Contact';
+
+        List<di_BindingConfigWrapper> wrappers = new List<di_BindingConfigWrapper>();
+        wrappers.add(wrapper1);
+        wrappers.add(wrapper2);
+
+        di_Injector.mock_BindingConfigurationWrappersOuter = wrappers;
+
+        // When
+        di_Injector.CustomMetadataModule defaultModule = new di_Injector.CustomMetadataModule();
+
+        defaultModule.configure();
+    }
+
+    @IsTest
+    private static void givenApexBindingWhenReplaceBindingWithNewInstanceThenNewInstance() {
+        // Given
+        di_Binding bindingBob = di_Binding.newInstance( di_Binding.BindingType.Apex, Bob.class.getName(), Account.sObjectType, null, Bob.class.getName(), null);
+
+        di_Binding bindingCharlie = di_Binding.newInstance( di_Binding.BindingType.Apex, Charlie.class.getName(), Account.sObjectType, null, Charlie.class.getName(), null);
+
+//         di_Binding bindingModule = di_Binding.newInstance( di_Binding.BindingType.Module, null, null, null, TestDIModule.class.getName(), null);
+
+        di_module module = new di_module();
+
+        // run through options
+        module.apex();
+        module.flow();
+        module.lightningComponent();
+        module.visualforceComponent();
+        module.module();
+        module.sequence(1);
+        module.type('Module');
+
+        // now set the values appropriately
+        module.type(di_Binding.BindingType.Module);
+        module.to(TestDIModule.class);
+
+        di_Injector injector = new di_Injector(module);
+        
+        // When
+        Object boundInstanceBob = bindingBob.getInstance();
+
+        List<di_Binding> bindings = injector.Bindings.byName( Bob.class.getName() ).bySObject( Account.sObjectType ).get();
+        System.debug(bindings);
+
+        Object boundInstanceCharlie = bindingCharlie.getInstance();
+
+        injector.Bindings.byName( Bob.class.getName() )
+                                .bySObject( Account.sObjectType )
+                                .replaceBindingWith( bindingCharlie );
+
+        // Then
+        System.assert(boundInstanceBob instanceof Bob);
+        System.assert(boundInstanceCharlie instanceof Charlie);
+        System.assert(boundInstanceBob !== boundInstanceCharlie);
+    }
+
+    public class Bob {
+        public String Name {get;private set;}
+        public Bob() { }
+        public Bob(String name) { this.Name = name; }
+    }
+    
+    public class Charlie {
+        public String Name {get;private set;}
+        public Charlie() { }
+        public Charlie(String name) { this.Name = name; }
+    }
+
+    public class TestDIModule
+        extends di_Module
+    {
+        public override void configure()
+        {
+            apex();
+            bind( Account.sObjectType );
+            bind( di_InjectorTest.Bob.class );
+            data('binding of Bob');
+            to(di_InjectorTest.Bob.class.getName());
+        }
+    }
 }
