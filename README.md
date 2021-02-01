@@ -10,18 +10,6 @@ Documentation
 - [Adopting Dependency Injection](https://douglascayers.com/2018/08/29/adopting-dependency-injection/) (webinar)
 - [Understanding the Value of Dependency Injection in the Lightning Platform](https://www.youtube.com/watch?v=oce2QO-E_3k) (DF18 session)
 
-Deploy
-------
-Deploying from this repo ...
-
-Using the SalesforceDX custom plugin ["shane-sfdx-plugins"](https://github.com/mshanemc/shane-sfdx-plugins) will be the simplest way to accomplish this. If you need to install this plugin, execute the following:
-
-- sfdx plugins:install shane-sfdx-plugins
-- Setup the scratch org - note: if you already have a node available, no need to create a scratch org; just substitue the name for 'myForceDIScratch'
-### Steps (Deploying from this repo **bjanderson70**)
-- sfdx force:org:create -a myForceDIScratch -f config/project-scratch-def.json
-- sfdx shane:github:src:install -c -g **bjanderson70** -r force-di -p force-di -u myForceDIScratch
-
 Project Folders
 ---------------
 The "core" framework is found in this project.  This includes the following:
