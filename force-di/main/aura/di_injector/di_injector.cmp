@@ -28,6 +28,11 @@
 
 <aura:component controller="di_InjectorController">
     <aura:attribute name="bindingName" type="String" required="true"/>
+    <!-- BJA for container id -->
+    <aura:attribute name="bindingId" type="String" required="false"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- Added by Leon Kempers: Listen to attribute value change -->
+    <aura:handler name="attributeChangeEvent" event="c:di_injectorAttributeChangeEvent" action="{!c.handleChangeEvent}" includeFacets="true" />
+
     {!v.body}
 </aura:component>

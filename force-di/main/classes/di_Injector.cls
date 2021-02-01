@@ -33,11 +33,13 @@ public class di_Injector {
     public static final di_Injector Org =
         new di_Injector(
             new List<di_Module> {
-                new CustomMetadataModule()});
+        new CustomMetadataModule()
+    });
 
     /**
      * Bindings visible to this Injector
      **/
+    @TestVisible
     public di_Binding.Resolver Bindings {get; private set;}
 
     /**
@@ -84,7 +86,6 @@ public class di_Injector {
         if ( String.isBlank(developerName) ) {
             throw new InjectorException('Request for Binding cannot take "developerName" parameter of null');
         }
-
         List<di_Binding> bindingsFound = this.Bindings.byName( developerName.toLowerCase().trim() ).get();
         if ( bindingsFound == null || bindingsFound.isEmpty() ) {
             throw new InjectorException('Binding for "' + developerName + '" not found');
@@ -121,8 +122,8 @@ public class di_Injector {
         }
 
         List<di_Binding> bindingsFound = this.Bindings.bySObject( bindingSObjectType )
-                                            .byName( developerName.toLowerCase().trim() )
-                                            .get();
+                                         .byName( developerName.toLowerCase().trim() )
+                                         .get();
 
         if ( bindingsFound == null || bindingsFound.isEmpty() || bindingsFound[0] == null) {
             throw new InjectorException('Binding for "' + developerName + '" and SObjectType "' + bindingSObjectType + '" not found');
@@ -152,23 +153,23 @@ public class di_Injector {
                                                         , BindingObject__r.QualifiedApiName
                                                         , BindingObjectAlternate__c
                                                         , BindingSequence__c
-                                                        FROM di_Binding__mdt];
-            for(di_Binding__mdt records :bindingMDTRec){
+                                                     FROM di_Binding__mdt];
+            for(di_Binding__mdt records :bindingMDTRec) {
                 recordList.add(new di_BindingConfigWrapper(records));
             }
             // When we want to mock data from metadata for injecting dependencies.
-            if(di_Injector.mock_BindingConfigurationWrappersOuter != null){
+            if(di_Injector.mock_BindingConfigurationWrappersOuter != null) {
                 recordList = di_Injector.mock_BindingConfigurationWrappersOuter;
             }
             return recordList;
         }
         public override void configure() {
             // TODO: Support Namespace
-            for(di_BindingConfigWrapper bindingConfig :getDIBinding()){
+            for(di_BindingConfigWrapper bindingConfig :getDIBinding()) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type);
                 if( String.isNotBlank(bindingConfig.BindingObject)
-                    || String.isNotBlank(bindingConfig.BindingObjectAlternate)){
+                    || String.isNotBlank(bindingConfig.BindingObjectAlternate)) {
                     bindingObjectApiName =  String.isNotBlank(bindingConfig.BindingObject)
                                             ? bindingConfig.bindingObjectQualifiedApiName.toLowerCase().trim()
                                             : bindingConfig.BindingObjectAlternate.toLowerCase().trim();
@@ -178,7 +179,7 @@ public class di_Injector {
                     }
                     bind(results[0].getSObjectType()); // if it is getting here, then it is finding a SObject to add to the binding
                 }
-                if(bindingConfig.BindingSequence != null){
+                if(bindingConfig.BindingSequence != null) {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence));
                 }
                 data(bindingConfig);
