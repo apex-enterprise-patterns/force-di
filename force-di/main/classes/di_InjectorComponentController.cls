@@ -22,13 +22,14 @@
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**/
+ **/
 
 public with sharing class di_InjectorComponentController {
 
-    public String BindingNameValue {set;get;}
-
-    public Object ParametersValue {set;get;}
+    public String BindingNameValue {set; get;}
+    // BJA - container id for lightning-- allows consumers to reference into (optional)
+    public String BindingIdValue {set; get;}
+    public Object ParametersValue {set; get;}
 
     public ApexPages.Component getInject() {
         ApexPages.Component cmp = null;
@@ -56,7 +57,7 @@ public with sharing class di_InjectorComponentController {
         return new Component.di_injectorFlowProxy(
             flowName = flowName,
             inputVariables = params
-        );
+            );
     }
 
 }

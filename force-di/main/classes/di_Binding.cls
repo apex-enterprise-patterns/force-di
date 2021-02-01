@@ -275,7 +275,6 @@ public abstract class di_Binding implements Comparable {
         {
             if ( this.bindings == null ) 
             {
-                System.debug('// di_Binding.Resolver :: Loading Bindings //');
                 // Ask each module to configure and aggregate the resulting bindings
                 this.bindings = new List<di_Binding>();
                 for (di_Module module : modules) 

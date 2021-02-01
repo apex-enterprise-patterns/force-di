@@ -1,9 +1,21 @@
 {
-    "orgName": "force-di",
+    "orgName": "force-di-scratch-dev",
     "edition": "Developer",
+    "features": ["MultiCurrency","AuthorApex"],
     "settings": {
+        "communitiesSettings": {
+            "enableNetworksEnabled": false
+        },
+        "mobileSettings": {
+            "enableS1EncryptedStoragePref2": false
+        },
         "lightningExperienceSettings": {
-            "enableS1DesktopEnabled": true
+                "enableS1DesktopEnabled": true
+        },
+        "securitySettings": {
+            "sessionSettings":{
+                "sessionTimeout": "TwelveHours"
+            }
         }
     }
 }

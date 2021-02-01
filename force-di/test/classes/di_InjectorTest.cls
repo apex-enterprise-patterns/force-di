@@ -22,20 +22,124 @@
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**/
-
+ **/
+/**
+ * Modifications:
+ * =============
+ *  B Anderson : Gettting the overall code-coverage > 75%
+ */
 @IsTest
 private class di_InjectorTest {
-    
+
     //TODO
     @IsTest
     private static void test(){
         di_module module = new di_module();
         di_Injector injector = new di_Injector(module);
-        
+
         di_Injector.Org.Bindings.byName( Contact.class.getName() )
-                                    .bySObject( Account.sObjectType )
-                                    .replaceBindingWith( null );
-        
+        .bySObject( Account.sObjectType )
+        .replaceBindingWith( null );
+
     }
+    @IsTest
+    private static void givenListOfModulesBindThenGetCount(){
+        // Given
+        List<di_module> modules =  new List<di_module > {
+        };
+        final Integer expected = 0;
+        // When
+        di_Injector injector = new di_Injector(modules);
+        // Then
+        system.assertEquals(expected, injector.Bindings.get().size());
+
+    }
+
+    @isTest
+    static void givenInstanceThenGetThatInstance(){
+        // Given
+        di_module module=new di_module();
+        di_Binding bobBinding = di_Binding.newInstance(
+            di_Binding.BindingType.Apex,
+            di_BindingTest.Bob.class.getName(), null, null,
+            di_BindingTest.Bob.class.getName(), null);
+
+        module.getBindings().add(bobBinding);
+
+        di_Injector injector = new di_Injector(module);
+        // When
+        Object result=injector.getInstance(di_BindingTest.Bob.class);
+        Object resultNoParams=injector.getInstance(di_BindingTest.Bob.class,(Object)null);
+        Object resultByName=injector.getInstance(di_BindingTest.Bob.class.getName());
+        // Then
+        system.assertEquals(true, result instanceof di_BindingTest.Bob);
+        system.assertEquals(true, resultByName instanceof di_BindingTest.Bob);
+        system.assertEquals(true, resultNoParams instanceof di_BindingTest.Bob);
+    }
+
+    @isTest
+    static void givenInstanceNameThenGetException(){
+        // Given
+        di_module module=new di_module();
+        di_Injector injector = new di_Injector(module);
+        Boolean hasException = false;
+        // When
+        try {
+            injector.getInstance((String)null);
+        } catch (di_Injector.InjectorException excp) {
+            hasException=true;
+        }
+        // Then
+        system.assertEquals(true, hasException);
+        // When
+        hasException=false;
+        try {
+            injector.getInstance('');
+        } catch (di_Injector.InjectorException excp) {
+            hasException=true;
+        }
+        // Then
+        system.assertEquals(true, hasException);
+
+    }
+
+    @isTest
+    static void givenNullSTypeParamterInGetInstanceThenThrowException()
+    {
+        //
+        // Given
+        di_Module module= new di_Module();
+        di_Injector injector = new di_Injector(module);
+        Schema.SObjectType sType = null;
+        Boolean hasException=false;
+        // Then
+
+        try {
+            injector.getInstance(di_Module.class,sType);
+        } catch (di_Injector.InjectorException excp) {
+            hasException=true;
+        }
+        // Then
+        system.assertEquals(true, hasException);
+    }
+    @isTest
+    static void givenNullParamterInGetInstanceThenThrowException()
+    {
+        //
+        // Given
+        di_Module module= new di_Module();
+        di_Injector injector = new di_Injector(module);
+        Schema.SObjectType sType = Account.getSObjectType();
+        Boolean hasException=false;
+        // Then
+
+        try {
+            injector.getInstance(Account.class,sType,null);
+        } catch (di_Injector.InjectorException excp) {
+            hasException=true;
+        }
+        // Then
+        system.assertEquals(true, hasException);
+    }
+
 }

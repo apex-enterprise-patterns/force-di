@@ -1,9 +1,21 @@
 {
-    "orgName": "Acme DF18 Enterprise Company",
+    "orgName": "force-di-scratch-ent",
     "edition": "Enterprise",
+    "features": ["MultiCurrency","AuthorApex"],
     "settings": {
+        "communitiesSettings": {
+            "enableNetworksEnabled": false
+        },
+        "mobileSettings": {
+            "enableS1EncryptedStoragePref2": false
+        },
         "lightningExperienceSettings": {
-            "enableS1DesktopEnabled": true
+                "enableS1DesktopEnabled": true
+        },
+        "securitySettings": {
+            "sessionSettings":{
+                "sessionTimeout": "TwelveHours"
+            }
         }
     }
 }
