@@ -27,7 +27,7 @@ private with sharing class di_PlatformCacheTest {
     static final String EXPECTED_PARTITION_NAME = 'diPartition';
 
     @isTest
-    static void givenNoPlatformCacheInstanceThenCreate(){
+    private static void givenNoPlatformCacheInstanceThenCreate(){
         // Given/ When
         di_PlatformCache cache = di_PlatformCache.getInstance();
 
@@ -37,7 +37,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenPlatformCacheConfigThenCreate(){
+    private static void givenPlatformCacheConfigThenCreate(){
         // Given/ When
         di_Configurations__c config = di_PlatformCache.getConfig();
         //Then
@@ -46,7 +46,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenStoringBindingIsTrueThenGet(){
+    private static void givenStoringBindingIsTrueThenGet(){
         // Given/ When configuraiton is true
         makeData();
         //Then
@@ -56,7 +56,7 @@ private with sharing class di_PlatformCacheTest {
 
 
     @isTest
-    static void givenPartitionNameSetThenGetNonNull(){
+    private static void givenPartitionNameSetThenGetNonNull(){
         // Given/ When partition name is set
         makeData();
         //Then
@@ -65,7 +65,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenPartitionTTLSetThenGetSeconds(){
+    private static void givenPartitionTTLSetThenGetSeconds(){
         // Given/ When partition name is set
         di_PlatformCache cache = di_PlatformCache.getInstance();
         //Then
@@ -74,7 +74,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenNoDataInCachePartitionThenGetEmptyKeys(){
+    private static void givenNoDataInCachePartitionThenGetEmptyKeys(){
         // Given/ When partition name is set
         makeData();
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -83,7 +83,7 @@ private with sharing class di_PlatformCacheTest {
 
     }
     @isTest
-    static void givenDataInCachePartitionIsNotEnabledThenGetEmptyKeys(){
+    private static void givenDataInCachePartitionIsNotEnabledThenGetEmptyKeys(){
         // Given when not storing ( )
         makeData(false);
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -99,7 +99,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenDataInCachePartitionIsEnabledThenGetEmptyKeys(){
+    private static void givenDataInCachePartitionIsEnabledThenGetEmptyKeys(){
         // Given when  storing ( )
         Integer expected=0;
         makeData(true);
@@ -122,7 +122,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void  givenCachedBindingsClearThenGetEmpty(){
+    private static void  givenCachedBindingsClearThenGetEmpty(){
         // Given
         makeData(true);
 
@@ -135,7 +135,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenInvalidDeveloperNameThenGetEmptyKeys(){
+    private static void givenInvalidDeveloperNameThenGetEmptyKeys(){
         // Given
         makeData(true);
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -145,7 +145,7 @@ private with sharing class di_PlatformCacheTest {
         System.assertEquals(0,binding.size());
     }
     @isTest
-    static void givenInvalidSObjectTypeThenGetEmptyKeys(){
+    private static void givenInvalidSObjectTypeThenGetEmptyKeys(){
         // Given
         makeData(true);
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -156,7 +156,7 @@ private with sharing class di_PlatformCacheTest {
     }
     //
     @isTest
-    static void givenCacheMapAddedThenGetKeys(){
+    private static void givenCacheMapAddedThenGetKeys(){
         // Given
         di_PlatformCache cache = di_PlatformCache.getInstance();
         // When
@@ -165,7 +165,7 @@ private with sharing class di_PlatformCacheTest {
         System.assertEquals(orgPartition != null,cache.pushCacheKeyIndexMapToCache());
     }
     @isTest
-    static void givenLogMethodThenGetKeys(){
+    private static void givenLogMethodThenGetKeys(){
         // Given
         di_PlatformCache.DEBUGGING = true;
         // When
@@ -175,7 +175,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @IsTest
-    static void givenValidBindingThenAddBinding(){
+    private static void givenValidBindingThenAddBinding(){
         // Given
         di_PlatformCache cache = di_PlatformCache.getInstance();
         // create binding
@@ -193,7 +193,7 @@ private with sharing class di_PlatformCacheTest {
 
     //
     @IsTest
-    static void givenValidTSTypeAndNameThenHash(){
+    private static void givenValidTSTypeAndNameThenHash(){
         //
         // Given
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -205,7 +205,7 @@ private with sharing class di_PlatformCacheTest {
     }
     //
     @IsTest
-    static void givenKeyIndexNameThenGetKey(){
+    private static void givenKeyIndexNameThenGetKey(){
         //
         // Given
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -216,7 +216,7 @@ private with sharing class di_PlatformCacheTest {
     }
     //
     @IsTest
-    static void givenValidSTypeAndNameThenHash(){
+    private static void givenValidSTypeAndNameThenHash(){
         //
         // Given
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -229,7 +229,7 @@ private with sharing class di_PlatformCacheTest {
 
     //
     @IsTest
-    static void givenDevNameAndSTypeThenGetHashAndKey(){
+    private static void givenDevNameAndSTypeThenGetHashAndKey(){
         //
         // Given
         di_PlatformCache cache = di_PlatformCache.getInstance();
@@ -242,7 +242,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenReadOnlyAccessThenGetInstance(){
+    private static void givenReadOnlyAccessThenGetInstance(){
         // Given
         User ruser = di_PlatformCacheTest.setROTestUser(false,false,false,false);
         System.runAs(ruser) {
@@ -255,7 +255,7 @@ private with sharing class di_PlatformCacheTest {
     }
 
     @isTest
-    static void givenANewConfigSettingThenGetThatInstance(){
+    private static void givenANewConfigSettingThenGetThatInstance(){
         // Given
         User ruser = di_PlatformCacheTest.setROTestUser(false,false,false,false);
         final String PARTITION = 'test';
@@ -279,11 +279,11 @@ private with sharing class di_PlatformCacheTest {
     ///////////////////////////////////////////////////////////////////////////////
 
 
-    static void makeData(){
+    private static void makeData(){
         makeData(true);
     }
 
-    static void makeData(Boolean isStoring){
+    private static void makeData(Boolean isStoring){
         di_Configurations__c setting = new di_Configurations__c(SetupOwnerId=Userinfo.getUserId());
 
         setting.OrgCachePartitionName__c = EXPECTED_PARTITION_NAME;
@@ -294,9 +294,18 @@ private with sharing class di_PlatformCacheTest {
     /**
      * readonly user
      */
-    @TestVisible
     private static User setROTestUser(Boolean read, Boolean create, Boolean edit, Boolean remove){
-        Profile prof = [SELECT Id FROM Profile WHERE Name='Read Only'];
+		Profile prof;
+		Boolean usedMinimumAccessProfile = false;
+        try {
+            prof = [SELECT Id FROM Profile WHERE Name = 'Read Only'];
+        } catch (QueryException ex) {
+            if (ex.getMessage().contains('List has no rows for assignment to SObject')) {
+                // #315 If the "Read Only" Profile is absent, then assume it's a Spring '21 org and see if there's a
+                // "Minimum Access - Salesforce" Profile we can use instead.
+                prof = [SELECT Id FROM Profile WHERE Name = 'Minimum Access - Salesforce'];
+            }
+        }
 
         User newUser = new User(Alias = 'readonly',
                                 Email='standarduser@mytest.com',
@@ -312,6 +321,4 @@ private with sharing class di_PlatformCacheTest {
  
         return newUser;
     }// end of setTestUser
-
-   
 }
