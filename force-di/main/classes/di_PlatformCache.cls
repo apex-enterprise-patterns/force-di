@@ -1,10 +1,3 @@
-/*
- * Modifications:
- *  B Anderson --
- *     + Checked for Cache not enabled ( getPartition)
- *     + Re-aligned the code for readability
- *     + Add Tests
- */
 public with sharing class di_PlatformCache
 {
     //////////////////////////////////////////////////////////////////////////////////////////////
