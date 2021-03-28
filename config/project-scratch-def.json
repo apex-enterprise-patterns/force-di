@@ -1,16 +1,10 @@
 {
-    "orgName": "force-di-scratch-dev",
+    "orgName": "force-di-developer-scratch-dev",
     "edition": "Developer",
-    "features": ["MultiCurrency","AuthorApex"],
+    "release": "Preview",
     "settings": {
-        "communitiesSettings": {
-            "enableNetworksEnabled": false
-        },
-        "mobileSettings": {
-            "enableS1EncryptedStoragePref2": false
-        },
         "lightningExperienceSettings": {
-                "enableS1DesktopEnabled": true
+            "enableS1DesktopEnabled": true
         },
         "securitySettings": {
             "sessionSettings":{
