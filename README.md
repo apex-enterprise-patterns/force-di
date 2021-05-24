@@ -18,7 +18,7 @@ The "core" framework is found in this project.  This includes the following:
 | ------ | ----------- |
 | **force-di** | Core library, contains **Injector** Apex API and **<c:di_injector>** VF and Lightning Components |
 
-The "samples" of how to use the framework can be found in the [Force-DI Samples](https://github.com/afawcett/force-di-samples) project.
+The "samples" of how to use the framework can be found in the [Force-DI Samples](https://github.com/apex-enterprise-patterns/force-di-samples) project.
 
 | Folder | Description |
 | ------ | ----------- |
