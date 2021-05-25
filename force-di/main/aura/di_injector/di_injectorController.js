@@ -47,7 +47,6 @@
                     componentAttrs['flowName'] = bindingInfo.To;
                     componentAttrs['injectorAttributes'] = injectAttrs;
                 } else if(bindingInfo.BindingTypeAsString == 'LightningComponent') {
-                    // Added by Leon Kempers: set aura:id
                     let bindingId =  cmp.get('v.bindingId');
                     if (typeof bindingId === 'undefined') {
                         cmp.set('v.bindingId', 'di_component');
@@ -101,7 +100,7 @@
         $A.enqueueAction(action);
     },
     
-    // Added by Leon Kempers: Listen to attribute value change
+    // Added by : Listen to attribute value change
     //
     // added a handler to capture the di_injectorAttributeChangeEvent. When it comes in, 
     // the handleChangeEvent() function looks at the bindingId variable stored in the component, 
