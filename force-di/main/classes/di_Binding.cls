@@ -54,7 +54,6 @@ public abstract class di_Binding implements Comparable {
     public Object Data {get;private set;}
 
     private Boolean IsProvider = false;
-    private Object Injected = null;
 
     /**
      * Gets the instance of the thing the binding points to
