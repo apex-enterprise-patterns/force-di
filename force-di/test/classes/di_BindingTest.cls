@@ -39,7 +39,8 @@ private class di_BindingTest {
         Object boundInstance2 = binding.getInstance();
         // Then
         System.assert(boundInstance1 instanceof Bob);
-        System.assert(boundInstance1 === boundInstance2);
+        System.assert(boundInstance2 instanceof Bob);
+        System.assert(boundInstance1 !== boundInstance2);
     }
 
     @IsTest

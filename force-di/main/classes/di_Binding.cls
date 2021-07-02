@@ -69,10 +69,9 @@ public abstract class di_Binding implements Comparable {
     public Object getInstance(Object params) {
         if(IsProvider) {
             return newInstance(params);
-        } else if(Injected==null) {
-            Injected = newInstance(params);
-        }
-        return Injected;
+        } 
+        
+        return newInstance(params);
     }
 
     /**
