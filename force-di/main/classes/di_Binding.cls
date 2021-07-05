@@ -54,19 +54,42 @@ public abstract class di_Binding implements Comparable {
     public Object Data {get;private set;}
 
     private Boolean IsProvider = false;
+    private Object Injected = null;
 
     /**
      * Gets the instance of the thing the binding points to
      **/
     public Object getInstance() {
-        return getInstance(null);
+        return getInstance(false);
+    }
+
+    /**
+     * Gets the instance of the thing the binding points to
+     * @param newInstance if a new instance should always be returned
+     **/
+    public Object getInstance(Boolean newInstance) {
+        return getInstance(newInstance, null);
     }
 
     /**
      * Gets the instance of the thing the binding points to
      **/
     public Object getInstance(Object params) {
-        return newInstance(params);
+        return getInstance(params, false)
+    }
+
+    /**
+     * Gets the instance of the thing the binding points to
+     **/
+    public Object getInstance(Object params, Boolean newInstance) {
+        if(IsProvider) {
+            return newInstance(params);
+        } else if(newInstance==true) {
+            return newInstance(params);
+        } else if(Injected==null) {
+            Injected = newInstance(params);
+        }
+        return Injected;
     }
 
     /**
