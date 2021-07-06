@@ -39,7 +39,20 @@ private class di_BindingTest {
         Object boundInstance2 = binding.getInstance();
         // Then
         System.assert(boundInstance1 instanceof Bob);
-        System.assert(boundInstance2 instanceof Bob);
+        System.assert(boundInstance1 === boundInstance2);
+    }
+
+    @IsTest
+    private static void givenApexBindingWhenGetNewInstanceThenNewInstance() {
+        // Given
+        di_Binding binding = di_Binding.newInstance(
+            di_Binding.BindingType.Apex,
+            Bob.class.getName(), null, null, Bob.class.getName(), null);
+        // When
+        Object boundInstance1 = binding.getInstance(true);
+        Object boundInstance2 = binding.getInstance(true);
+        // Then
+        System.assert(boundInstance1 instanceof Bob);
         System.assert(boundInstance1 !== boundInstance2);
     }
 
