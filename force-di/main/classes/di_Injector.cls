@@ -60,7 +60,7 @@ public class di_Injector {
      * Creates an instance of the object configured for the class name binding
      **/
     public Object getInstance(Type developerNameByType) {
-        return getInstance(developerNameByType == null ? null : developerNameByType.getName().toLowerCase(), null);
+        return getInstance(developerNameByType?.getName()?.toLowerCase(), null);
     }
 
     /**
@@ -68,7 +68,7 @@ public class di_Injector {
      *   (if params is specified, implicitly uses the Provider interface)
      **/
     public Object getInstance(Type developerNameByType, Object params) {
-        return getInstance(developerNameByType == null ? null : developerNameByType.getName().toLowerCase(), params);
+        return getInstance(developerNameByType?.getName()?.toLowerCase(), params);
     }
 
     /**
