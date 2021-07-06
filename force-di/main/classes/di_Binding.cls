@@ -63,13 +63,6 @@ public abstract class di_Binding implements Comparable {
         return getInstance(null, false);
     }
 
-        /**
-     * Gets the instance of the thing the binding points to
-     **/
-    public Object getInstance(Boolean newInstance) {
-        return getInstance(null, newInstance);
-    }
-
     /**
      * Gets the instance of the thing the binding points to
      **/
