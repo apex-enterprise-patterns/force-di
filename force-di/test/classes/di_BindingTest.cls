@@ -50,8 +50,8 @@ private class di_BindingTest {
             di_Binding.BindingType.Apex,
             Bob.class.getName(), null, null, Bob.class.getName(), null);
         // When
-        Object boundInstance1 = binding.getInstance(true);
-        Object boundInstance2 = binding.getInstance(true);
+        Object boundInstance1 = binding.getInstance(null, true);
+        Object boundInstance2 = binding.getInstance(null, true);
         // Then
         System.assert(boundInstance1 instanceof Bob);
         System.assert(boundInstance2 instanceof Bob);
