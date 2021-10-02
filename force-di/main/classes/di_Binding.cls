@@ -310,7 +310,7 @@ public abstract class di_Binding implements Comparable {
         {
             list<di_Binding> matchedBindings = di_PlatformCache.getInstance().retrieveBindings(this.developerName, this.bindingObject);
             
-            if ( ( bindingsAreRequired && matchedBindings.isEmpty() && di_PlatformCache.isStoringBindingInPlatformCache() ) 
+            if ( ( di_PlatformCache.isStoringBindingInPlatformCache() && bindingsAreRequired && matchedBindings.isEmpty() ) 
                 || ! di_PlatformCache.isStoringBindingInPlatformCache()
                 )
             {
