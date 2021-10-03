@@ -66,7 +66,7 @@ public class di_Flow {
             Map<String, Object> outputVars = new Map<String, Object>();
             for(String outputVar : outputVarsNames) {
                 Object outputVarValue = flow.getVariableValue(outputVar);
-                if(outputVarValue!=null) {
+                if(outputVarValue != null) {
                     outputVars.put(outputVar, outputVarValue);
                 } else if(outputVarsNamesRequired.contains(outputVar)) {
                     throw new FlowException('Output variable ' + outputVar + ' expected but not returned from Flow');

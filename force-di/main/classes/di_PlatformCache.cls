@@ -19,7 +19,7 @@ public with sharing class di_PlatformCache
     private static Boolean DEBUGGING = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    //  Ctors
+    //  Constructors
     //////////////////////////////////////////////////////////////////////////////////////////////
     // singleton
     private di_PlatformCache() 
@@ -45,7 +45,7 @@ public with sharing class di_PlatformCache
         return getConfig().UsePlatformCacheToStoreBindings__c == null ? false : ( getConfig().UsePlatformCacheToStoreBindings__c && getPartition() != null );
     }
 
-    public Map<String, Map<Schema.SObjectType, Set<String> > > getCacheKeyIndexMap()
+    public Map<String, Map<Schema.SObjectType, Set<String>>> getCacheKeyIndexMap()
     {
         if ( cacheKeyIndexMap.isEmpty() )
         {
@@ -75,7 +75,7 @@ public with sharing class di_PlatformCache
 
     public Boolean addBindingToPlatformCache( di_Binding binding )
     {
-        Boolean result=false;
+        Boolean result = false;
         if ( isStoringBindingInPlatformCache() )
         {
             // if there IS NO Partition created; let's not FAIL
@@ -204,7 +204,7 @@ public with sharing class di_PlatformCache
     @TestVisible
     private static Cache.OrgPartition getPartition()
     {
-        Cache.OrgPartition result=null;
+        Cache.OrgPartition result = null;
         try 
         {
             result = Cache.Org.getPartition( getPartitionName() );

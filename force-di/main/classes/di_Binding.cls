@@ -76,9 +76,9 @@ public abstract class di_Binding implements Comparable {
     public Object getInstance(Object params, Boolean newInstance) {
         if(IsProvider) {
             return newInstance(params);
-        } else if(newInstance==true) {
+        } else if(newInstance == true) {
             return newInstance(params);
-        } else if(Injected==null) {
+        } else if(Injected == null) {
             Injected = newInstance(params);
         }
         return Injected;
@@ -102,9 +102,9 @@ public abstract class di_Binding implements Comparable {
      * Defaults to DeveloperName or binding object and sequence if specified
      **/
     public override String toString() {
-        if(BindingObject!=null) {
+        if(BindingObject != null) {
             String hashValue = BindingObject.getDescribe().getName();
-            if(BindingSequence!=null) {
+            if(BindingSequence != null) {
                 hashValue+= '#'+String.valueOf(BindingSequence).leftPad(4,'0');
             }
             return hashValue;
@@ -395,7 +395,7 @@ public abstract class di_Binding implements Comparable {
             {
                 // Leverage namespace if the Binding has one
                 String className = (String) To;
-                Type toType = NameSpacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
+                Type toType = NameSpacePrefix == null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
                 if ( toType == null ) 
                 {
                     throw new BindingException('Apex binding ' + DeveloperName + ' implementation ' + To + ' does not exist');
@@ -431,8 +431,8 @@ public abstract class di_Binding implements Comparable {
             {
                 // Visualforce Components references must be made via an Apex class implementing the Provider interface
                 String className = (String) To;
-                Type toType = NamespacePrefix==null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
-                if ( toType==null )
+                Type toType = NamespacePrefix == null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
+                if ( toType == null )
                 {
                     throw new BindingException('Visualforce Component binding ' + DeveloperName + ' implementation ' + className + ' does not exist.');
                 }
