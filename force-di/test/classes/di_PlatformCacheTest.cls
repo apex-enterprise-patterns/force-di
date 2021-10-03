@@ -47,11 +47,21 @@ private with sharing class di_PlatformCacheTest {
 
     @isTest
     private static void givenStoringBindingIsTrueThenGet(){
-        // Given/ When configuraiton is true
+        // Given/ When configuration is true
         makeData();
         //Then
-        System.assertEquals(true,di_PlatformCache.isStoringBindingInPlatformCache());
-
+        //  depending on the org, the cache partition may not be present.  
+        //  If that is the case, then the isStoringBindingInPlatformCache() method
+        //  will return false regardless what we setup in the makeData() method here 
+        //  in the test class
+        if ( di_PlatformCache.getPartition() == null )
+        {
+            System.assertEquals(false, di_PlatformCache.isStoringBindingInPlatformCache());
+        }
+        else 
+        {
+            System.assertEquals(true,di_PlatformCache.isStoringBindingInPlatformCache());
+        }
     }
 
 
