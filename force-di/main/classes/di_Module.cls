@@ -199,6 +199,7 @@ public virtual class di_Module {
             bindingSequence,
             to,
             bindingData);
+            
         bindings.add(newBinding);
 
         di_PlatformCache.getInstance().addBindingToPlatformCache( newBinding );
