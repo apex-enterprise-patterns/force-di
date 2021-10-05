@@ -83,11 +83,35 @@ public with sharing class di_PlatformCache
             if ( orgPartition != null ) 
             {
                 String theKeyName = getKeyName(binding);
+                
                 // add the binding to the platform cache directly
-                orgPartition.put(theKeyName, binding, getPartitionTTL(), Cache.Visibility.ALL, false);
+                List<di_Binding> workingBindings = new List<di_Binding>();
+
+                // the binding may be a group of bindings.  
+                //  if there are bindings already cached on this key... 
+                if ( orgPartition.contains(theKeyName) )
+                {
+                    // ... then retrieve those bindings first 
+                    workingBindings.addAll((List<di_Binding>) orgPartition.get(theKeyName));
+                }
+                // ... add the new binding to the working group.
+                workingBindings.add( binding );
+                log('Adding binding for hash => ' + theKeyName + ' && developerName => ' + binding.developerName + ' && object => ' + binding.bindingObject);
+                // ... then put the working list back in cache on this key
+                try 
+                {
+                    orgPartition.put(theKeyName, workingBindings, getPartitionTTL(), Cache.Visibility.ALL, false);    
+                }
+                catch (cache.Org.OrgCacheException oce)
+                {
+                    // there are some objects that cannot be serialized and thus cannot be stored in cache.  
+                    //  in those situations, we simply bypass storing that object. 
+                    log( oce );
+                }
+
                 // add the binding's cache key name to the bindingKeyIndex
                 addBindingToKeyIndex(binding);
-                log('Adding binding for hash => ' + theKeyName + ' && developerName => ' + binding.developerName + ' && object => ' + binding.bindingObject);
+                // log('Adding binding for hash => ' + theKeyName + ' && developerName => ' + binding.developerName + ' && object => ' + binding.bindingObject);
                 result = true;
             }
         }
@@ -117,7 +141,7 @@ public with sharing class di_PlatformCache
                         cachedObject = orgPartition.get( cacheKey );
                         if ( cachedObject != null )
                         {
-                            bindings.add( (di_Binding) cachedObject);
+                            bindings.addAll( (List<di_Binding>) cachedObject);
                         }
                     }
                 }
@@ -296,7 +320,7 @@ public with sharing class di_PlatformCache
         Boolean before = DEBUGGING, result;
         // always show exceptions
         DEBUGGING = true;
-        result = log(excp.getMessage());
+        result = log('Exception: ' + excp.getMessage());
         DEBUGGING = before;
         return result;
 
