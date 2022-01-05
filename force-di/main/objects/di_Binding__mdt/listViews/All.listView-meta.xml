@@ -5,6 +5,7 @@
     <columns>BindingObject__c</columns>
     <columns>BindingObjectAlternate__c</columns>
     <columns>BindingSequence__c</columns>
+    <columns>BindingName__c</columns>
     <columns>To__c</columns>
     <columns>Type__c</columns>
     <filterScope>Everything</filterScope>

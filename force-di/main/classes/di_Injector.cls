@@ -149,6 +149,7 @@ public class di_Injector {
                                                         , NamespacePrefix
                                                         , Type__c
                                                         , To__c
+                                                        , BindingName__c
                                                         , BindingObject__c
                                                         , BindingObject__r.QualifiedApiName
                                                         , BindingObjectAlternate__c

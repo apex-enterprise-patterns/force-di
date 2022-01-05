@@ -53,6 +53,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>BindingName__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>BindingSequence__c</field>
             </layoutItems>
         </layoutColumns>

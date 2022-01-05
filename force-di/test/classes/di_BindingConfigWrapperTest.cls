@@ -78,4 +78,32 @@ private with sharing class di_BindingConfigWrapperTest {
         system.assertEquals('BindingObjectAlternate', wrapper.BindingObjectAlternate);
         system.assertEquals(10.10, wrapper.BindingSequence);
     }
+
+    @isTest
+    static void givenBindingWrapperWithBindingNameExpectDeveloperNameEqualsBindingName(){
+        // Given
+        di_Binding__mdt bindingConfig = new di_Binding__mdt();
+        bindingConfig.QualifiedApiName='QualifiedAPIName';
+        bindingConfig.DeveloperName='DeveloperName';
+        bindingConfig.BindingName__c='BindingName';
+        bindingConfig.NamespacePrefix='NamespacePrefix';
+        bindingConfig.Type__c='Type';
+        bindingConfig.To__c='To';
+        bindingConfig.BindingObject__c='BindingObject';
+        bindingConfig.BindingObjectAlternate__c='BindingObjectAlternate';
+        bindingConfig.BindingSequence__c=10.10;
+
+        //when
+        di_BindingConfigWrapper wrapper = new di_BindingConfigWrapper(bindingConfig);
+
+        // Then
+        system.assertEquals('QualifiedAPIName', wrapper.QualifiedAPIName, 'Expecting specific value of wrapper QualifiedAPIName');
+        system.assertEquals('BindingName',  wrapper.DeveloperName, 'Expecting Developer name equals Binding Name');
+        system.assertEquals('NamespacePrefix', wrapper.NamespacePrefix, 'Expecting specific value of wrapper NamespacePrefix');
+        system.assertEquals('Type', wrapper.Type, 'Expecting specific value of wrapper Type');
+        system.assertEquals('To', wrapper.To, 'Expecting specific value of wrapper To');
+        system.assertEquals('BindingObject', wrapper.BindingObject, 'Expecting specific value of wrapper BindingObject');
+        system.assertEquals('BindingObjectAlternate', wrapper.BindingObjectAlternate, 'Expecting specific value of wrapper BindingObjectAlternate');
+        system.assertEquals(10.10, wrapper.BindingSequence, 'Expecting specific value of wrapper BindingSequence');
+    }
 }

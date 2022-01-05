@@ -109,7 +109,11 @@ public abstract class di_Binding implements Comparable {
             }
             return hashValue;
         } else {
-            return DeveloperName;
+            String hashValue = DeveloperName;
+            if(BindingSequence != null) {
+                hashValue+= '#'+String.valueOf(BindingSequence).leftPad(4,'0');
+            }
+            return hashValue;
         }
     }
 
