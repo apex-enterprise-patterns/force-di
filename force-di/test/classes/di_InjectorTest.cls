@@ -142,4 +142,104 @@ private class di_InjectorTest {
         system.assertEquals(true, hasException);
     }
 
+    @isTest
+    static void whenDeveloperNameIsEmptyThenGetInstanceShouldThrowException(){
+
+        //given
+        di_Module module = new di_Module();
+        di_Injector injector = new di_Injector(module);
+
+        //when
+        try {
+            injector.getInstance('', Account.getSObjectType(), null);
+            System.assert(false, 'Expecting that exception was thrown');
+        } catch (di_Injector.InjectorException excp) {
+            //then
+            System.assertEquals('Request for Binding cannot take "developerName" parameter of null', excp.getMessage(), 'Expecting specific exception message');
+        } catch (Exception e) {
+            System.assert(false, 'Was expecting a di_Injector.InjectorException but instead received ' + e);
+        }
+    }
+
+    @isTest
+    static void givenInjectorWithBindingsThenBindingIsReturned(){
+
+        //given
+        di_Injector injector = di_Injector.Org;
+        di_Injector.mock_BindingConfigurationWrappersOuter = new List<di_BindingConfigWrapper> { 
+            new di_BindingConfigWrapper(
+                'testQualifiedApiName',
+                di_InjectorTest.InterfaceForTest.class.getName(), 
+                'testNamespacePrefix', 
+                'Apex',
+                di_InjectorTest.ClassForTest.class.getName(),
+                'Account',
+                'Account',
+                null,
+                1
+            )
+        };
+        //when
+        di_InjectorTest.InterfaceForTest returnedInstance = 
+            (di_InjectorTest.InterfaceForTest)injector.getInstance( di_InjectorTest.InterfaceForTest.class.getName(), Account.SObjectType, null);
+
+        //then
+        System.assert(returnedInstance instanceof di_InjectorTest.ClassForTest, 'Expecting that instance of class was returned');
+    }
+
+    @isTest
+    static void givenBindingsWithAlternateObjectNameThenBindingIsReturned(){
+
+        //given
+        di_Injector injector = di_Injector.Org;
+        di_Injector.mock_BindingConfigurationWrappersOuter = new List<di_BindingConfigWrapper> { 
+            new di_BindingConfigWrapper(
+                'testQualifiedApiName',
+                di_InjectorTest.InterfaceForTest.class.getName(), 
+                'testNamespacePrefix', 
+                'Apex',
+                di_InjectorTest.ClassForTest.class.getName(),
+                null,
+                null,
+                'Account',
+                1
+            )
+        };
+
+        //when
+        di_InjectorTest.InterfaceForTest returnedInstance = 
+            (di_InjectorTest.InterfaceForTest)injector.getInstance( di_InjectorTest.InterfaceForTest.class.getName(), Account.SObjectType, null);
+
+        //then
+        System.assert(returnedInstance instanceof di_InjectorTest.ClassForTest, 'Expecting that instance of class was returned');
+    }
+
+    @isTest
+    static void givenNoBindingsGetInstanceShouldThrowException(){
+
+        //given
+        String dummyBindingName = 'UnknownBinding';
+        di_Module module=new di_Module();
+        di_Injector injector = new di_Injector(module);
+
+        //when
+        try {
+            injector.getInstance(dummyBindingName, null);
+            System.assert(false, 'Expecting that exception was thrown');
+        } catch (di_Injector.InjectorException excp) {
+            //then
+            System.assertEquals('Binding for "' + dummyBindingName + '" not found', excp.getMessage(), 'Expecting specific exception message');
+        }
+
+    }
+
+    public interface InterfaceForTest {
+        void implementMe();
+    }
+
+    public class ClassForTest implements InterfaceForTest {
+        public ClassForTest() { }
+        public void implementMe(){}
+    }
+
 }

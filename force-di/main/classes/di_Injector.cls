@@ -144,22 +144,24 @@ public class di_Injector {
         @testVisible
         private List<di_BindingConfigWrapper> getDIBinding(){
             List<di_BindingConfigWrapper> recordList = new List<di_BindingConfigWrapper>();
-            List<di_Binding__mdt> bindingMDTRec = [SELECT QualifiedAPIName
-                                                        , DeveloperName
-                                                        , NamespacePrefix
-                                                        , Type__c
-                                                        , To__c
-                                                        , BindingObject__c
-                                                        , BindingObject__r.QualifiedApiName
-                                                        , BindingObjectAlternate__c
-                                                        , BindingSequence__c
-                                                     FROM di_Binding__mdt];
-            for(di_Binding__mdt records :bindingMDTRec) {
-                recordList.add(new di_BindingConfigWrapper(records));
-            }
+
             // When we want to mock data from metadata for injecting dependencies.
             if(di_Injector.mock_BindingConfigurationWrappersOuter != null) {
                 recordList = di_Injector.mock_BindingConfigurationWrappersOuter;
+            } else {
+                List<di_Binding__mdt> bindingMDTRec = [SELECT QualifiedAPIName
+                                                            , DeveloperName
+                                                            , NamespacePrefix
+                                                            , Type__c
+                                                            , To__c
+                                                            , BindingObject__c
+                                                            , BindingObject__r.QualifiedApiName
+                                                            , BindingObjectAlternate__c
+                                                            , BindingSequence__c
+                                                         FROM di_Binding__mdt];
+                for(di_Binding__mdt records :bindingMDTRec) {
+                    recordList.add(new di_BindingConfigWrapper(records));
+                }
             }
             return recordList;
         }
