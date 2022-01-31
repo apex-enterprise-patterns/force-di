@@ -144,43 +144,45 @@ public class di_Injector {
         @testVisible
         private List<di_BindingConfigWrapper> getDIBinding(){
             List<di_BindingConfigWrapper> recordList = new List<di_BindingConfigWrapper>();
-            List<di_Binding__mdt> bindingMDTRec = [SELECT QualifiedAPIName
-                                                        , DeveloperName
-                                                        , NamespacePrefix
-                                                        , Type__c
-                                                        , To__c
-                                                        , BindingName__c
-                                                        , BindingObject__c
-                                                        , BindingObject__r.QualifiedApiName
-                                                        , BindingObjectAlternate__c
-                                                        , BindingSequence__c
-                                                     FROM di_Binding__mdt];
-            for(di_Binding__mdt records :bindingMDTRec) {
-                recordList.add(new di_BindingConfigWrapper(records));
-            }
+
             // When we want to mock data from metadata for injecting dependencies.
-            if(di_Injector.mock_BindingConfigurationWrappersOuter != null) {
+            if ( di_Injector.mock_BindingConfigurationWrappersOuter != null ) {
                 recordList = di_Injector.mock_BindingConfigurationWrappersOuter;
+            } else {
+                List<di_Binding__mdt> bindingMDTRec = [SELECT QualifiedAPIName
+                                                            , DeveloperName
+                                                            , NamespacePrefix
+                                                            , Type__c
+                                                            , To__c
+                                                            , BindingObject__c
+                                                            , BindingObject__r.QualifiedApiName
+                                                            , BindingObjectAlternate__c
+                                                            , BindingSequence__c
+                                                         FROM di_Binding__mdt];
+                for ( di_Binding__mdt records :bindingMDTRec ) {
+                    recordList.add( new di_BindingConfigWrapper(records) );
+                }
             }
             return recordList;
         }
+      
         public override void configure() {
             // TODO: Support Namespace
-            for(di_BindingConfigWrapper bindingConfig :getDIBinding()) {
+            for ( di_BindingConfigWrapper bindingConfig :getDIBinding() ) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type);
-                if( String.isNotBlank(bindingConfig.BindingObject)
-                    || String.isNotBlank(bindingConfig.BindingObjectAlternate)) {
+                if ( String.isNotBlank(bindingConfig.BindingObject)
+                    || String.isNotBlank(bindingConfig.BindingObjectAlternate) ) {
                     bindingObjectApiName =  String.isNotBlank(bindingConfig.BindingObject)
                                             ? bindingConfig.bindingObjectQualifiedApiName.toLowerCase().trim()
                                             : bindingConfig.BindingObjectAlternate.toLowerCase().trim();
                     Schema.DescribeSobjectResult[] results = Schema.describeSObjects(new String[] { bindingObjectApiName });
-                    if(results.size() != 1) {
+                    if (results.size() != 1) {
                         throw new InjectorException('Failed to find SObject ' + bindingObjectApiName + ' referenced by binding ' + bindingConfig.DeveloperName);
                     }
                     bind(results[0].getSObjectType()); // if it is getting here, then it is finding a SObject to add to the binding
                 }
-                if(bindingConfig.BindingSequence != null) {
+                if (bindingConfig.BindingSequence != null) {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence));
                 }
                 data(bindingConfig);
