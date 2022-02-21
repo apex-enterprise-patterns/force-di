@@ -102,19 +102,14 @@ public abstract class di_Binding implements Comparable {
      * Defaults to DeveloperName or binding object and sequence if specified
      **/
     public override String toString() {
-        if(BindingObject != null) {
-            String hashValue = BindingObject.getDescribe().getName();
-            if(BindingSequence != null) {
-                hashValue+= '#'+String.valueOf(BindingSequence).leftPad(4,'0');
-            }
-            return hashValue;
-        } else {
-            String hashValue = DeveloperName;
-            if(BindingSequence != null) {
-                hashValue+= '#'+String.valueOf(BindingSequence).leftPad(4,'0');
-            }
-            return hashValue;
+        String hashValue = 
+            (BindingObject != null) ? 
+            BindingObject.getDescribe().getName() : 
+            DeveloperName;
+        if(BindingSequence != null) {
+            hashValue += '#' + String.valueOf(BindingSequence).leftPad(4,'0');
         }
+        return hashValue;
     }
 
     /**
