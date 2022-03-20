@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BindingName__c</fullName>
+    <description>Binding name. Use this field instead of the standard Name field to create multiple bindings with the same name. If more than one binding is found, then the record with the lowest Binding Sequence is selected. If this field is empty, then the standard Name field will be used</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Binding name. Use this field instead of the standard Name field to create multiple bindings with the same name. If more than one binding is found, then the record with the lowest Binding Sequence is selected. If this field is empty, then the standard Name field will be used</inlineHelpText>
+    <label>Binding Name</label>
+    <length>40</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

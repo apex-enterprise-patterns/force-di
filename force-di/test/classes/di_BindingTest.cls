@@ -181,6 +181,56 @@ private class di_BindingTest {
         System.assertEquals(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
     }
 
+    @IsTest
+    private static void shouldConvertBindingToStringWhenObjectIsEmptyAndSequenceIsProvided() {
+
+        //given
+        di_Binding zoroBinding = di_Binding.newInstance(
+            di_Binding.BindingType.Apex,
+            ProviderImpl.class.getName(), null, 2, Zoro.class.getName(), null);
+
+        //then
+        System.assertEquals(
+            ProviderImpl.class.getName() + '#' + String.valueOf(zoroBinding.BindingSequence).leftPad(4,'0'), 
+            zoroBinding.toString(), 
+            'Expecting toString method returns specific value'
+        );
+    }
+
+    @IsTest
+    private static void givenApexBindingsWithSequenceAndWithoutObjectWhenSortThenReturnSortedBindingsList() {
+
+        //given
+        //3 bindings with sequence and binding name
+        List<di_Binding> bindings = new List<di_Binding>();
+        List<di_Binding> sortedExpectedBindings = new List<di_Binding>();
+
+        di_Binding zoroBinding = di_Binding.newInstance(
+            di_Binding.BindingType.Apex,
+            ProviderImpl.class.getName(), null, 2, Zoro.class.getName(), null);
+        bindings.add(zoroBinding);
+        
+        di_Binding charlieBinding = di_Binding.newInstance(
+            di_Binding.BindingType.Apex,
+            ProviderImpl.class.getName(),  null, 3, Charlie.class.getName(), null);
+        bindings.add(charlieBinding);
+        
+        di_Binding bobBinding = di_Binding.newInstance(
+            di_Binding.BindingType.Apex,
+            ProviderImpl.class.getName(),  null, 1, Bob.class.getName(),  null);
+        bindings.add(bobBinding);
+
+        //when
+        bindings.sort();
+
+        // //Sorted based on binding sequence
+        sortedExpectedBindings.add(bobBinding);
+        sortedExpectedBindings.add(zoroBinding);
+        sortedExpectedBindings.add(charlieBinding);
+
+        System.assertEquals(sortedExpectedBindings, bindings, 'Binding sorted by Binding Names and Binding Sequence');
+    }
+
     public class Bob {
         public String Name {get;private set;}
         public Bob() { }

@@ -170,7 +170,7 @@ public class di_Injector {
             for(di_BindingConfigWrapper bindingConfig :getDIBinding()) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type);
-                if( String.isNotBlank(bindingConfig.BindingObject)
+                if(String.isNotBlank(bindingConfig.BindingObject)
                     || String.isNotBlank(bindingConfig.BindingObjectAlternate)) {
                     bindingObjectApiName =  String.isNotBlank(bindingConfig.BindingObject)
                                             ? bindingConfig.bindingObjectQualifiedApiName.toLowerCase().trim()

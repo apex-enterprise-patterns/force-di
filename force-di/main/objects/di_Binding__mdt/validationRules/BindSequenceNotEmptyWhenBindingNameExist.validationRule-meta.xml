@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BindSequenceNotEmptyWhenBindingNameExist</fullName>
+    <active>true</active>
+    <description>When Binding Name is specified, Binding Sequence must not be empty.</description>
+    <errorConditionFormula>AND (
+NOT(ISBLANK(BindingName__c)),
+ISBLANK(BindingSequence__c)
+)</errorConditionFormula>
+    <errorDisplayField>BindingSequence__c</errorDisplayField>
+    <errorMessage>When Binding Name is specified, Binding Sequence must not be empty.</errorMessage>
+</ValidationRule>
