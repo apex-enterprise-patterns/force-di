@@ -151,6 +151,7 @@ public class di_Injector {
             } else {
                 List<di_Binding__mdt> bindingMDTRec = [SELECT QualifiedAPIName
                                                             , DeveloperName
+                                                            , BindingName__c
                                                             , NamespacePrefix
                                                             , Type__c
                                                             , To__c
