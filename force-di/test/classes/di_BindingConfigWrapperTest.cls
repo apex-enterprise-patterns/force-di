@@ -44,15 +44,15 @@ private with sharing class di_BindingConfigWrapperTest {
             , 10.10
             );
         // Then
-        Assert.areEqual('QualifiedAPIName', wrapper.QualifiedAPIName);
-        Assert.areEqual('DeveloperName',  wrapper.DeveloperName);
-        Assert.areEqual('NamespacePrefix', wrapper.NamespacePrefix);
-        Assert.areEqual('Type', wrapper.Type);
-        Assert.areEqual('To', wrapper.To);
-        Assert.areEqual('BindingObject', wrapper.BindingObject);
-        Assert.areEqual('BindingObjectQualifiedApiName', wrapper.BindingObjectQualifiedApiName);
-        Assert.areEqual('BindingObjectAlternate', wrapper.BindingObjectAlternate);
-        Assert.areEqual(10.10, wrapper.BindingSequence);
+        System.Assert.areEqual('QualifiedAPIName', wrapper.QualifiedAPIName);
+        System.Assert.areEqual('DeveloperName',  wrapper.DeveloperName);
+        System.Assert.areEqual('NamespacePrefix', wrapper.NamespacePrefix);
+        System.Assert.areEqual('Type', wrapper.Type);
+        System.Assert.areEqual('To', wrapper.To);
+        System.Assert.areEqual('BindingObject', wrapper.BindingObject);
+        System.Assert.areEqual('BindingObjectQualifiedApiName', wrapper.BindingObjectQualifiedApiName);
+        System.Assert.areEqual('BindingObjectAlternate', wrapper.BindingObjectAlternate);
+        System.Assert.areEqual(10.10, wrapper.BindingSequence);
     }
 
     @isTest
@@ -69,14 +69,14 @@ private with sharing class di_BindingConfigWrapperTest {
         bindingConfig.BindingSequence__c=10.10;
         di_BindingConfigWrapper wrapper = new di_BindingConfigWrapper(bindingConfig);
         // Then
-        Assert.areEqual('QualifiedAPIName', wrapper.QualifiedAPIName);
-        Assert.areEqual('DeveloperName',  wrapper.DeveloperName);
-        Assert.areEqual('NamespacePrefix', wrapper.NamespacePrefix);
-        Assert.areEqual('Type', wrapper.Type);
-        Assert.areEqual('To', wrapper.To);
-        Assert.areEqual('BindingObject', wrapper.BindingObject);
-        Assert.areEqual('BindingObjectAlternate', wrapper.BindingObjectAlternate);
-        Assert.areEqual(10.10, wrapper.BindingSequence);
+        System.Assert.areEqual('QualifiedAPIName', wrapper.QualifiedAPIName);
+        System.Assert.areEqual('DeveloperName',  wrapper.DeveloperName);
+        System.Assert.areEqual('NamespacePrefix', wrapper.NamespacePrefix);
+        System.Assert.areEqual('Type', wrapper.Type);
+        System.Assert.areEqual('To', wrapper.To);
+        System.Assert.areEqual('BindingObject', wrapper.BindingObject);
+        System.Assert.areEqual('BindingObjectAlternate', wrapper.BindingObjectAlternate);
+        System.Assert.areEqual(10.10, wrapper.BindingSequence);
     }
 
     @isTest
@@ -97,13 +97,13 @@ private with sharing class di_BindingConfigWrapperTest {
         di_BindingConfigWrapper wrapper = new di_BindingConfigWrapper(bindingConfig);
 
         // Then
-        Assert.areEqual('QualifiedAPIName', wrapper.QualifiedAPIName, 'Expecting specific value of wrapper QualifiedAPIName');
-        Assert.areEqual('BindingName',  wrapper.DeveloperName, 'Expecting Developer name equals Binding Name');
-        Assert.areEqual('NamespacePrefix', wrapper.NamespacePrefix, 'Expecting specific value of wrapper NamespacePrefix');
-        Assert.areEqual('Type', wrapper.Type, 'Expecting specific value of wrapper Type');
-        Assert.areEqual('To', wrapper.To, 'Expecting specific value of wrapper To');
-        Assert.areEqual('BindingObject', wrapper.BindingObject, 'Expecting specific value of wrapper BindingObject');
-        Assert.areEqual('BindingObjectAlternate', wrapper.BindingObjectAlternate, 'Expecting specific value of wrapper BindingObjectAlternate');
-        Assert.areEqual(10.10, wrapper.BindingSequence, 'Expecting specific value of wrapper BindingSequence');
+        System.Assert.areEqual('QualifiedAPIName', wrapper.QualifiedAPIName, 'Expecting specific value of wrapper QualifiedAPIName');
+        System.Assert.areEqual('BindingName',  wrapper.DeveloperName, 'Expecting Developer name equals Binding Name');
+        System.Assert.areEqual('NamespacePrefix', wrapper.NamespacePrefix, 'Expecting specific value of wrapper NamespacePrefix');
+        System.Assert.areEqual('Type', wrapper.Type, 'Expecting specific value of wrapper Type');
+        System.Assert.areEqual('To', wrapper.To, 'Expecting specific value of wrapper To');
+        System.Assert.areEqual('BindingObject', wrapper.BindingObject, 'Expecting specific value of wrapper BindingObject');
+        System.Assert.areEqual('BindingObjectAlternate', wrapper.BindingObjectAlternate, 'Expecting specific value of wrapper BindingObjectAlternate');
+        System.Assert.areEqual(10.10, wrapper.BindingSequence, 'Expecting specific value of wrapper BindingSequence');
     }
 }

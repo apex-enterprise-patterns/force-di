@@ -51,7 +51,7 @@ private class di_InjectorTest {
         // When
         di_Injector injector = new di_Injector(modules);
         // Then
-        Assert.areEqual(expected, injector.Bindings.get().size());
+        System.Assert.areEqual(expected, injector.Bindings.get().size());
 
     }
 
@@ -72,9 +72,9 @@ private class di_InjectorTest {
         Object resultNoParams=injector.getInstance(di_BindingTest.Bob.class,(Object)null);
         Object resultByName=injector.getInstance(di_BindingTest.Bob.class.getName());
         // Then
-        Assert.isInstanceOfType(result, di_BindingTest.Bob.class);
-        Assert.isInstanceOfType(resultByName, di_BindingTest.Bob.class);
-        Assert.isInstanceOfType(resultNoParams, di_BindingTest.Bob.class);
+        System.Assert.isInstanceOfType(result, di_BindingTest.Bob.class);
+        System.Assert.isInstanceOfType(resultByName, di_BindingTest.Bob.class);
+        System.Assert.isInstanceOfType(resultNoParams, di_BindingTest.Bob.class);
     }
 
     @isTest
@@ -90,7 +90,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.isTrue( hasException);
+        System.Assert.isTrue( hasException);
         // When
         hasException=false;
         try {
@@ -99,7 +99,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.isTrue( hasException);
+        System.Assert.isTrue( hasException);
 
     }
 
@@ -120,7 +120,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.isTrue( hasException);
+        System.Assert.isTrue( hasException);
     }
     @isTest
     static void givenNullParamterInGetInstanceThenThrowException()
@@ -139,7 +139,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.isTrue( hasException);
+        System.Assert.isTrue( hasException);
     }
 
     @isTest
@@ -152,12 +152,12 @@ private class di_InjectorTest {
         //when
         try {
             injector.getInstance('', Account.getSObjectType(), null);
-            Assert.fail('Expecting that exception was thrown');
+            System.Assert.fail('Expecting that exception was thrown');
         } catch (di_Injector.InjectorException excp) {
             //then
-            Assert.areEqual('Request for Binding cannot take "developerName" parameter of null', excp.getMessage(), 'Expecting specific exception message');
+            System.Assert.areEqual('Request for Binding cannot take "developerName" parameter of null', excp.getMessage(), 'Expecting specific exception message');
         } catch (Exception e) {
-            Assert.fail('Was expecting a di_Injector.InjectorException but instead received ' + e);
+            System.Assert.fail('Was expecting a di_Injector.InjectorException but instead received ' + e);
         }
     }
 
@@ -184,7 +184,7 @@ private class di_InjectorTest {
             (di_InjectorTest.InterfaceForTest)injector.getInstance( di_InjectorTest.InterfaceForTest.class.getName(), Account.SObjectType, null);
 
         //then
-        Assert.isInstanceOfType(returnedInstance, di_InjectorTest.ClassForTest.class, 'Expecting that instance of class was returned');
+        System.Assert.isInstanceOfType(returnedInstance, di_InjectorTest.ClassForTest.class, 'Expecting that instance of class was returned');
     }
 
     @isTest
@@ -211,7 +211,7 @@ private class di_InjectorTest {
             (di_InjectorTest.InterfaceForTest)injector.getInstance( di_InjectorTest.InterfaceForTest.class.getName(), Account.SObjectType, null);
 
         //then
-        Assert.isInstanceOfType(returnedInstance, di_InjectorTest.ClassForTest.class, 'Expecting that instance of class was returned');
+        System.Assert.isInstanceOfType(returnedInstance, di_InjectorTest.ClassForTest.class, 'Expecting that instance of class was returned');
     }
 
     @isTest
@@ -225,10 +225,10 @@ private class di_InjectorTest {
         //when
         try {
             injector.getInstance(dummyBindingName, null);
-            Assert.fail('Expecting that exception was thrown');
+            System.Assert.fail('Expecting that exception was thrown');
         } catch (di_Injector.InjectorException excp) {
             //then
-            Assert.areEqual('Binding for "' + dummyBindingName + '" not found', excp.getMessage(), 'Expecting specific exception message');
+            System.Assert.areEqual('Binding for "' + dummyBindingName + '" not found', excp.getMessage(), 'Expecting specific exception message');
         }
 
     }

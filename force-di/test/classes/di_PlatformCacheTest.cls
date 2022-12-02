@@ -32,7 +32,7 @@ private with sharing class di_PlatformCacheTest {
         di_PlatformCache cache = di_PlatformCache.getInstance();
 
         //Then
-        Assert.areEqual( cache, di_PlatformCache.instance);
+        System.Assert.areEqual( cache, di_PlatformCache.instance);
 
     }
 
@@ -41,7 +41,7 @@ private with sharing class di_PlatformCacheTest {
         // Given/ When
         di_Configurations__c config = di_PlatformCache.getConfig();
         //Then
-        Assert.isNotNull(config);
+        System.Assert.isNotNull(config);
 
     }
 
@@ -56,11 +56,11 @@ private with sharing class di_PlatformCacheTest {
         //  in the test class
         if ( di_PlatformCache.getPartition() == null )
         {
-            Assert.areEqual(false, di_PlatformCache.isStoringBindingInPlatformCache());
+            System.Assert.areEqual(false, di_PlatformCache.isStoringBindingInPlatformCache());
         }
         else 
         {
-            Assert.isTrue(di_PlatformCache.isStoringBindingInPlatformCache());
+            System.Assert.isTrue(di_PlatformCache.isStoringBindingInPlatformCache());
         }
     }
 
@@ -70,7 +70,7 @@ private with sharing class di_PlatformCacheTest {
         // Given/ When partition name is set
         makeData();
         //Then
-        Assert.areEqual(EXPECTED_PARTITION_NAME,di_PlatformCache.getPartitionName());
+        System.Assert.areEqual(EXPECTED_PARTITION_NAME,di_PlatformCache.getPartitionName());
 
     }
 
@@ -79,7 +79,7 @@ private with sharing class di_PlatformCacheTest {
         // Given/ When partition name is set
         di_PlatformCache cache = di_PlatformCache.getInstance();
         //Then
-        Assert.areEqual(di_PlatformCache.NUM_OF_SECS_IN24HR,cache.getPartitionTTL());
+        System.Assert.areEqual(di_PlatformCache.NUM_OF_SECS_IN24HR,cache.getPartitionTTL());
 
     }
 
@@ -89,7 +89,7 @@ private with sharing class di_PlatformCacheTest {
         makeData();
         di_PlatformCache cache = di_PlatformCache.getInstance();
         //Then
-        Assert.areEqual(0,cache.getCacheKeyIndexMap().size());
+        System.Assert.areEqual(0,cache.getCacheKeyIndexMap().size());
 
     }
     @isTest
@@ -104,7 +104,7 @@ private with sharing class di_PlatformCacheTest {
         // When
         cache.addBindingToPlatformCache(binding);
         //Then
-        Assert.areEqual(0,cache.getCacheKeyIndexMap().size());
+        System.Assert.areEqual(0,cache.getCacheKeyIndexMap().size());
 
     }
 
@@ -127,7 +127,7 @@ private with sharing class di_PlatformCacheTest {
         // When
         cache.addBindingToPlatformCache(binding);
         //Then
-        Assert.areEqual(expected,cache.getCacheKeyIndexMap().size());
+        System.Assert.areEqual(expected,cache.getCacheKeyIndexMap().size());
 
     }
 
@@ -140,7 +140,7 @@ private with sharing class di_PlatformCacheTest {
         di_PlatformCache.clearCachedBindings();
         Set<String> keys = di_PlatformCache.getPartitionKeys();
         //Then
-        Assert.isTrue(keys == null || keys.size()==0);
+        System.Assert.isTrue(keys == null || keys.size()==0);
 
     }
 
@@ -152,7 +152,7 @@ private with sharing class di_PlatformCacheTest {
         // when
         list<di_Binding>  binding = cache.retrieveBindings(null,Account.sObjectType);
         //Then
-        Assert.areEqual(0,binding.size());
+        System.Assert.areEqual(0,binding.size());
     }
     @isTest
     private static void givenInvalidSObjectTypeThenGetEmptyKeys(){
@@ -162,7 +162,7 @@ private with sharing class di_PlatformCacheTest {
         // when
         list<di_Binding>  binding = cache.retrieveBindings('value',null);
         //Then
-        Assert.areEqual(0,binding.size());
+        System.Assert.areEqual(0,binding.size());
     }
     //
     @isTest
@@ -172,7 +172,7 @@ private with sharing class di_PlatformCacheTest {
         // When
         Cache.OrgPartition orgPartition = di_PlatformCache.getPartition();
         //Then
-        Assert.areEqual(orgPartition != null,cache.pushCacheKeyIndexMapToCache());
+        System.Assert.areEqual(orgPartition != null,cache.pushCacheKeyIndexMapToCache());
     }
     @isTest
     private static void givenLogMethodThenGetKeys(){
@@ -180,8 +180,8 @@ private with sharing class di_PlatformCacheTest {
         di_PlatformCache.DEBUGGING = true;
         // When
         //Then
-        Assert.isTrue(di_PlatformCache.log('test'));
-        Assert.isTrue(di_PlatformCache.log(new NullPointerException()));
+        System.Assert.isTrue(di_PlatformCache.log('test'));
+        System.Assert.isTrue(di_PlatformCache.log(new NullPointerException()));
     }
 
     @IsTest
@@ -197,8 +197,8 @@ private with sharing class di_PlatformCacheTest {
         // When
         cache.addBindingToKeyIndex(binding);
         // Then
-        Assert.areEqual(1, cache.getCacheKeyIndexMap().size());
-        Assert.isNotNull(cache.getCacheKeyIndexMap().get(workingDeveloperName));
+        System.Assert.areEqual(1, cache.getCacheKeyIndexMap().size());
+        System.Assert.isNotNull(cache.getCacheKeyIndexMap().get(workingDeveloperName));
     }
 
     //
@@ -210,7 +210,7 @@ private with sharing class di_PlatformCacheTest {
         // When
         String hash= cache.constructKeyName(Account.sObjectType,'test');
         // Then
-        Assert.isTrue( hash != null);
+        System.Assert.isTrue( hash != null);
 
     }
     //
@@ -221,7 +221,7 @@ private with sharing class di_PlatformCacheTest {
         di_PlatformCache cache = di_PlatformCache.getInstance();
         // When
         // Then
-        Assert.areEqual(di_PlatformCache.BINDING_KEY, cache.getKeyIndexName());
+        System.Assert.areEqual(di_PlatformCache.BINDING_KEY, cache.getKeyIndexName());
 
     }
     //
@@ -233,7 +233,7 @@ private with sharing class di_PlatformCacheTest {
         // When
         String hash= cache.constructKeyName(Account.sObjectType,'test');
         // Then
-        Assert.isTrue( hash != null);
+        System.Assert.isTrue( hash != null);
 
     }
 
@@ -247,7 +247,7 @@ private with sharing class di_PlatformCacheTest {
         String key= cache.getKeyName('test',Account.sObjectType),
                hash= cache.constructKeyName(Account.sObjectType,'test');
         // Then
-        Assert.areEqual(hash, key);
+        System.Assert.areEqual(hash, key);
 
     }
 
@@ -258,9 +258,9 @@ private with sharing class di_PlatformCacheTest {
         System.runAs(ruser) {
             // Then
             di_Configurations__c config = di_PlatformCache.getConfig();
-            Assert.isNotNull(config);
-            Assert.areEqual(false,  config.UsePlatformCacheToStoreBindings__c);
-            Assert.isNull(config.OrgCachePartitionName__c);
+            System.Assert.isNotNull(config);
+            System.Assert.areEqual(false,  config.UsePlatformCacheToStoreBindings__c);
+            System.Assert.isNull(config.OrgCachePartitionName__c);
         }
     }
 
@@ -278,9 +278,9 @@ private with sharing class di_PlatformCacheTest {
         System.runAs(ruser) {
             // Then
             di_Configurations__c config = di_PlatformCache.getConfig();
-            Assert.isNotNull(config);
-            Assert.isTrue(  config.UsePlatformCacheToStoreBindings__c);
-            Assert.areEqual(PARTITION, config.OrgCachePartitionName__c);
+            System.Assert.isNotNull(config);
+            System.Assert.isTrue(  config.UsePlatformCacheToStoreBindings__c);
+            System.Assert.areEqual(PARTITION, config.OrgCachePartitionName__c);
         }
     }
     //

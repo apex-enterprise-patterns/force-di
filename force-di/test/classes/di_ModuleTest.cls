@@ -46,9 +46,9 @@ private class di_ModuleTest {
         };
         module.getBindings().add(bobBinding);
         // Then
-        Assert.areEqual(module, module.type(di_Binding.BindingType.Apex.name()));
+        System.Assert.areEqual(module, module.type(di_Binding.BindingType.Apex.name()));
         // gt bindings
-        Assert.areEqual(bindings, module.getBindings());
+        System.Assert.areEqual(bindings, module.getBindings());
     }
 
     @isTest
@@ -64,7 +64,7 @@ private class di_ModuleTest {
             moduleExceptionThrown=true;
 
         }
-        Assert.isTrue(moduleExceptionThrown);
+        System.Assert.isTrue(moduleExceptionThrown);
     }
 
     @isTest
@@ -82,8 +82,8 @@ private class di_ModuleTest {
         List<di_Binding> bindings = module.getBindings();
      
         // Then
-        Assert.areEqual('test',(String)bindings[0].Data);
-        Assert.areEqual('apex',(String)bindings[0].BindingTypeAsString.toLowerCase());
-        Assert.areEqual(1,bindings[0].bindingSequence);
+        System.Assert.areEqual('test',(String)bindings[0].Data);
+        System.Assert.areEqual('apex',(String)bindings[0].BindingTypeAsString.toLowerCase());
+        System.Assert.areEqual(1,bindings[0].bindingSequence);
     }
 }

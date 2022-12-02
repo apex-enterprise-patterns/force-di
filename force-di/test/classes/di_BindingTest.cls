@@ -38,9 +38,9 @@ private class di_BindingTest {
         Object boundInstance1 = binding.getInstance();
         Object boundInstance2 = binding.getInstance();
         // Then
-        Assert.isInstanceOfType(boundInstance1, Bob.class);
-        Assert.isInstanceOfType(boundInstance2, Bob.class);
-        Assert.areEqual(boundInstance1, boundInstance2);
+        System.Assert.isInstanceOfType(boundInstance1, Bob.class);
+        System.Assert.isInstanceOfType(boundInstance2, Bob.class);
+        System.Assert.areEqual(boundInstance1, boundInstance2);
     }
 
     @IsTest
@@ -53,9 +53,9 @@ private class di_BindingTest {
         Object boundInstance1 = binding.getInstance(null, true);
         Object boundInstance2 = binding.getInstance(null, true);
         // Then
-        Assert.isInstanceOfType(boundInstance1, Bob.class);
-        Assert.isInstanceOfType(boundInstance2, Bob.class);
-        Assert.areNotEqual(boundInstance1, boundInstance2);
+        System.Assert.isInstanceOfType(boundInstance1, Bob.class);
+        System.Assert.isInstanceOfType(boundInstance2, Bob.class);
+        System.Assert.areNotEqual(boundInstance1, boundInstance2);
     }
 
     @IsTest
@@ -68,10 +68,10 @@ private class di_BindingTest {
         Object boundInstance1 = binding.getInstance('Some value 1');
         Object boundInstance2 = binding.getInstance('Some value 2');
         // Then
-        Assert.isInstanceOfType(boundInstance1, Bob.class);
-        Assert.areEqual('Some value 1', ((Bob) boundInstance1).Name);
-        Assert.isInstanceOfType(boundInstance2, Bob.class);
-        Assert.areEqual('Some value 2', ((Bob) boundInstance2).Name);
+        System.Assert.isInstanceOfType(boundInstance1, Bob.class);
+        System.Assert.areEqual('Some value 1', ((Bob) boundInstance1).Name);
+        System.Assert.isInstanceOfType(boundInstance2, Bob.class);
+        System.Assert.areEqual('Some value 2', ((Bob) boundInstance2).Name);
     }
     
     @IsTest
@@ -80,10 +80,10 @@ private class di_BindingTest {
             //When
             di_Binding binding = di_Binding.newInstance(
             null, Bob.class.getName(), null, null, ProviderImpl.class.getName(), null);
-            Assert.fail('No Exception was thrown.');
+            System.Assert.fail('No Exception was thrown.');
         } catch(Exception ex){
             //Then
-            Assert.isInstanceOfType(ex, di_Binding.BindingException.class,'Exception thrown was not of type "di_Binding.BindingException"');
+            System.Assert.isInstanceOfType(ex, di_Binding.BindingException.class,'Exception thrown was not of type "di_Binding.BindingException"');
         }
     }
     
@@ -116,7 +116,7 @@ private class di_BindingTest {
         sortedExpectedBindings.add(zoroBinding);
         
         
-        Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
+        System.Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
     }
     
     @IsTest
@@ -147,7 +147,7 @@ private class di_BindingTest {
         sortedExpectedBindings.add(zoroBinding);
         sortedExpectedBindings.add(bobBinding);
 
-        Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
+        System.Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
     }
     
     @IsTest
@@ -178,7 +178,7 @@ private class di_BindingTest {
         sortedExpectedBindings.add(charlieBinding);
         sortedExpectedBindings.add(zoroBinding);
 
-        Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
+        System.Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by default Developer Names');
     }
 
     @IsTest
@@ -190,7 +190,7 @@ private class di_BindingTest {
             ProviderImpl.class.getName(), null, 2, Zoro.class.getName(), null);
 
         //then
-        Assert.areEqual(
+        System.Assert.areEqual(
             ProviderImpl.class.getName() + '#' + String.valueOf(zoroBinding.BindingSequence).leftPad(4,'0'), 
             zoroBinding.toString(), 
             'Expecting toString method returns specific value'
@@ -228,7 +228,7 @@ private class di_BindingTest {
         sortedExpectedBindings.add(zoroBinding);
         sortedExpectedBindings.add(charlieBinding);
 
-        Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by Binding Names and Binding Sequence');
+        System.Assert.areEqual(sortedExpectedBindings, bindings, 'Binding sorted by Binding Names and Binding Sequence');
     }
 
     public class Bob {
