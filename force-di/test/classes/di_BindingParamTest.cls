@@ -44,12 +44,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        Assert.areEqual( null, response.longValue );
-        Assert.areEqual( null, response.decimalValue );
-        Assert.areEqual( null, response.stringValue );
-        Assert.areEqual( null, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.longValue );
+        Assert.isNull(response.decimalValue );
+        Assert.isNull(response.stringValue );
+        Assert.isNull(response.booleanValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         Assert.areEqual( 0, response.longValues.size() );
         Assert.areEqual( 0, response.decimalValues.size() );
@@ -79,12 +79,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        Assert.areEqual( null, response.longValue );
-        Assert.areEqual( null, response.decimalValue );
-        Assert.areEqual( null, response.stringValue );
-        Assert.areEqual( null, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.longValue );
+        Assert.isNull(response.decimalValue );
+        Assert.isNull(response.stringValue );
+        Assert.isNull(response.booleanValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         Assert.areEqual( 0, response.longValues.size() );
         Assert.areEqual( 0, response.decimalValues.size() );
@@ -238,12 +238,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        Assert.areEqual( null, response.longValue );
-        Assert.areEqual( null, response.decimalValue );
+        Assert.isNull(response.longValue );
+        Assert.isNull(response.decimalValue );
         Assert.areEqual( inputs.get('text'), response.stringValue );
         Assert.areEqual( false, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         // number
 
@@ -256,8 +256,8 @@ private class di_BindingParamTest {
         Assert.areEqual( 42.0, response.decimalValue );
         Assert.areEqual( inputs.get('number'), response.stringValue );
         Assert.areEqual( false, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         // truthy
 
@@ -266,12 +266,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        Assert.areEqual( null, response.longValue );
-        Assert.areEqual( null, response.decimalValue );
+        Assert.isNull(response.longValue );
+        Assert.isNull(response.decimalValue );
         Assert.areEqual( inputs.get('truthy'), response.stringValue );
         Assert.areEqual( true, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         // falsey
 
@@ -280,12 +280,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        Assert.areEqual( null, response.longValue );
-        Assert.areEqual( null, response.decimalValue );
+        Assert.isNull(response.longValue );
+        Assert.isNull(response.decimalValue );
         Assert.areEqual( inputs.get('falsey'), response.stringValue );
         Assert.areEqual( false, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         // date
 
@@ -294,8 +294,8 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        Assert.areEqual( null, response.longValue );
-        Assert.areEqual( null, response.decimalValue );
+        Assert.isNull(response.longValue );
+        Assert.isNull(response.decimalValue );
         Assert.areEqual( inputs.get('date'), response.stringValue );
         Assert.areEqual( false, response.booleanValue );
         Assert.areEqual( testDateTime.date(), response.dateValue );
@@ -308,8 +308,8 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        Assert.areEqual( null, response.longValue );
-        Assert.areEqual( null, response.decimalValue );
+        Assert.isNull(response.longValue );
+        Assert.isNull(response.decimalValue );
         Assert.areEqual( inputs.get('dateTime'), response.stringValue );
         Assert.areEqual( false, response.booleanValue );
         Assert.areEqual( testDateTime.date(), response.dateValue );
@@ -356,8 +356,8 @@ private class di_BindingParamTest {
         Assert.areEqual( 1.0, response.decimalValue );
         Assert.areEqual( 'true', response.stringValue );
         Assert.areEqual( true, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         // falsey
 
@@ -370,8 +370,8 @@ private class di_BindingParamTest {
         Assert.areEqual( 0, response.decimalValue );
         Assert.areEqual( 'false', response.stringValue );
         Assert.areEqual( false, response.booleanValue );
-        Assert.areEqual( null, response.dateValue );
-        Assert.areEqual( null, response.dateTimeValue );
+        Assert.isNull(response.dateValue );
+        Assert.isNull(response.dateTimeValue );
 
         // booleans
 

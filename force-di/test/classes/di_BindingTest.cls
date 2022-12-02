@@ -40,7 +40,7 @@ private class di_BindingTest {
         // Then
         Assert.isInstanceOfType(boundInstance1, Bob.class);
         Assert.isInstanceOfType(boundInstance2, Bob.class);
-        Assert.isTrue(boundInstance1 === boundInstance2);
+        Assert.areEqual(boundInstance1, boundInstance2);
     }
 
     @IsTest
@@ -55,7 +55,7 @@ private class di_BindingTest {
         // Then
         Assert.isInstanceOfType(boundInstance1, Bob.class);
         Assert.isInstanceOfType(boundInstance2, Bob.class);
-        Assert.isTrue(boundInstance1 !== boundInstance2);
+        Assert.areNotEqual(boundInstance1, boundInstance2);
     }
 
     @IsTest

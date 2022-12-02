@@ -64,7 +64,7 @@ private class di_ModuleTest {
             moduleExceptionThrown=true;
 
         }
-        Assert.areEqual(true,moduleExceptionThrown);
+        Assert.isTrue(moduleExceptionThrown);
     }
 
     @isTest

@@ -90,7 +90,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.areEqual(true, hasException);
+        Assert.isTrue( hasException);
         // When
         hasException=false;
         try {
@@ -99,7 +99,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.areEqual(true, hasException);
+        Assert.isTrue( hasException);
 
     }
 
@@ -120,7 +120,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.areEqual(true, hasException);
+        Assert.isTrue( hasException);
     }
     @isTest
     static void givenNullParamterInGetInstanceThenThrowException()
@@ -139,7 +139,7 @@ private class di_InjectorTest {
             hasException=true;
         }
         // Then
-        Assert.areEqual(true, hasException);
+        Assert.isTrue( hasException);
     }
 
     @isTest
