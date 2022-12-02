@@ -152,12 +152,12 @@ private class di_InjectorTest {
         //when
         try {
             injector.getInstance('', Account.getSObjectType(), null);
-            Assert.isTrue(false, 'Expecting that exception was thrown');
+            Assert.fail('Expecting that exception was thrown');
         } catch (di_Injector.InjectorException excp) {
             //then
             Assert.areEqual('Request for Binding cannot take "developerName" parameter of null', excp.getMessage(), 'Expecting specific exception message');
         } catch (Exception e) {
-            Assert.isTrue(false, 'Was expecting a di_Injector.InjectorException but instead received ' + e);
+            Assert.fail('Was expecting a di_Injector.InjectorException but instead received ' + e);
         }
     }
 
@@ -225,7 +225,7 @@ private class di_InjectorTest {
         //when
         try {
             injector.getInstance(dummyBindingName, null);
-            Assert.isTrue(false, 'Expecting that exception was thrown');
+            Assert.fail('Expecting that exception was thrown');
         } catch (di_Injector.InjectorException excp) {
             //then
             Assert.areEqual('Binding for "' + dummyBindingName + '" not found', excp.getMessage(), 'Expecting specific exception message');

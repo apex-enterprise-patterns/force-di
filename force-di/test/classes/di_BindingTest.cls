@@ -80,7 +80,7 @@ private class di_BindingTest {
             //When
             di_Binding binding = di_Binding.newInstance(
             null, Bob.class.getName(), null, null, ProviderImpl.class.getName(), null);
-            Assert.isTrue(false, 'No Exception was thrown.');
+            Assert.fail('No Exception was thrown.');
         } catch(Exception ex){
             //Then
             Assert.isInstanceOfType(ex, di_Binding.BindingException.class,'Exception thrown was not of type "di_Binding.BindingException"');
