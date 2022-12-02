@@ -38,8 +38,8 @@ private class di_BindingTest {
         Object boundInstance1 = binding.getInstance();
         Object boundInstance2 = binding.getInstance();
         // Then
-        Assert.isTrue(boundInstance1 instanceof Bob);
-        Assert.isTrue(boundInstance2 instanceof Bob);
+        Assert.isInstanceOfType(boundInstance1, Bob.class);
+        Assert.isInstanceOfType(boundInstance2, Bob.class);
         Assert.isTrue(boundInstance1 === boundInstance2);
     }
 
@@ -53,8 +53,8 @@ private class di_BindingTest {
         Object boundInstance1 = binding.getInstance(null, true);
         Object boundInstance2 = binding.getInstance(null, true);
         // Then
-        Assert.isTrue(boundInstance1 instanceof Bob);
-        Assert.isTrue(boundInstance2 instanceof Bob);
+        Assert.isInstanceOfType(boundInstance1, Bob.class);
+        Assert.isInstanceOfType(boundInstance2, Bob.class);
         Assert.isTrue(boundInstance1 !== boundInstance2);
     }
 
@@ -68,9 +68,9 @@ private class di_BindingTest {
         Object boundInstance1 = binding.getInstance('Some value 1');
         Object boundInstance2 = binding.getInstance('Some value 2');
         // Then
-        Assert.isTrue(boundInstance1 instanceof Bob);
+        Assert.isInstanceOfType(boundInstance1, Bob.class);
         Assert.areEqual('Some value 1', ((Bob) boundInstance1).Name);
-        Assert.isTrue(boundInstance2 instanceof Bob);
+        Assert.isInstanceOfType(boundInstance2, Bob.class);
         Assert.areEqual('Some value 2', ((Bob) boundInstance2).Name);
     }
     
@@ -83,7 +83,7 @@ private class di_BindingTest {
             Assert.isTrue(false, 'No Exception was thrown.');
         } catch(Exception ex){
             //Then
-            Assert.isTrue(ex instanceOf di_Binding.BindingException,'Exception thrown was not of type "di_Binding.BindingException"');
+            Assert.isInstanceOfType(ex, di_Binding.BindingException.class,'Exception thrown was not of type "di_Binding.BindingException"');
         }
     }
     

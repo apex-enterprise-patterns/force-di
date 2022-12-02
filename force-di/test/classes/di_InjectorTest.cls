@@ -72,9 +72,9 @@ private class di_InjectorTest {
         Object resultNoParams=injector.getInstance(di_BindingTest.Bob.class,(Object)null);
         Object resultByName=injector.getInstance(di_BindingTest.Bob.class.getName());
         // Then
-        Assert.areEqual(true, result instanceof di_BindingTest.Bob);
-        Assert.areEqual(true, resultByName instanceof di_BindingTest.Bob);
-        Assert.areEqual(true, resultNoParams instanceof di_BindingTest.Bob);
+        Assert.isInstanceOfType(result, di_BindingTest.Bob.class);
+        Assert.isInstanceOfType(resultByName, di_BindingTest.Bob.class);
+        Assert.isInstanceOfType(resultNoParams, di_BindingTest.Bob.class);
     }
 
     @isTest
@@ -184,7 +184,7 @@ private class di_InjectorTest {
             (di_InjectorTest.InterfaceForTest)injector.getInstance( di_InjectorTest.InterfaceForTest.class.getName(), Account.SObjectType, null);
 
         //then
-        Assert.isTrue(returnedInstance instanceof di_InjectorTest.ClassForTest, 'Expecting that instance of class was returned');
+        Assert.isInstanceOfType(returnedInstance, di_InjectorTest.ClassForTest.class, 'Expecting that instance of class was returned');
     }
 
     @isTest
@@ -211,7 +211,7 @@ private class di_InjectorTest {
             (di_InjectorTest.InterfaceForTest)injector.getInstance( di_InjectorTest.InterfaceForTest.class.getName(), Account.SObjectType, null);
 
         //then
-        Assert.isTrue(returnedInstance instanceof di_InjectorTest.ClassForTest, 'Expecting that instance of class was returned');
+        Assert.isInstanceOfType(returnedInstance, di_InjectorTest.ClassForTest.class, 'Expecting that instance of class was returned');
     }
 
     @isTest

@@ -49,7 +49,7 @@ private class di_InjectorComponentControllerTest {
         di_InjectorComponentController newObj = new di_InjectorComponentController();
         Object result= newObj.getInjectorFlowProxyInstance('HelloWorld', 'Account');
         //Then
-        Assert.areEqual(true, result instanceOf Component.di_injectorFlowProxy );
+        Assert.isInstanceOfType(result, Component.di_injectorFlowProxy.class );
 
     }
 
@@ -70,8 +70,7 @@ private class di_InjectorComponentControllerTest {
         Object result= newObj.getInject();
         //Then
         Assert.areNotEqual(null, result );
-        Assert.areEqual(true,result instanceOf Component.apex.pageblock);
-
+        Assert.isInstanceOfType(result, Component.Apex.Pageblock.class);
     }
 
     @isTest
