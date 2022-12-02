@@ -12,7 +12,7 @@ private with sharing class di_InjectorCMPFlowProxyControllerTest {
         try {
             newObj.getInject();
         } catch(Exception e) {
-            System.assertEquals(e.getMessage().contains('Invalid value for property name'), true, 'correct Exception is thrown');
+            Assert.areEqual(e.getMessage().contains('Invalid value for property name'), true, 'correct Exception is thrown');
         }
     }
 

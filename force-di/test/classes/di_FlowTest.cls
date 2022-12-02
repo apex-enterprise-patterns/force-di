@@ -7,8 +7,8 @@ private with sharing class di_FlowTest {
         //When
         di_Flow diObj = new di_Flow(flow);
         //Then
-        System.assertEquals(0, diObj.outputVarsNames.size(), 'Set is not initialized');
-        System.assertEquals(0, diObj.outputVarsNamesRequired.size(), 'Set is not initialized');
+        Assert.areEqual(0, diObj.outputVarsNames.size(), 'Set is not initialized');
+        Assert.areEqual(0, diObj.outputVarsNamesRequired.size(), 'Set is not initialized');
     }
 
     @isTest
@@ -20,7 +20,7 @@ private with sharing class di_FlowTest {
         di_Flow diObj = new di_Flow(flow);
         diObj.output(variableName);
         //Then
-        System.assertEquals(1, diObj.outputVarsNames.size(), 'value not inserted in Set');
+        Assert.areEqual(1, diObj.outputVarsNames.size(), 'value not inserted in Set');
     }
 
     @isTest
@@ -32,8 +32,8 @@ private with sharing class di_FlowTest {
         di_Flow diObj = new di_Flow(flow);
         diObj.required(variableName);
         //Then
-        System.assertEquals(1, diObj.outputVarsNames.size(), 'value not inserted in Set');
-        System.assertEquals(1, diObj.outputVarsNamesRequired.size(), 'value not inserted in Set');
+        Assert.areEqual(1, diObj.outputVarsNames.size(), 'value not inserted in Set');
+        Assert.areEqual(1, diObj.outputVarsNamesRequired.size(), 'value not inserted in Set');
     }
 
     /** 
@@ -53,7 +53,7 @@ private with sharing class di_FlowTest {
         diObj.returning(outputVariableName);
         } catch(Exception e){
             //Then
-            System.assertEquals(e.getMessage().contains('expected but not returned from Flow'), true, 'correct Exception in not thrown');
+            Assert.areEqual(e.getMessage().contains('expected but not returned from Flow'), true, 'correct Exception in not thrown');
         }
     }
     **/

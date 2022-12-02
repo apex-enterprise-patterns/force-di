@@ -40,7 +40,7 @@ private class di_InjectorComponentControllerTest {
             newObj.getInject();
         } catch(Exception e) {
             //Then
-            System.assertEquals(e.getMessage().contains('List index out of bounds'), true, 'Correct exception is not thrown');
+            Assert.areEqual(e.getMessage().contains('List index out of bounds'), true, 'Correct exception is not thrown');
         }
     }
 
@@ -49,7 +49,7 @@ private class di_InjectorComponentControllerTest {
         di_InjectorComponentController newObj = new di_InjectorComponentController();
         Object result= newObj.getInjectorFlowProxyInstance('HelloWorld', 'Account');
         //Then
-        System.assertEquals(true, result instanceOf Component.di_injectorFlowProxy );
+        Assert.areEqual(true, result instanceOf Component.di_injectorFlowProxy );
 
     }
 
@@ -69,8 +69,8 @@ private class di_InjectorComponentControllerTest {
 
         Object result= newObj.getInject();
         //Then
-        System.assertNotEquals(null, result );
-        System.assertEquals(true,result instanceOf Component.apex.pageblock);
+        Assert.areNotEqual(null, result );
+        Assert.areEqual(true,result instanceOf Component.apex.pageblock);
 
     }
 
@@ -85,8 +85,8 @@ private class di_InjectorComponentControllerTest {
         newObj.BindingIdValue=BINDING_ID;
    
         //Then
-        System.assertEquals( BINDING_ID,newObj.BindingIdValue);
-        System.assertEquals( BINDING_NAME,newObj.BindingNameValue);
+        Assert.areEqual( BINDING_ID,newObj.BindingIdValue);
+        Assert.areEqual( BINDING_NAME,newObj.BindingNameValue);
 
     }
 

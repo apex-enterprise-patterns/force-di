@@ -44,19 +44,19 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( null, response.longValue );
-        System.assertEquals( null, response.decimalValue );
-        System.assertEquals( null, response.stringValue );
-        System.assertEquals( null, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( null, response.longValue );
+        Assert.areEqual( null, response.decimalValue );
+        Assert.areEqual( null, response.stringValue );
+        Assert.areEqual( null, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
-        System.assertEquals( 0, response.longValues.size() );
-        System.assertEquals( 0, response.decimalValues.size() );
-        System.assertEquals( 0, response.stringValues.size() );
-        System.assertEquals( 0, response.booleanValues.size() );
-        System.assertEquals( 0, response.dateValues.size() );
-        System.assertEquals( 0, response.dateTimeValues.size() );
+        Assert.areEqual( 0, response.longValues.size() );
+        Assert.areEqual( 0, response.decimalValues.size() );
+        Assert.areEqual( 0, response.stringValues.size() );
+        Assert.areEqual( 0, response.booleanValues.size() );
+        Assert.areEqual( 0, response.dateValues.size() );
+        Assert.areEqual( 0, response.dateTimeValues.size() );
 
         Test.stopTest();
 
@@ -79,19 +79,19 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( null, response.longValue );
-        System.assertEquals( null, response.decimalValue );
-        System.assertEquals( null, response.stringValue );
-        System.assertEquals( null, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( null, response.longValue );
+        Assert.areEqual( null, response.decimalValue );
+        Assert.areEqual( null, response.stringValue );
+        Assert.areEqual( null, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
-        System.assertEquals( 0, response.longValues.size() );
-        System.assertEquals( 0, response.decimalValues.size() );
-        System.assertEquals( 0, response.stringValues.size() );
-        System.assertEquals( 0, response.booleanValues.size() );
-        System.assertEquals( 0, response.dateValues.size() );
-        System.assertEquals( 0, response.dateTimeValues.size() );
+        Assert.areEqual( 0, response.longValues.size() );
+        Assert.areEqual( 0, response.decimalValues.size() );
+        Assert.areEqual( 0, response.stringValues.size() );
+        Assert.areEqual( 0, response.booleanValues.size() );
+        Assert.areEqual( 0, response.dateValues.size() );
+        Assert.areEqual( 0, response.dateTimeValues.size() );
 
         Test.stopTest();
 
@@ -126,12 +126,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 42, response.longValue );
-        System.assertEquals( 42.0, response.decimalValue );
-        System.assertEquals( '42', response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assertEquals( DateTime.newInstance(42).date(), response.dateValue );
-        System.assertEquals( DateTime.newInstance(42), response.dateTimeValue );
+        Assert.areEqual( 42, response.longValue );
+        Assert.areEqual( 42.0, response.decimalValue );
+        Assert.areEqual( '42', response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.areEqual( DateTime.newInstance(42).date(), response.dateValue );
+        Assert.areEqual( DateTime.newInstance(42), response.dateTimeValue );
 
         // truthy
 
@@ -140,12 +140,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 1, response.longValue );
-        System.assertEquals( 1.0, response.decimalValue );
-        System.assertEquals( '1', response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assertEquals( DateTime.newInstance(1).date(), response.dateValue );
-        System.assertEquals( DateTime.newInstance(1), response.dateTimeValue );
+        Assert.areEqual( 1, response.longValue );
+        Assert.areEqual( 1.0, response.decimalValue );
+        Assert.areEqual( '1', response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.areEqual( DateTime.newInstance(1).date(), response.dateValue );
+        Assert.areEqual( DateTime.newInstance(1), response.dateTimeValue );
 
         // falsey
 
@@ -154,12 +154,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 0, response.longValue );
-        System.assertEquals( 0, response.decimalValue );
-        System.assertEquals( '0', response.stringValue );
-        System.assertEquals( false, response.booleanValue );
-        System.assertEquals( DateTime.newInstance(0).date(), response.dateValue );
-        System.assertEquals( DateTime.newInstance(0), response.dateTimeValue );
+        Assert.areEqual( 0, response.longValue );
+        Assert.areEqual( 0, response.decimalValue );
+        Assert.areEqual( '0', response.stringValue );
+        Assert.areEqual( false, response.booleanValue );
+        Assert.areEqual( DateTime.newInstance(0).date(), response.dateValue );
+        Assert.areEqual( DateTime.newInstance(0), response.dateTimeValue );
 
         // date
 
@@ -168,12 +168,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( expectedDateMillisGMT, response.longValue );
-        System.assertEquals( expectedDateMillisGMT, response.decimalValue );
-        System.assertEquals( String.valueOf( expectedDateMillisGMT ), response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assert( DateTime.newInstance( expectedDateMillisGMT ).date().isSameDay( response.dateValue ) );
-        System.assertEquals( DateTime.newInstance( expectedDateMillisGMT ), response.dateTimeValue );
+        Assert.areEqual( expectedDateMillisGMT, response.longValue );
+        Assert.areEqual( expectedDateMillisGMT, response.decimalValue );
+        Assert.areEqual( String.valueOf( expectedDateMillisGMT ), response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.isTrue( DateTime.newInstance( expectedDateMillisGMT ).date().isSameDay( response.dateValue ) );
+        Assert.areEqual( DateTime.newInstance( expectedDateMillisGMT ), response.dateTimeValue );
 
         // dateTime
 
@@ -182,12 +182,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( expectedDateTimeMillisGMT, response.longValue );
-        System.assertEquals( expectedDateTimeMillisGMT, response.decimalValue );
-        System.assertEquals( String.valueOf( expectedDateTimeMillisGMT ), response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assert( DateTime.newInstance( expectedDateTimeMillisGMT ).date().isSameDay( response.dateValue ) );
-        System.assertEquals( DateTime.newInstance( expectedDateTimeMillisGMT ), response.dateTimeValue );
+        Assert.areEqual( expectedDateTimeMillisGMT, response.longValue );
+        Assert.areEqual( expectedDateTimeMillisGMT, response.decimalValue );
+        Assert.areEqual( String.valueOf( expectedDateTimeMillisGMT ), response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.isTrue( DateTime.newInstance( expectedDateTimeMillisGMT ).date().isSameDay( response.dateValue ) );
+        Assert.areEqual( DateTime.newInstance( expectedDateTimeMillisGMT ), response.dateTimeValue );
 
         // decimals
 
@@ -196,8 +196,8 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 3, response.decimalValues.size() );
-        System.assertEquals( response.decimalValue, response.decimalValues[0] );
+        Assert.areEqual( 3, response.decimalValues.size() );
+        Assert.areEqual( response.decimalValue, response.decimalValues[0] );
 
         Test.stopTest();
 
@@ -238,12 +238,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( null, response.longValue );
-        System.assertEquals( null, response.decimalValue );
-        System.assertEquals( inputs.get('text'), response.stringValue );
-        System.assertEquals( false, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( null, response.longValue );
+        Assert.areEqual( null, response.decimalValue );
+        Assert.areEqual( inputs.get('text'), response.stringValue );
+        Assert.areEqual( false, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
         // number
 
@@ -252,12 +252,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 42, response.longValue );
-        System.assertEquals( 42.0, response.decimalValue );
-        System.assertEquals( inputs.get('number'), response.stringValue );
-        System.assertEquals( false, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( 42, response.longValue );
+        Assert.areEqual( 42.0, response.decimalValue );
+        Assert.areEqual( inputs.get('number'), response.stringValue );
+        Assert.areEqual( false, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
         // truthy
 
@@ -266,12 +266,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( null, response.longValue );
-        System.assertEquals( null, response.decimalValue );
-        System.assertEquals( inputs.get('truthy'), response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( null, response.longValue );
+        Assert.areEqual( null, response.decimalValue );
+        Assert.areEqual( inputs.get('truthy'), response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
         // falsey
 
@@ -280,12 +280,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( null, response.longValue );
-        System.assertEquals( null, response.decimalValue );
-        System.assertEquals( inputs.get('falsey'), response.stringValue );
-        System.assertEquals( false, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( null, response.longValue );
+        Assert.areEqual( null, response.decimalValue );
+        Assert.areEqual( inputs.get('falsey'), response.stringValue );
+        Assert.areEqual( false, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
         // date
 
@@ -294,12 +294,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( null, response.longValue );
-        System.assertEquals( null, response.decimalValue );
-        System.assertEquals( inputs.get('date'), response.stringValue );
-        System.assertEquals( false, response.booleanValue );
-        System.assertEquals( testDateTime.date(), response.dateValue );
-        System.assertEquals( testDateTime.date(), response.dateTimeValue.dateGmt() ); // hours will be zero'ed out
+        Assert.areEqual( null, response.longValue );
+        Assert.areEqual( null, response.decimalValue );
+        Assert.areEqual( inputs.get('date'), response.stringValue );
+        Assert.areEqual( false, response.booleanValue );
+        Assert.areEqual( testDateTime.date(), response.dateValue );
+        Assert.areEqual( testDateTime.date(), response.dateTimeValue.dateGmt() ); // hours will be zero'ed out
 
         // dateTime
 
@@ -308,12 +308,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( null, response.longValue );
-        System.assertEquals( null, response.decimalValue );
-        System.assertEquals( inputs.get('dateTime'), response.stringValue );
-        System.assertEquals( false, response.booleanValue );
-        System.assertEquals( testDateTime.date(), response.dateValue );
-        System.assertEquals( testDateTime, response.dateTimeValue );
+        Assert.areEqual( null, response.longValue );
+        Assert.areEqual( null, response.decimalValue );
+        Assert.areEqual( inputs.get('dateTime'), response.stringValue );
+        Assert.areEqual( false, response.booleanValue );
+        Assert.areEqual( testDateTime.date(), response.dateValue );
+        Assert.areEqual( testDateTime, response.dateTimeValue );
 
         // strings
 
@@ -322,8 +322,8 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 3, response.stringValues.size() );
-        System.assertEquals( response.stringValue, response.stringValues[0] );
+        Assert.areEqual( 3, response.stringValues.size() );
+        Assert.areEqual( response.stringValue, response.stringValues[0] );
 
         Test.stopTest();
 
@@ -352,12 +352,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 1, response.longValue );
-        System.assertEquals( 1.0, response.decimalValue );
-        System.assertEquals( 'true', response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( 1, response.longValue );
+        Assert.areEqual( 1.0, response.decimalValue );
+        Assert.areEqual( 'true', response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
         // falsey
 
@@ -366,12 +366,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 0, response.longValue );
-        System.assertEquals( 0, response.decimalValue );
-        System.assertEquals( 'false', response.stringValue );
-        System.assertEquals( false, response.booleanValue );
-        System.assertEquals( null, response.dateValue );
-        System.assertEquals( null, response.dateTimeValue );
+        Assert.areEqual( 0, response.longValue );
+        Assert.areEqual( 0, response.decimalValue );
+        Assert.areEqual( 'false', response.stringValue );
+        Assert.areEqual( false, response.booleanValue );
+        Assert.areEqual( null, response.dateValue );
+        Assert.areEqual( null, response.dateTimeValue );
 
         // booleans
 
@@ -380,8 +380,8 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 2, response.booleanValues.size() );
-        System.assertEquals( response.booleanValue, response.booleanValues[0] );
+        Assert.areEqual( 2, response.booleanValues.size() );
+        Assert.areEqual( response.booleanValue, response.booleanValues[0] );
 
         Test.stopTest();
 
@@ -412,12 +412,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( testDateTime.getTime(), response.longValue );
-        System.assertEquals( testDateTime.getTime(), response.decimalValue );
-        System.assertEquals( String.valueOf( testDate ), response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assertEquals( testDate, response.dateValue );
-        System.assertEquals( testDateTime, response.dateTimeValue );
+        Assert.areEqual( testDateTime.getTime(), response.longValue );
+        Assert.areEqual( testDateTime.getTime(), response.decimalValue );
+        Assert.areEqual( String.valueOf( testDate ), response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.areEqual( testDate, response.dateValue );
+        Assert.areEqual( testDateTime, response.dateTimeValue );
 
         // dates
 
@@ -426,8 +426,8 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 2, response.dateValues.size() );
-        System.assertEquals( response.dateValue, response.dateValues[0] );
+        Assert.areEqual( 2, response.dateValues.size() );
+        Assert.areEqual( response.dateValue, response.dateValues[0] );
 
         Test.stopTest();
 
@@ -458,12 +458,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( testDateTime.getTime(), response.longValue );
-        System.assertEquals( testDateTime.getTime(), response.decimalValue );
-        System.assertEquals( String.valueOf( testDateTime ), response.stringValue );
-        System.assertEquals( true, response.booleanValue );
-        System.assertEquals( testDateTime.date(), response.dateValue );
-        System.assertEquals( testDateTime, response.dateTimeValue );
+        Assert.areEqual( testDateTime.getTime(), response.longValue );
+        Assert.areEqual( testDateTime.getTime(), response.decimalValue );
+        Assert.areEqual( String.valueOf( testDateTime ), response.stringValue );
+        Assert.areEqual( true, response.booleanValue );
+        Assert.areEqual( testDateTime.date(), response.dateValue );
+        Assert.areEqual( testDateTime, response.dateTimeValue );
 
         // dates
 
@@ -472,8 +472,8 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.assertEquals( 2, response.dateTimeValues.size() );
-        System.assertEquals( response.dateTimeValue, response.dateTimeValues[0] );
+        Assert.areEqual( 2, response.dateTimeValues.size() );
+        Assert.areEqual( response.dateTimeValue, response.dateTimeValues[0] );
 
         Test.stopTest();
 

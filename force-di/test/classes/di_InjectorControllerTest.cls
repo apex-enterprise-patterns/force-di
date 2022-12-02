@@ -36,7 +36,7 @@ private class di_InjectorControllerTest {
             di_InjectorController.getBinding(bindingName);
         }
         catch(Exception e){
-            System.assertEquals(e.getMessage().contains('List index out of bounds'), true, 'Correct exception is not thrown');
+            Assert.areEqual(e.getMessage().contains('List index out of bounds'), true, 'Correct exception is not thrown');
         }
     }
 }
