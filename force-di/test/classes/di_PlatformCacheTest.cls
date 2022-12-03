@@ -41,7 +41,7 @@ private with sharing class di_PlatformCacheTest {
         // Given/ When
         di_Configurations__c config = di_PlatformCache.getConfig();
         //Then
-        System.Assert.isNotNull(config);
+        System.Assert.areNotEqual(null, config);
 
     }
 
@@ -56,7 +56,7 @@ private with sharing class di_PlatformCacheTest {
         //  in the test class
         if ( di_PlatformCache.getPartition() == null )
         {
-            System.Assert.areEqual(false, di_PlatformCache.isStoringBindingInPlatformCache());
+            System.Assert.isFalse(di_PlatformCache.isStoringBindingInPlatformCache());
         }
         else 
         {
@@ -198,7 +198,7 @@ private with sharing class di_PlatformCacheTest {
         cache.addBindingToKeyIndex(binding);
         // Then
         System.Assert.areEqual(1, cache.getCacheKeyIndexMap().size());
-        System.Assert.isNotNull(cache.getCacheKeyIndexMap().get(workingDeveloperName));
+        System.Assert.areNotEqual(null, cache.getCacheKeyIndexMap().get(workingDeveloperName));
     }
 
     //
@@ -258,9 +258,9 @@ private with sharing class di_PlatformCacheTest {
         System.runAs(ruser) {
             // Then
             di_Configurations__c config = di_PlatformCache.getConfig();
-            System.Assert.isNotNull(config);
-            System.Assert.areEqual(false,  config.UsePlatformCacheToStoreBindings__c);
-            System.Assert.isNull(config.OrgCachePartitionName__c);
+            System.Assert.areNotEqual(null, config);
+            System.Assert.isFalse(  config.UsePlatformCacheToStoreBindings__c);
+            System.Assert.areEqual(null, config.OrgCachePartitionName__c);
         }
     }
 
@@ -278,7 +278,7 @@ private with sharing class di_PlatformCacheTest {
         System.runAs(ruser) {
             // Then
             di_Configurations__c config = di_PlatformCache.getConfig();
-            System.Assert.isNotNull(config);
+            System.Assert.areNotEqual(null, config);
             System.Assert.isTrue(  config.UsePlatformCacheToStoreBindings__c);
             System.Assert.areEqual(PARTITION, config.OrgCachePartitionName__c);
         }

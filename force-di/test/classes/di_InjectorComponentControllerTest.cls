@@ -69,7 +69,7 @@ private class di_InjectorComponentControllerTest {
 
         Object result= newObj.getInject();
         //Then
-        System.Assert.isNotNull(result );
+        System.Assert.areNotEqual(null, result );
         System.Assert.isInstanceOfType(result, Component.Apex.Pageblock.class);
     }
 

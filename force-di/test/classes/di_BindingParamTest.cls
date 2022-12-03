@@ -44,12 +44,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.Assert.isNull(response.longValue );
-        System.Assert.isNull(response.decimalValue );
-        System.Assert.isNull(response.stringValue );
-        System.Assert.isNull(response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.areEqual(null, response.longValue );
+        System.Assert.areEqual(null, response.decimalValue );
+        System.Assert.areEqual(null, response.stringValue );
+        System.Assert.areEqual(null, response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         System.Assert.areEqual( 0, response.longValues.size() );
         System.Assert.areEqual( 0, response.decimalValues.size() );
@@ -79,12 +79,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.Assert.isNull(response.longValue );
-        System.Assert.isNull(response.decimalValue );
-        System.Assert.isNull(response.stringValue );
-        System.Assert.isNull(response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.areEqual(null, response.longValue );
+        System.Assert.areEqual(null, response.decimalValue );
+        System.Assert.areEqual(null, response.stringValue );
+        System.Assert.areEqual(null, response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         System.Assert.areEqual( 0, response.longValues.size() );
         System.Assert.areEqual( 0, response.decimalValues.size() );
@@ -129,7 +129,7 @@ private class di_BindingParamTest {
         System.Assert.areEqual( 42, response.longValue );
         System.Assert.areEqual( 42.0, response.decimalValue );
         System.Assert.areEqual( '42', response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
+        System.Assert.isTrue(response.booleanValue );
         System.Assert.areEqual( DateTime.newInstance(42).date(), response.dateValue );
         System.Assert.areEqual( DateTime.newInstance(42), response.dateTimeValue );
 
@@ -143,7 +143,7 @@ private class di_BindingParamTest {
         System.Assert.areEqual( 1, response.longValue );
         System.Assert.areEqual( 1.0, response.decimalValue );
         System.Assert.areEqual( '1', response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
+        System.Assert.isTrue(response.booleanValue );
         System.Assert.areEqual( DateTime.newInstance(1).date(), response.dateValue );
         System.Assert.areEqual( DateTime.newInstance(1), response.dateTimeValue );
 
@@ -157,7 +157,7 @@ private class di_BindingParamTest {
         System.Assert.areEqual( 0, response.longValue );
         System.Assert.areEqual( 0, response.decimalValue );
         System.Assert.areEqual( '0', response.stringValue );
-        System.Assert.areEqual( false, response.booleanValue );
+        System.Assert.isFalse(response.booleanValue );
         System.Assert.areEqual( DateTime.newInstance(0).date(), response.dateValue );
         System.Assert.areEqual( DateTime.newInstance(0), response.dateTimeValue );
 
@@ -171,7 +171,7 @@ private class di_BindingParamTest {
         System.Assert.areEqual( expectedDateMillisGMT, response.longValue );
         System.Assert.areEqual( expectedDateMillisGMT, response.decimalValue );
         System.Assert.areEqual( String.valueOf( expectedDateMillisGMT ), response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
+        System.Assert.isTrue(response.booleanValue );
         System.Assert.isTrue( DateTime.newInstance( expectedDateMillisGMT ).date().isSameDay( response.dateValue ) );
         System.Assert.areEqual( DateTime.newInstance( expectedDateMillisGMT ), response.dateTimeValue );
 
@@ -185,7 +185,7 @@ private class di_BindingParamTest {
         System.Assert.areEqual( expectedDateTimeMillisGMT, response.longValue );
         System.Assert.areEqual( expectedDateTimeMillisGMT, response.decimalValue );
         System.Assert.areEqual( String.valueOf( expectedDateTimeMillisGMT ), response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
+        System.Assert.isTrue(response.booleanValue );
         System.Assert.isTrue( DateTime.newInstance( expectedDateTimeMillisGMT ).date().isSameDay( response.dateValue ) );
         System.Assert.areEqual( DateTime.newInstance( expectedDateTimeMillisGMT ), response.dateTimeValue );
 
@@ -238,12 +238,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.Assert.isNull(response.longValue );
-        System.Assert.isNull(response.decimalValue );
+        System.Assert.areEqual(null, response.longValue );
+        System.Assert.areEqual(null, response.decimalValue );
         System.Assert.areEqual( inputs.get('text'), response.stringValue );
-        System.Assert.areEqual( false, response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.isFalse(response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         // number
 
@@ -255,9 +255,9 @@ private class di_BindingParamTest {
         System.Assert.areEqual( 42, response.longValue );
         System.Assert.areEqual( 42.0, response.decimalValue );
         System.Assert.areEqual( inputs.get('number'), response.stringValue );
-        System.Assert.areEqual( false, response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.isFalse(response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         // truthy
 
@@ -266,12 +266,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.Assert.isNull(response.longValue );
-        System.Assert.isNull(response.decimalValue );
+        System.Assert.areEqual(null, response.longValue );
+        System.Assert.areEqual(null, response.decimalValue );
         System.Assert.areEqual( inputs.get('truthy'), response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.isTrue(response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         // falsey
 
@@ -280,12 +280,12 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.Assert.isNull(response.longValue );
-        System.Assert.isNull(response.decimalValue );
+        System.Assert.areEqual(null, response.longValue );
+        System.Assert.areEqual(null, response.decimalValue );
         System.Assert.areEqual( inputs.get('falsey'), response.stringValue );
-        System.Assert.areEqual( false, response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.isFalse(response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         // date
 
@@ -294,10 +294,10 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.Assert.isNull(response.longValue );
-        System.Assert.isNull(response.decimalValue );
+        System.Assert.areEqual(null, response.longValue );
+        System.Assert.areEqual(null, response.decimalValue );
         System.Assert.areEqual( inputs.get('date'), response.stringValue );
-        System.Assert.areEqual( false, response.booleanValue );
+        System.Assert.isFalse(response.booleanValue );
         System.Assert.areEqual( testDateTime.date(), response.dateValue );
         System.Assert.areEqual( testDateTime.date(), response.dateTimeValue.dateGmt() ); // hours will be zero'ed out
 
@@ -308,10 +308,10 @@ private class di_BindingParamTest {
 
         response = di_BindingParam.invoke( new di_BindingParam.Request[] { request } )[0];
 
-        System.Assert.isNull(response.longValue );
-        System.Assert.isNull(response.decimalValue );
+        System.Assert.areEqual(null, response.longValue );
+        System.Assert.areEqual(null, response.decimalValue );
         System.Assert.areEqual( inputs.get('dateTime'), response.stringValue );
-        System.Assert.areEqual( false, response.booleanValue );
+        System.Assert.isFalse(response.booleanValue );
         System.Assert.areEqual( testDateTime.date(), response.dateValue );
         System.Assert.areEqual( testDateTime, response.dateTimeValue );
 
@@ -355,9 +355,9 @@ private class di_BindingParamTest {
         System.Assert.areEqual( 1, response.longValue );
         System.Assert.areEqual( 1.0, response.decimalValue );
         System.Assert.areEqual( 'true', response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.isTrue(response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         // falsey
 
@@ -369,9 +369,9 @@ private class di_BindingParamTest {
         System.Assert.areEqual( 0, response.longValue );
         System.Assert.areEqual( 0, response.decimalValue );
         System.Assert.areEqual( 'false', response.stringValue );
-        System.Assert.areEqual( false, response.booleanValue );
-        System.Assert.isNull(response.dateValue );
-        System.Assert.isNull(response.dateTimeValue );
+        System.Assert.isFalse(response.booleanValue );
+        System.Assert.areEqual(null, response.dateValue );
+        System.Assert.areEqual(null, response.dateTimeValue );
 
         // booleans
 
@@ -415,7 +415,7 @@ private class di_BindingParamTest {
         System.Assert.areEqual( testDateTime.getTime(), response.longValue );
         System.Assert.areEqual( testDateTime.getTime(), response.decimalValue );
         System.Assert.areEqual( String.valueOf( testDate ), response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
+        System.Assert.isTrue(response.booleanValue );
         System.Assert.areEqual( testDate, response.dateValue );
         System.Assert.areEqual( testDateTime, response.dateTimeValue );
 
@@ -461,7 +461,7 @@ private class di_BindingParamTest {
         System.Assert.areEqual( testDateTime.getTime(), response.longValue );
         System.Assert.areEqual( testDateTime.getTime(), response.decimalValue );
         System.Assert.areEqual( String.valueOf( testDateTime ), response.stringValue );
-        System.Assert.areEqual( true, response.booleanValue );
+        System.Assert.isTrue(response.booleanValue );
         System.Assert.areEqual( testDateTime.date(), response.dateValue );
         System.Assert.areEqual( testDateTime, response.dateTimeValue );
 
