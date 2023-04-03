@@ -14,9 +14,9 @@ Project Folders
 ---------------
 The "core" framework is found in this project.  This includes the following:
 
-| Folder | Description |
-| ------ | ----------- |
-| **force-di** | Core library, contains **Injector** Apex API and **<c:di_injector>** VF and Lightning Components |
+| Folder | Description                                                                                                                                                                                                                                                                                                                               |
+| ------ |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **force-di** | Core library, contains **Injector** Apex API and **<c:di_injector>** VF and Lightning Components <br/>**Note:** this contains an auto-launched flow called `HelloWorld` required for the unit tests to pass. If you do not want this flow to be deployed to your org, remove it before deploying; however, unit test coverage will suffer |
 
 The "samples" of how to use the framework can be found in the [Force-DI Samples](https://github.com/apex-enterprise-patterns/force-di-samples) project.
 

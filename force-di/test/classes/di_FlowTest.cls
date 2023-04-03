@@ -1,7 +1,7 @@
-@isTest
+@IsTest
 private with sharing class di_FlowTest {
-    @isTest
-    public static void givenNullInputWhenObjectCreatedThenSetInitialized(){
+    @IsTest
+    public static void givenNullInputWhenObjectCreatedThenSetInitialized() {
         //Given
         Flow.Interview flow = null;
         //When
@@ -11,8 +11,8 @@ private with sharing class di_FlowTest {
         System.assertEquals(0, diObj.outputVarsNamesRequired.size(), 'Set is not initialized');
     }
 
-    @isTest
-    public static void givenStringValueWhenOutputThenStringAddedToSet(){
+    @IsTest
+    public static void givenStringValueWhenOutputThenStringAddedToSet() {
         //Given
         Flow.Interview flow = null;
         String variableName = 'Test';
@@ -23,8 +23,8 @@ private with sharing class di_FlowTest {
         System.assertEquals(1, diObj.outputVarsNames.size(), 'value not inserted in Set');
     }
 
-    @isTest
-    public static void givenVariableNameWhenRequiredThenValueAddedToSet(){
+    @IsTest
+    public static void givenVariableNameWhenRequiredThenValueAddedToSet() {
         //Given
         Flow.Interview flow = null;
         String variableName = 'Test';
@@ -36,25 +36,30 @@ private with sharing class di_FlowTest {
         System.assertEquals(1, diObj.outputVarsNamesRequired.size(), 'value not inserted in Set');
     }
 
-    /** 
-     * Removed until further mocking support added to di_Flow 
-     *  (see https://github.com/apex-enterprise-patterns/flowextensions for ideas)
-    @isTest
-    public static void givenFlowNameWhenReturningThenExceptionThrown(){
+    @IsTest
+    public static void givenFlowNameWhenReturningThenExceptionThrown() {
         //Given
-        String flowName='HelloWorld';
-        Flow.Interview flow = Flow.Interview.createInterview(flowName, new Map<String, Object>());
+        String flowName = 'HelloWorld';
         String variableName = 'HelloWorld';
         String outputVariableName = 'HelloWorld';
+        Flow.Interview helloWorldFlow = null;
+        try {
+            helloWorldFlow = Flow.Interview.createInterview(flowName, new Map<String, Object>());
+        } catch (System.TypeException e) {
+            // Apparently flow doesn't exist; we don't want to fail the test, but unit test coverage will suffer
+            System.debug('HelloWorld flow was not found. Please create to obtain sufficient test coverage.');
+        }
+
         //When
-        di_Flow diObj = new di_Flow(flow);
-        diObj.required(variableName);
-        try{
-        diObj.returning(outputVariableName);
-        } catch(Exception e){
-            //Then
-            System.assertEquals(e.getMessage().contains('expected but not returned from Flow'), true, 'correct Exception in not thrown');
+        if (helloWorldFlow != null) {
+            di_Flow diObj = new di_Flow(helloWorldFlow);
+            diObj.required(variableName);
+            try {
+                diObj.returning(outputVariableName);
+            } catch (Exception e) {
+                //Then
+                System.assertEquals(e.getMessage().contains('expected but not returned from Flow'), true, 'correct Exception in not thrown');
+            }
         }
     }
-    **/
 }
