@@ -96,13 +96,13 @@ public with sharing class di_PlatformCache
                 }
                 // ... add the new binding to the working group.
                 workingBindings.add( binding );
-                log('Adding binding for hash => ' + theKeyName + ' && developerName => ' + binding.developerName + ' && object => ' + binding.bindingObject);
+                log('Adding binding for hash => ' + theKeyName + ' && developerName => ' + binding.DeveloperName + ' && object => ' + binding.BindingObject);
                 // ... then put the working list back in cache on this key
                 try 
                 {
                     orgPartition.put(theKeyName, workingBindings, getPartitionTTL(), Cache.Visibility.ALL, false);    
                 }
-                catch (cache.Org.OrgCacheException oce)
+                catch (Cache.Org.OrgCacheException oce)
                 {
                     // there are some objects that cannot be serialized and thus cannot be stored in cache.  
                     //  in those situations, we simply bypass storing that object. 
@@ -118,12 +118,12 @@ public with sharing class di_PlatformCache
         return result;
     }
 
-    public list<di_Binding> retrieveBindings(String developerName, Schema.SObjectType bindingSObjectType)
+    public List<di_Binding> retrieveBindings(String developerName, Schema.SObjectType bindingSObjectType)
     {
-        list<di_Binding> bindings = new list<di_Binding>();
+        List<di_Binding> bindings = new List<di_Binding>();
 
         if ( isStoringBindingInPlatformCache()
-             && string.isNotBlank(developerName)
+             && String.isNotBlank(developerName)
              && bindingSObjectType != null)
         {
             log('Retrieving from Cache Key => ' + developerName + ' && Cache Key Index => ' + bindingSObjectType);
@@ -241,7 +241,7 @@ public with sharing class di_PlatformCache
     }
 
     @TestVisible
-    private boolean pushCacheKeyIndexMapToCache()
+    private Boolean pushCacheKeyIndexMapToCache()
     {
         // if there IS NO Partition created; let's not FAIL
         Cache.OrgPartition orgPartition = getPartition();
@@ -256,19 +256,19 @@ public with sharing class di_PlatformCache
     @TestVisible
     private void addBindingToKeyIndex(di_Binding binding)
     {
-        String workingDeveloperName = binding.developerName.toLowerCase().trim();
+        String workingDeveloperName = binding.DeveloperName.toLowerCase().trim();
 
         if ( !getCacheKeyIndexMap().containsKey( workingDeveloperName ) )
         {
             getCacheKeyIndexMap().put(workingDeveloperName, new Map<Schema.SObjectType, Set<String> >() );
         }
 
-        if ( !getCacheKeyIndexMap().get(workingDeveloperName).containsKey( binding.bindingObject) )
+        if ( !getCacheKeyIndexMap().get(workingDeveloperName).containsKey( binding.BindingObject) )
         {
-            getCacheKeyIndexMap().get(workingDeveloperName).put( binding.bindingObject, new Set<String>() );
+            getCacheKeyIndexMap().get(workingDeveloperName).put( binding.BindingObject, new Set<String>() );
         }
 
-        getCacheKeyIndexMap().get(workingDeveloperName).get(binding.bindingObject).add(getKeyName(binding));
+        getCacheKeyIndexMap().get(workingDeveloperName).get(binding.BindingObject).add(getKeyName(binding));
 
         pushCacheKeyIndexMapToCache();
     }
@@ -286,7 +286,7 @@ public with sharing class di_PlatformCache
             return generatedKeyNames.get(key); 
         }
 
-        String hash = String.valueOf( Math.abs( ( key ).hashcode() ) );
+        String hash = String.valueOf( Math.abs( ( key ).hashCode() ) );
         log('Creating Hash For => ' + developerName + ' && ' + bindingSObjectType + ' := ' + hash);
         generatedKeyNames.put(key, hash);
         return hash;
@@ -301,7 +301,7 @@ public with sharing class di_PlatformCache
     @TestVisible
     private String getKeyName( di_Binding binding )
     {
-        return constructKeyName( binding.bindingObject, binding.developerName);
+        return constructKeyName( binding.BindingObject, binding.DeveloperName);
     }
 
     @TestVisible
@@ -333,10 +333,10 @@ public with sharing class di_PlatformCache
     @TestVisible
     private static Boolean log(String message)
     {
-        Boolean doLog = DEBUGGING && string.isNotBlank(message);
+        Boolean doLog = DEBUGGING && String.isNotBlank(message);
         if ( doLog ) 
         {
-            system.debug('+++ di_PlatformCache.message: ' + message);
+            System.debug('+++ di_PlatformCache.message: ' + message);
         }
         return doLog;
     }
