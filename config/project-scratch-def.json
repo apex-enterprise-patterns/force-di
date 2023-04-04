@@ -1,6 +1,9 @@
 {
     "orgName": "force-di-developer-scratch-dev",
     "edition": "Developer",
+    "features": [
+        "PlatformCache"
+    ],
     "settings": {
         "lightningExperienceSettings": {
             "enableS1DesktopEnabled": true

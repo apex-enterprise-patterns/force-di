@@ -8,7 +8,6 @@ public with sharing class di_PlatformCache
 
     @TestVisible
     private static final String BINDING_KEY = 'bindingKeyIndex';
-    @TestVisible
     private static di_PlatformCache instance;
     @TestVisible
     private Map<String, Map<Schema.SObjectType, Set<String> > > cacheKeyIndexMap = new Map<String, Map<Schema.SObjectType, Set<String> > >();
@@ -16,7 +15,7 @@ public with sharing class di_PlatformCache
     private static Map<String, String> generatedKeyNames = new Map<String, String>();
     // Used for turning on logging (if needed)
     @TestVisible
-    private static Boolean DEBUGGING = false;
+    private static Boolean DEBUGGING = true;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //  Constructors
@@ -38,7 +37,6 @@ public with sharing class di_PlatformCache
 
         return instance;
     }
-
 
     public static Boolean isStoringBindingInPlatformCache()
     {
@@ -129,21 +127,28 @@ public with sharing class di_PlatformCache
             log('Retrieving from Cache Key => ' + developerName + ' && Cache Key Index => ' + bindingSObjectType);
             // if there IS NO Partition created; let's not FAIL
             Cache.OrgPartition orgPartition = getPartition();
+            log('OrgPartition = ' + orgPartition);
+            log('cacheKeyIndexMap = ' + getCacheKeyIndexMap());
             Map<Schema.SObjectType, Set<String> > keyIndexBySObjectTypeMap = getCacheKeyIndexMap().get(developerName.toLowerCase().trim());
+            log('keyIndexBySObjectTypeMap = ' + keyIndexBySObjectTypeMap);
             if ( keyIndexBySObjectTypeMap != null && orgPartition != null )
             {
                 Set<String> cacheKeys = keyIndexBySObjectTypeMap.get(bindingSObjectType);
                 if ( cacheKeys != null )
                 {
+                    log('Found ' + cacheKeys.size() + ' cache key(s) for object type ' + bindingSObjectType);
                     Object cachedObject = null;
                     for ( String cacheKey : cacheKeys )
                     {
+                        log('Retrieving entries with cache key "' + cacheKey + '" from platform cache partition "' + orgPartition + '"');
                         cachedObject = orgPartition.get( cacheKey );
                         if ( cachedObject != null )
                         {
                             bindings.addAll( (List<di_Binding>) cachedObject);
                         }
                     }
+                } else {
+                    log('Found no cache key(s) for object type ' + bindingSObjectType);
                 }
             }
         }
