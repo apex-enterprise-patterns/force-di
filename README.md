@@ -7,7 +7,7 @@ Documentation
 - [General overview of the library features, configuration and use of Injectors](https://andyinthecloud.com/2018/07/15/managing-dependency-injection-within-salesforce/) (blog)
 - [Using the library to aid with Test Driven Development in Apex](https://andyinthecloud.com/2018/07/29/test-driven-development-mocking-and-force-di/) (blog)
 - [Dependency Injection, Flows, and Force DI](https://douglascayers.com/2018/08/05/dependency-injection-flows-and-force-di/) (blog)
-- [Adopting Dependency Injection](https://douglascayers.com/2018/08/29/adopting-dependency-injection/) (webinar)
+- [Dependency Injection, Flows, and Force DI](https://www.youtube.com/watch?v=YzaI5Ddfwkg) (webinar)
 - [Understanding the Value of Dependency Injection in the Lightning Platform](https://www.youtube.com/watch?v=oce2QO-E_3k) (DF18 session)
 
 Project Folders
