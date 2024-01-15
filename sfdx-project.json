@@ -5,7 +5,7 @@
       "default": true
     }
   ],
-  "namespace": "",
+  "namespace": "fHCM2",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "59.0"
 }

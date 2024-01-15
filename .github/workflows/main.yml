@@ -1,0 +1,83 @@
+name: Run all unit tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master, "patches/**"]
+  pull_request:
+  merge_group:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    # If a push event triggered this workflow, then wait for any existing workflow to complete.
+    # All other triggers will cancel any in progress runs.
+    cancel-in-progress: ${{ github.event_name != 'push' }}
+
+env:
+  NODE_VERSION: "18.x"
+  ALIAS: "ciorg"
+  SFDX_VERSION: "@salesforce/cli" # automation fails if this isn't latest
+  SFDX_ROOT: "./"
+
+jobs:
+  run-all-unit-tests:
+    name: Run All Unit Tests
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.SFDX_ROOT }}
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout force-di
+        with:
+          submodules: "true"
+          token: ${{ secrets.SAGE_PEOPLE_CI_USER_PAT }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Salesforce CLI
+        run: |
+          npm install --global $SFDX_VERSION  
+  
+      - name: "Authorise DevHub"
+        run: |
+          echo "${{ secrets.SAGE_PEOPLE_DEVHUB_SERVER_KEY }}" > "server.key"
+          sf org login jwt --client-id=${{ secrets.SAGE_PEOPLE_DEVHUB_CONSUMER_KEY }} --username=${{ secrets.SAGE_PEOPLE_DEVHUB_USERNAME }} --jwt-key-file ./server.key --set-default-dev-hub
+
+      # Preview org
+      # sfdx force:org:create release=Preview --setdefaultusername --definitionfile src/config/project-scratch-def.json --setalias "${{ env.ALIAS }}" --wait 20 --durationdays 1
+      - name: "Create Scratch Org "
+        run: |
+          sf org create scratch -f config/project-scratch-def.json -a "${{ env.ALIAS }}"
+
+      - name: "Deploy Code to Scratch Org"
+        run: |
+          sf project deploy start -o "${{ env.ALIAS }}"
+
+      - name: "Run Unit Tests In Scratch Org"
+        run: |
+          mkdir -p apexTestResults/test
+          unittestcommand="sf apex run test  -l RunLocalTests -w 60 -r human -d apexTestResults/test  -o \"${{ env.ALIAS }}\""
+          echo "Test command to be run: $unittestcommand"
+          echo "Running All Apex Tests"
+          bash -c "$unittestcommand" || runFailed="true"
+          echo "Finished test run"
+
+      - name: "Make the script files executable"
+        run: |
+            chmod +x .github/scripts/parse-results.sh
+
+      - name: "Verfify all tests pass"
+        run: |
+            .github/scripts/parse-results.sh
+
+      - name: "Delete Scratch Org "
+        if: ${{success()}}
+        run: |
+            sf org delete scratch -o "${{ env.ALIAS }}" --no-prompt
