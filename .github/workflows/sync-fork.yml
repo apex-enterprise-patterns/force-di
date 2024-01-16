@@ -32,7 +32,7 @@ jobs:
     
       - name: Configure remote
         run: |
-          git remote add upstream
+          git remote add upstream https://github.com/apex-enterprise-patterns/force-di
 
       - name: Fetch the branches and their respective commits from the upstream repository
         run: |
