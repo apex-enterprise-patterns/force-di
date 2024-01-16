@@ -1,6 +1,7 @@
 name: Sync fork with source repo
 
 on:
+  workflow_dispatch: # enable workflow to be started manually
   schedule:
     - cron: '* * 1 * *' # first day of every month
 
