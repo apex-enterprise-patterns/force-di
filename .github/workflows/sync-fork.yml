@@ -37,13 +37,9 @@ jobs:
       - name: Fetch the branches and their respective commits from the upstream repository
         run: |
           git fetch upstream  
-    
-      - name: Check out local default branch
-        run: |
-          git checkout master  
-    
+        
       - name: Merge the changes from the upstream default branch
         run: |
-          git merge upstream/master  
+          git merge --allow-unrelated-histories upstream/master  
     
   
