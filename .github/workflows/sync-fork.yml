@@ -1,0 +1,44 @@
+name: Sync fork with source repo
+
+on:
+  schedule:
+    - cron: '* * 1 * *' # first day of every month
+
+
+env:
+  NODE_VERSION: "18.x"
+  ALIAS: "ciorg"
+  SFDX_VERSION: "@salesforce/cli" # automation fails if this isn't latest
+  SFDX_ROOT: "./"
+
+jobs:
+  sync-fork:
+    name: Sync Fork
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.SFDX_ROOT }}
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout force-di
+        with:
+          submodules: "true"
+          token: ${{ secrets.SAGE_PEOPLE_CI_USER_PAT }}
+
+      - name: Fetch the branches and their respective commits from the upstream repository
+        run: |
+          git fetch upstream  
+    
+      - name: Check out local default branch
+        run: |
+          git checkout master  
+    
+      - name: Merge the changes from the upstream default branch
+        run: |
+          git merge upstream/master  
+    
+  
