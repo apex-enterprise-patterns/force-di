@@ -40,6 +40,8 @@ jobs:
         
       - name: Merge the changes from the upstream default branch
         run: |
+          git config user.email "${{ secrets.SAGE_PEOPLE_CI_EMAIL }}"
+          git config user.name "${{ secrets.SAGE_PEOPLE_CI_USERNAME }}"
           git merge --allow-unrelated-histories upstream/master  
     
   
