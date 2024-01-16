@@ -14,12 +14,19 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: ${{ env.SFDX_ROOT }}
 
-    steps:    
+    steps:
+      - name: Checkout force-di
+        uses: actions/checkout@v4
+        with:
+          submodules: "true"
+          token: ${{ secrets.SAGE_PEOPLE_CI_USER_PAT }}
+
       - name: Merge the changes from the upstream default branch
-        run: |
-          gh repo sync 
         env:
           GH_TOKEN: ${{ secrets.SAGE_PEOPLE_CI_USER_PAT }}
+        run: |
+          gh repo sync 
     
   
