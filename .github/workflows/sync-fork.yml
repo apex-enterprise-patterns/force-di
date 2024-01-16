@@ -29,6 +29,10 @@ jobs:
         with:
           submodules: "true"
           token: ${{ secrets.SAGE_PEOPLE_CI_USER_PAT }}
+    
+      - name: Configure remote
+        run: |
+          git remote add upstream
 
       - name: Fetch the branches and their respective commits from the upstream repository
         run: |
