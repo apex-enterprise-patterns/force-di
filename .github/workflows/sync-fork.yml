@@ -1,17 +1,13 @@
-name: Sync fork with source repo
+name: Sync fork with parent repo
 
 on:
   workflow_dispatch: # enable workflow to be started manually
   schedule:
     - cron: '* * 1 * *' # first day of every month
 
-
 env:
-  NODE_VERSION: "18.x"
-  ALIAS: "ciorg"
-  SFDX_VERSION: "@salesforce/cli" # automation fails if this isn't latest
   SFDX_ROOT: "./"
-
+    
 jobs:
   sync-fork:
     name: Sync Fork
@@ -24,24 +20,16 @@ jobs:
         working-directory: ${{ env.SFDX_ROOT }}
 
     steps:
-      - uses: actions/checkout@v4
-        name: Checkout force-di
+      - name: Checkout force-di
+        uses: actions/checkout@v4
         with:
           submodules: "true"
           token: ${{ secrets.SAGE_PEOPLE_CI_USER_PAT }}
-    
-      - name: Configure remote
-        run: |
-          git remote add upstream https://github.com/apex-enterprise-patterns/force-di
 
-      - name: Fetch the branches and their respective commits from the upstream repository
-        run: |
-          git fetch upstream  
-        
       - name: Merge the changes from the upstream default branch
+        env:
+          GH_TOKEN: ${{ secrets.SAGE_PEOPLE_CI_USER_PAT }}
         run: |
-          git config user.email "${{ secrets.SAGE_PEOPLE_CI_EMAIL }}"
-          git config user.name "${{ secrets.SAGE_PEOPLE_CI_USERNAME }}"
-          git merge --allow-unrelated-histories upstream/master  
+          gh repo sync 
     
   
