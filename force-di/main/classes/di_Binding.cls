@@ -204,7 +204,7 @@ public abstract class di_Binding implements Comparable {
          */
         public Resolver replaceBindingWith( Object mockType )
         {
-            // system.debug('replaceBindingWith method called');
+            //System.debug('replaceBindingWith method called');
 
             // Late resolve bindings to allow runtime module injection via set and add methods
             loadBindings();
@@ -222,7 +222,7 @@ public abstract class di_Binding implements Comparable {
             this.developerName = null;
             this.bindingObject = null;
 
-            // system.debug('replaceBindingWith method finished');
+            //System.debug('replaceBindingWith method finished');
 
             return this;
         }
@@ -236,20 +236,25 @@ public abstract class di_Binding implements Comparable {
          */
         private Boolean isBindingMatchByFilteringCriteria( di_Binding bind )
         {
-            // System.debug('isBindingMatchByFilteringCriteria method called');
+            //System.debug('isBindingMatchByFilteringCriteria method called');
             Boolean isMatch = false;
-            // system.debug('bind == ' + bind);
-            // system.debug('this.developerName == ' + this.developerName);
-            // system.debug('this.bindingObject == ' + this.bindingObject); 
-            // System.debug('bind.BindingObject == ' + bind.BindingObject);
-            // System.debug('bind.DeveloperName == ' + bind.DeveloperName);
+            //System.debug('bind == ' + bind);
+            //System.debug('this.developerName == ' + this.developerName);
+            //System.debug('this.bindingObject == ' + this.bindingObject); 
+            //System.debug('bind.BindingObject == ' + bind.BindingObject);
+            //System.debug('bind.DeveloperName == ' + bind.DeveloperName);
+            //System.debug('Current namespace == ' + di_NamespaceClass.CURRENTNAMESPACE);
+            //System.debug('bind.NamespacePrefix == ' + bind.NamespacePrefix);
+
 
             // if both filtering parameters were specified
             if ( String.isNotBlank(this.developerName) && this.bindingObject != null ) 
             {
                 // then require both match for the binding to be included.
                 if ( ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
-                        // or same check for the reference without a namespace prefix
+                        // or same check for the reference with a namespace prefix
+                        || this.developerName.equalsIgnoreCase( bind.NamespacePrefix + '.' + bind.DeveloperName )
+                        // or same check for the reference in the local namespace prefix
                         || this.developerName.equalsIgnoreCase( di_NamespaceClass.CURRENTNAMESPACE + '.' + bind.DeveloperName )
                         )
                     && this.bindingObject == bind.BindingObject )
@@ -261,7 +266,9 @@ public abstract class di_Binding implements Comparable {
                 // else match on any of the available filtering parameters
                 if ( String.isNotBlank(this.developerName)
                     && ( this.developerName.equalsIgnoreCase( bind.DeveloperName )
-                        // or same check for the reference without a namespace prefix
+                        // or same check for the reference with a namespace prefix
+                        || this.developerName.equalsIgnoreCase( bind.NamespacePrefix + '.' + bind.DeveloperName )
+                        // or same check for the reference in the local namespace prefix
                         || this.developerName.equalsIgnoreCase( di_NamespaceClass.CURRENTNAMESPACE + '.' + bind.DeveloperName )
                         )
                     ) 
@@ -274,7 +281,7 @@ public abstract class di_Binding implements Comparable {
                 }
             }
             
-            // system.debug('isMatch == ' + isMatch); 
+            //System.debug('isMatch == ' + isMatch); 
 
             return isMatch;
         }
@@ -356,6 +363,27 @@ public abstract class di_Binding implements Comparable {
             Object to,
             Object bindingData) 
     {
+        return newInstance(bindType,
+            developerName,
+            bindingObject,
+            bindingSequence,
+            to,
+            NULL,
+            bindingData);
+    }
+
+    /**
+     * Returns the applicable Binding impl to resolve the type of binding provided
+     **/
+    public static di_Binding newInstance(
+            BindingType bindType,
+            String developerName,
+            SObjectType bindingObject,
+            Integer bindingSequence,
+            Object to,
+            String namespacePrefix,
+            Object bindingData) 
+    {
         // Return an applicable Binding subclass for the given binding type
         Type implType = BINDING_IMPLS_BY_TYPE.get(bindType);
 
@@ -367,6 +395,7 @@ public abstract class di_Binding implements Comparable {
             binding.BindingSequence = bindingSequence;
             binding.To = to;
             binding.Data = bindingData;
+            binding.NamespacePrefix = namespacePrefix;
             return binding;
         }
         throw new BindingException('Binding type ' + bindType + ' has no implementation.');
@@ -392,6 +421,12 @@ public abstract class di_Binding implements Comparable {
             // Type binding?
             if ( To instanceof String ) 
             {
+                //System.debug('newInstance method called for ApexBinding');
+                //System.debug('this.To == ' + this.To);
+                //System.debug('this.BindingObject == ' + this.BindingObject); 
+                //System.debug('this.BindingSequence == ' + this.BindingSequence); 
+                //System.debug('this.NamespacePrefix == ' + this.NamespacePrefix); 
+
                 // Leverage namespace if the Binding has one
                 String className = (String) To;
                 Type toType = NameSpacePrefix == null ? Type.forName(className) : Type.forName(NamespacePrefix, className);
@@ -402,6 +437,7 @@ public abstract class di_Binding implements Comparable {
                 Object toObject = toType.newInstance();
                 // Is this Apex binding resolved via a Provider?
                 IsProvider = toObject instanceof Provider;
+                //System.debug('IsProvider == ' + IsProvider);
                 if ( IsProvider )
                 {
                     return ((Provider) toObject).newInstance(params);

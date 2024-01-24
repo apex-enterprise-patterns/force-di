@@ -38,6 +38,7 @@ public virtual class di_Module {
     private SObjectType bindingObject;
     private Integer bindingSequence;
     private Object to;
+    private String namespacePrefix;
     private Object bindingData;
 
     /**
@@ -182,6 +183,14 @@ public virtual class di_Module {
     }
 
     /**
+     * Binding namespace prefix
+     */
+    public di_Module namespacePrefix(String prefix) {
+        namespacePrefix = prefix;
+        return this;
+    }
+
+    /**
      * Returns all the bindings this module has been configured with
      * Any module bindings will be expanded and removed
      **/
@@ -198,6 +207,7 @@ public virtual class di_Module {
             bindingObject,
             bindingSequence,
             to,
+            namespacePrefix,
             bindingData);
             
         bindings.add(newBinding);
@@ -214,6 +224,7 @@ public virtual class di_Module {
         developerName = null;
         bindingObject = null;
         bindingSequence = null;
+        namespacePrefix = null;
         to = null;
     }
 

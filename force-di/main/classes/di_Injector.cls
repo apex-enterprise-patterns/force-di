@@ -167,7 +167,6 @@ public class di_Injector {
             return recordList;
         }
         public override void configure() {
-            // TODO: Support Namespace
             for(di_BindingConfigWrapper bindingConfig :getDIBinding()) {
                 bind(bindingConfig.DeveloperName);
                 type(bindingConfig.Type);
@@ -186,6 +185,8 @@ public class di_Injector {
                     sequence(Integer.valueOf(bindingConfig.BindingSequence));
                 }
                 data(bindingConfig);
+                namespacePrefix(bindingConfig.NamespacePrefix);
+                // appears that 'to' should be the last property set
                 to(bindingConfig.To);
             }
         }
