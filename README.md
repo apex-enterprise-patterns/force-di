@@ -2,6 +2,8 @@
 
 Generic [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) (DI) library with support for injecting Apex, Visualforce, Lightning, and Flows at runtime. 
 
+This  repository is a fork of the open source [Force-DI] (https://github.com/apex-enterprise-patterns/force-di) library. Changes have been made to enable the dependencies to be resolved with namespaces and across package boundaries. It is included in HCM as a submodule.
+
 Documentation
 -------------
 - [General overview of the library features, configuration and use of Injectors](https://andyinthecloud.com/2018/07/15/managing-dependency-injection-within-salesforce/) (blog)
