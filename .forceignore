@@ -5,3 +5,6 @@
 package.xml
 **.profile-meta.xml
 **.settings-meta.xml
+
+#ignore files which can't be packaged
+**/force_di_teststuite.testSuite-meta.xml
