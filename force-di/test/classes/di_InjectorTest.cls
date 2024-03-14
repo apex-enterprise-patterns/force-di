@@ -170,7 +170,7 @@ private class di_InjectorTest {
             new di_BindingConfigWrapper(
                 'testQualifiedApiName',
                 di_InjectorTest.InterfaceForTest.class.getName(), 
-                'testNamespacePrefix', 
+                null, 
                 'Apex',
                 di_InjectorTest.ClassForTest.class.getName(),
                 'Account',
@@ -196,7 +196,7 @@ private class di_InjectorTest {
             new di_BindingConfigWrapper(
                 'testQualifiedApiName',
                 di_InjectorTest.InterfaceForTest.class.getName(), 
-                'testNamespacePrefix', 
+                null, 
                 'Apex',
                 di_InjectorTest.ClassForTest.class.getName(),
                 null,
