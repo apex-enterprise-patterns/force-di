@@ -39,7 +39,7 @@ Some of these blogs and videos are not necessarily Salesforce-specific but give 
 ### Videos
 
 - [Dependency Injection Overview](https://www.youtube.com/watch?v=IKD2-MAkXyQ&t=0s&index=3&list=PL-oxrNbxQl3-wPOf0t3PT-0JYXiOBwReG) by Anthony Ferrara
-- [Advanced Apex Design Patterns](https://www.youtube.com/watch?v=IKD2-MAkXyQ) by Andy Fawcett
+- [Advanced Apex Design Patterns](https://www.youtube.com/watch?v=BLXp0ZP0cF0) by Andy Fawcett
 - [Writing True Unit Tests Using Dependency Injection and Mocking](https://www.youtube.com/watch?v=hj4538vR6Mg&list=PL-oxrNbxQl3-wPOf0t3PT-0JYXiOBwReG&index=4) by Alex Tennant
 
 ### Blogs
