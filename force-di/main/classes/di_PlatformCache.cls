@@ -1,3 +1,4 @@
+@SuppressWarnings('PMD.ClassNamingConventions,PMD.CognitiveComplexity')
 public with sharing class di_PlatformCache
 {
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,15 +17,8 @@ public with sharing class di_PlatformCache
     private static Map<String, String> generatedKeyNames = new Map<String, String>();
     // Used for turning on logging (if needed)
     @TestVisible
+    @SuppressWarnings('PMD.FieldNamingConventions')
     private static Boolean DEBUGGING = false;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //  Constructors
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // singleton
-    private di_PlatformCache() 
-    {
-    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     // Public Methods
@@ -118,6 +112,7 @@ public with sharing class di_PlatformCache
         return result;
     }
 
+    @SuppressWarnings('PMD.AvoidDeeplyNestedIfStmts')
     public list<di_Binding> retrieveBindings(String developerName, Schema.SObjectType bindingSObjectType)
     {
         list<di_Binding> bindings = new list<di_Binding>();
@@ -139,6 +134,7 @@ public with sharing class di_PlatformCache
                     for ( String cacheKey : cacheKeys )
                     {
                         cachedObject = orgPartition.get( cacheKey );
+                        
                         if ( cachedObject != null )
                         {
                             bindings.addAll( (List<di_Binding>) cachedObject);
@@ -174,6 +170,35 @@ public with sharing class di_PlatformCache
         }
     }
 
+    public static void enable()
+    {
+        initializeUpdateableConfig();
+        
+        enable(getConfig());
+    }
+
+    public static void enableForPartition(String partitionName)
+    {
+        initializeUpdateableConfig();
+        
+        di_Configurations__c config = getConfig();
+
+        config.OrgCachePartitionName__c = partitionName;
+        
+        enable(config);
+    }
+
+    public static void disable()
+    {
+        initializeUpdateableConfig();
+        
+        di_Configurations__c config = getConfig();
+
+        config.UsePlatformCacheToStoreBindings__c = false;
+
+        persistChanges(config);
+    }
+
     /**
      * getPartitionKeys get partition keys
      * @return   return Set<String> partition keys
@@ -190,26 +215,83 @@ public with sharing class di_PlatformCache
         return keys;
     }
 
+    public class DIPlatformCacheException extends Exception {}
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     // Private Methods
     //////////////////////////////////////////////////////////////////////////////////////////////
 
+    private static void enable(di_Configurations__c config)
+    {
+        if (String.isBlank(config.OrgCachePartitionName__c))
+        {
+            throw new DIPlatformCacheException('The di_Configurations__c.OrgCachePartitionName__c must bet set with the partition name before Platform Cache can be enabled for Force-DI bindings.');
+        }
+
+        // attempt to get the partition to ensure that it is present.  If it is not available, then an error will be thrown.
+        try 
+        {
+            getPartitionByName(config.OrgCachePartitionName__c);
+        }
+        catch (DIPlatformCacheException pce)
+        {
+            throw new DIPlatformCacheException('The cache partition \'' + config.OrgCachePartitionName__c + '\' is not available.');
+        }
+        
+        config.UsePlatformCacheToStoreBindings__c = true;
+
+        persistChanges(config);
+    }
+
+    private static void persistChanges(di_Configurations__c config)
+    {
+        if ( config.isSet( di_Configurations__c.Id ) && di_Configurations__c.SObjectType.getDescribe().isUpdateable() )
+        {
+            update config;
+        }
+        else if (di_Configurations__c.SObjectType.getDescribe().isCreateable() )
+        {
+            insert config;
+        }
+        else 
+        {
+            throw new DIPlatformCacheException('Unable to persist changes for di_Configurations__c');
+        }
+    }
+
+    private static di_Configurations__c DEFAULT_CONFIG = di_Configurations__c.getInstance();
+
+    private static void initializeUpdateableConfig()
+    {
+        Id orgId = ConnectApi.Organization.getSettings().orgId;
+        Id currentUsersProfileId = UserInfo.getProfileId();
+        Id currentUsersId = UserInfo.getUserId();
+        List<di_Configurations__c> allRelevantConfigs = [SELECT Id, Name, SetupOwnerId
+                                                              , OrgCachePartitionName__c
+                                                              , UsePlatformCacheToStoreBindings__c
+                                                              , CreatedById, CreatedDate, LastModifiedById, LastModifiedDate
+                                                           FROM di_Configurations__c
+                                                          WHERE (SetupOwnerId = :currentUsersId AND Name = 'Force-DI Configurations (User)')
+                                                             OR (SetupOwnerId = :currentUsersProfileId AND Name = 'Force-DI Configurations (Profile)')
+                                                             OR (SetupOwnerId = :orgId)
+                                                          ORDER BY Name DESC]; // the sort order is important to ensure that the 
+                                                                                // user's default shows first in the list, then 
+                                                                                // the user's profile version, and finally the org default.
+        DEFAULT_CONFIG = allRelevantConfigs[0];                                                                      
+    }
+
     @TestVisible
     private static di_Configurations__c getConfig()
     {
-        di_Configurations__c config = di_Configurations__c.getInstance();
-
+        di_Configurations__c config = DEFAULT_CONFIG;
+        System.debug(LoggingLevel.ERROR, config);
         if ( config == null )
         {
             config = new di_Configurations__c();
             config.SetupOwnerId = ConnectApi.Organization.getSettings().orgId;
-            // make CheckMarx happy
-            if (di_Configurations__c.SObjectType.getDescribe().isCreateable() )
-            {
-                insert config;
-            }
+            persistChanges(config);
         }
-
+        System.debug(LoggingLevel.ERROR, config);
         return config;
     }
 
@@ -228,15 +310,25 @@ public with sharing class di_PlatformCache
     @TestVisible
     private static Cache.OrgPartition getPartition()
     {
+        return getPartitionByName( getPartitionName() );
+    }
+
+    private static Cache.OrgPartition getPartitionByName(String partitionName)
+    {
         Cache.OrgPartition result = null;
-        try 
+        try
         {
-            result = Cache.Org.getPartition( getPartitionName() );
+            result = Cache.Org.getPartition( partitionName );
         }
-        catch (Exception excp) 
+        catch (cache.Org.OrgCacheException oce)
         {
-            log('ERROR: Is there Cache? Is the Cache Partition enabled : Exception:' + excp);
+            throw new DIPlatformCacheException(oce);
         }
+        // catch (Exception excp) // TODO::Determine if catching this exception is the right move
+        // {
+        //     // TODO: Determine if simply loging the error is sufficient
+        //     log('ERROR: Is there Cache? Is the Cache Partition enabled : Exception:' + excp);
+        // }
         return result;
     }
 
@@ -317,7 +409,8 @@ public with sharing class di_PlatformCache
     @TestVisible
     private static Boolean log(Exception excp)
     {
-        Boolean before = DEBUGGING, result;
+        Boolean before = DEBUGGING;
+        Boolean result;
         // always show exceptions
         DEBUGGING = true;
         result = log('Exception: ' + excp.getMessage());
