@@ -136,7 +136,7 @@ public class di_Injector {
      * A Module that loads bindings configured via the Binding__mdt object
      **/
     @testVisible
-    private class CustomMetadataModule extends di_Module {
+    private inherited sharing class CustomMetadataModule extends di_Module {
 
         private string bindingObjectApiName = null;
         // Method to convert a metadata into a wrapper class,
